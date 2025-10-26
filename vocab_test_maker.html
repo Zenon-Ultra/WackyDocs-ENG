@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>단어 시험지 생성기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 14px;
+        }
+        .control-panel {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .info-text {
+            color: #666;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+        }
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .generate-btn {
+            background: #667eea;
+            color: white;
+        }
+        .generate-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .download-btn {
+            background: #51cf66;
+            color: white;
+        }
+        .download-btn:hover {
+            background: #40c057;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(81, 207, 102, 0.4);
+        }
+        .download-answer-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+        .download-answer-btn:hover {
+            background: #fa5252;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        button:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        .preview {
+            display: none;
+            margin-top: 30px;
+        }
+        .preview.active {
+            display: block;
+        }
+        .preview-header {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        .preview-content {
+            border: 2px solid #667eea;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .preview-word {
+            display: flex;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .preview-word:last-child {
+            border-bottom: none;
+        }
+        .word-num {
+            width: 50px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .word-text {
+            flex: 1;
+            color: #333;
+        }
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 올림포스 단어 시험지 생성기</h1>
+        <p class="subtitle">원하는 단어 개수를 선택하고 무작위 시험지를 만드세요</p>
+        
+        <div class="control-panel">
+            <div class="input-group">
+                <label for="numWords">단어 개수 (최대 133개)</label>
+                <input type="number" id="numWords" min="1" max="133" value="60">
+                <p class="info-text">전체 단어 목록에서 무작위로 선택됩니다</p>
+            </div>
+            
+            <div class="button-group">
+                <button class="generate-btn" onclick="generateTest()">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    시험지 생성
+                </button>
+            </div>
+            
+            <div class="button-group" style="margin-top: 15px;">
+                <button class="download-btn" id="downloadTestBtn" onclick="downloadTest()" disabled>
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    시험지 다운로드
+                </button>
+                <button class="download-answer-btn" id="downloadAnswerBtn" onclick="downloadAnswer()" disabled>
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    답안지 다운로드
+                </button>
+            </div>
+        </div>
+        
+        <div class="preview" id="preview">
+            <div class="preview-header">미리보기</div>
+            <div class="preview-content" id="previewContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const vocabulary = [
+            { word: "convention", meaning: "관습" },
+            { word: "ethical", meaning: "윤리적인" },
+            { word: "applicable", meaning: "적용할 수 있는" },
+            { word: "objective", meaning: "객관적인" },
+            { word: "universal", meaning: "보편적인" },
+            { word: "theorist", meaning: "이론가" },
+            { word: "rational", meaning: "합리적인, 이성적인" },
+            { word: "reason", meaning: "이성" },
+            { word: "legal", meaning: "법적인, 법률의" },
+            { word: "binding", meaning: "구속하는, 묶어 두는" },
+            { word: "regardless of", meaning: "~에 관계없이" },
+            { word: "divine", meaning: "신성한" },
+            { word: "account for", meaning: "~을 설명하다" },
+            { word: "uniformity", meaning: "획일성" },
+            { word: "practice", meaning: "관례, 실행" },
+            { word: "inherent", meaning: "내재한" },
+            { word: "immutable", meaning: "불변하는" },
+            { word: "academic", meaning: "학술적인, 학문적인" },
+            { word: "construct", meaning: "구성하다" },
+            { word: "unsettled", meaning: "불안한" },
+            { word: "stressed", meaning: "스트레스를 받는" },
+            { word: "avoid", meaning: "피하다" },
+            { word: "carry on with", meaning: "~을 계속하다" },
+            { word: "unusual", meaning: "예외적인, 흔치 않은" },
+            { word: "solution", meaning: "해결책" },
+            { word: "absence", meaning: "부재" },
+            { word: "actual", meaning: "실제의" },
+            { word: "behaviour", meaning: "행동" },
+            { word: "realise", meaning: "깨닫다, 인식하다" },
+            { word: "worry", meaning: "걱정" },
+            { word: "give in", meaning: "굴복하다" },
+            { word: "vicious circle", meaning: "악순환" },
+            { word: "withdrawal", meaning: "금단 현상" },
+            { word: "absorb", meaning: "흡수하다, 빨아들이다" },
+            { word: "moral code", meaning: "도덕 규범" },
+            { word: "transmit", meaning: "전당하다" },
+            { word: "cue", meaning: "단서, 신호" },
+            { word: "cooperation", meaning: "협력" },
+            { word: "trustworthy", meaning: "신뢰할 수 있는" },
+            { word: "self-interest", meaning: "이기심" },
+            { word: "in favor of", meaning: "~을 위해" },
+            { word: "take advantage of", meaning: "~을 이용하다" },
+            { word: "psychological", meaning: "심리적인" },
+            { word: "mechanism", meaning: "메커니즘, 구조, 기구" },
+            { word: "innate", meaning: "타고난, 선천적인" },
+            { word: "defection", meaning: "태만" },
+            { word: "suppress", meaning: "억제하다" },
+            { word: "pre-predatory", meaning: "명사" },
+            { word: "primate", meaning: "영장류" },
+            { word: "prey", meaning: "사냥감, 먹이" },
+            { word: "predator", meaning: "포식자" },
+            { word: "upright", meaning: "적합한, 똑바른" },
+            { word: "testify", meaning: "증명하다" },
+            { word: "initially", meaning: "처음에" },
+            { word: "encounter", meaning: "마주치다, 만나다" },
+            { word: "associate ~ with ...", meaning: "~을 ...과 연관 짓다" },
+            { word: "scores of", meaning: "많은" },
+            { word: "tameness", meaning: "온순함, 길들임" },
+            { word: "a term of art", meaning: "전문 용어" },
+            { word: "carnivory", meaning: "육식" },
+            { word: "template", meaning: "틀, 모형" },
+            { word: "linguistic", meaning: "언어의" },
+            { word: "election", meaning: "선거" },
+            { word: "literally", meaning: "문자 그대로" },
+            { word: "make sense", meaning: "이치에 맞다" },
+            { word: "physically", meaning: "물리적으로" },
+            { word: "measurable", meaning: "측정 가능한" },
+            { word: "observable", meaning: "관찰 가능한" },
+            { word: "metaphorical", meaning: "은유적인" },
+            { word: "depressed", meaning: "우울한" },
+            { word: "figure of speech", meaning: "수사적 표현" },
+            { word: "exceptional", meaning: "특별한" },
+            { word: "unconsciously", meaning: "무의식적으로" },
+            { word: "permeate", meaning: "스며들다" },
+            { word: "conceptual", meaning: "개념적인" },
+            { word: "route", meaning: "경로, 길, 노선" },
+            { word: "entirely", meaning: "완전히, 아주" },
+            { word: "scale", meaning: "축척대로 설계하다" },
+            { word: "spatial", meaning: "공간적인" },
+            { word: "highlight", meaning: "강조하다" },
+            { word: "informal", meaning: "비공식적인" },
+            { word: "reference", meaning: "참조, 참고하다" },
+            { word: "visible", meaning: "눈에 띄는, 두드러진" },
+            { word: "feature", meaning: "특징, 특색" },
+            { word: "dealership", meaning: "판매 대리점" },
+            { word: "adaptive", meaning: "적용하는" },
+            { word: "biologically", meaning: "생물학적으로" },
+            { word: "novel", meaning: "새로운" },
+            { word: "measure", meaning: "측정하다" },
+            { word: "response", meaning: "반응" },
+            { word: "diminish", meaning: "감소하다" },
+            { word: "tiny", meaning: "아주 작은" },
+            { word: "colleague", meaning: "동료" },
+            { word: "supposedly", meaning: "겉으로 보기에, 짐작건대" },
+            { word: "grade", meaning: "채점하다" },
+            { word: "performance", meaning: "성과, 실적" },
+            { word: "vividly", meaning: "생생하게" },
+            { word: "in comparison to", meaning: "~과 비교하여" },
+            { word: "swim with", meaning: "~이 가득하다" },
+            { word: "stick with", meaning: "~을 계속하다" },
+            { word: "finding", meaning: "연구 결과" },
+            { word: "elevate", meaning: "높이다" },
+            { word: "persistence", meaning: "끈기, 지속성" },
+            { word: "anagram", meaning: "철자 순서를 바꾸어 만든 말" },
+            { word: "poke", meaning: "쿡 찌르기, 쑤시다" },
+            { word: "literacy", meaning: "문해력" },
+            { word: "crucial", meaning: "중요한" },
+            { word: "adolescent", meaning: "청소년" },
+            { word: "narrative", meaning: "이야기" },
+            { word: "conceive", meaning: "생각하다" },
+            { word: "integrate", meaning: "통합하다" },
+            { word: "consequently", meaning: "그 결과" },
+            { word: "emphasis", meaning: "강조" },
+            { word: "call on", meaning: "요구하다" },
+            { word: "middle grade", meaning: "중학년(대략 10~14세의 학생)" },
+            { word: "expository", meaning: "설명적인" },
+            { word: "aspire to do", meaning: "~하기를 열망하다" },
+            { word: "have ~ in mind", meaning: "~을 염두에 두다" },
+            { word: "gifted", meaning: "재능 있는" },
+            { word: "evolution", meaning: "진화" },
+            { word: "appetite", meaning: "욕구, 식욕" },
+            { word: "species", meaning: "종" },
+            { word: "navigate", meaning: "길을 찾아 나가다" },
+            { word: "shelter", meaning: "은신처" },
+            { word: "whereabout", meaning: "소재, 행방" },
+            { word: "edge", meaning: "강점" },
+            { word: "asset", meaning: "자산" },
+            { word: "run out of", meaning: "~이 없어지다" },
+            { word: "intriguing", meaning: "아주 흥미로운" },
+            { word: "anthropology", meaning: "인류학" }
+        ];
+
+        let currentTest = null;
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function generateTest() {
+            const numWords = parseInt(document.getElementById('numWords').value);
+            
+            if (numWords < 1 || numWords > vocabulary.length) {
+                alert(`1~${vocabulary.length} 사이의 숫자를 입력해주세요.`);
+                return;
+            }
+
+            const shuffled = shuffleArray(vocabulary);
+            currentTest = shuffled.slice(0, numWords);
+
+            // 미리보기 표시
+            const previewContent = document.getElementById('previewContent');
+            previewContent.innerHTML = currentTest.map((item, index) => `
+                <div class="preview-word">
+                    <span class="word-num">${index + 1}.</span>
+                    <span class="word-text">${item.word}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('preview').classList.add('active');
+            document.getElementById('downloadTestBtn').disabled = false;
+            document.getElementById('downloadAnswerBtn').disabled = false;
+        }
+
+        function generatePDF(includeAnswers) {
+            const numPerColumn = 30;
+            const col1 = currentTest.slice(0, numPerColumn);
+            const col2 = currentTest.slice(numPerColumn);
+
+            const rows = [];
+            for (let i = 0; i < numPerColumn; i++) {
+                const left = col1[i] || { word: '', meaning: '' };
+                const right = col2[i] || { word: '', meaning: '' };
+                
+                rows.push(`
+                    <tr>
+                        <td class="no-col">${i + 1}</td>
+                        <td class="word-col">${left.word}</td>
+                        <td class="word-col">${includeAnswers ? left.meaning : ''}</td>
+                        <td class="no-col">${col2[i] ? i + 1 + numPerColumn : ''}</td>
+                        <td class="word-col">${right.word}</td>
+                        <td class="word-col">${includeAnswers ? right.meaning : ''}</td>
+                    </tr>
+                `);
+            }
+
+            const title = includeAnswers ? 'VOCA TEST - 답안지' : 'VOCA TEST';
+            const date = new Date().toLocaleDateString('ko-KR');
+
+            return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: white;
+        }
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #333;
+            padding-bottom: 15px;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            background-color: #f0f0f0;
+        }
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            height: 25px;
+        }
+        .no-col {
+            width: 6%;
+            text-align: center;
+            font-weight: bold;
+        }
+        .word-col {
+            width: 22%;
+        }
+        .meaning-col {
+            width: 22%;
+        }
+        @media print {
+            body {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>${title}</h1>
+            <div class="info">
+                <span>총 단어 수: ${currentTest.length}개</span>
+                <span>생성일: ${date}</span>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>단어</th>
+                    <th>뜻</th>
+                    <th>No.</th>
+                    <th>단어</th>
+                    <th>뜻</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows.join('')}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>`;
+        }
+
+        function downloadTest() {
+            const html = generatePDF(false);
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `단어시험지_${currentTest.length}개_${new Date().getTime()}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('시험지 HTML 파일이 다운로드되었습니다.\n파일을 열어서 Ctrl+P(또는 Cmd+P)로 PDF로 저장하세요.');
+        }
+
+        function downloadAnswer() {
+            const html = generatePDF(true);
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `단어답안지_${currentTest.length}개_${new Date().getTime()}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('답안지 HTML 파일이 다운로드되었습니다.\n파일을 열어서 Ctrl+P(또는 Cmd+P)로 PDF로 저장하세요.');
+        }
+    </script>
+</body>
+</html>

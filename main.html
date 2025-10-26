@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WackDocs</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap');
+    body {
+      font-family: 'Nanum Gothic', sans-serif;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 6px; /* 간격 줄임 */
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+    }
+
+    /* 부제목 디자인 */
+    h2 {
+      font-size: 18px;
+      font-weight: 300;
+      color: #ffffff; /* 하얀색으로 변경 */
+      letter-spacing: 1px;
+      margin-bottom: 35px; /* 버튼과 간격 */
+      position: relative;
+      display: inline-block;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 260px;
+    }
+
+    .link-button {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      text-decoration: none;
+      padding: 15px 0;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+      transition: all 0.25s ease;
+    }
+
+    .link-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+      background: linear-gradient(135deg, #60a5fa, #2563eb);
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <h1>WackDocs</h1>
+  <h2>- 배움은 존재의 절대법칙 -</h2>
+  <div class="button-container">
+    <a href="sentence_order_test.html" class="link-button">📘 문장 배열 생성기</a>
+    <a href="vocab_test_maker.html" class="link-button">📗 올림포스 단어 생성기</a>
+  </div>
+
+  <footer>Made By Sungwoo</footer>
+</body>
+</html>

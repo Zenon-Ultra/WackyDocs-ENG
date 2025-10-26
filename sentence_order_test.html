@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문장 배열 시험지 생성기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .controls {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-align: center;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .lesson-select {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .lesson-select label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 16px;
+        }
+        
+        .paper {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .paper-title {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .paper-title h2 {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .paper-title .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .subsection {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .subsection-title {
+            color: #764ba2;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #764ba2;
+        }
+        
+        .sentence-item {
+            margin-bottom: 12px;
+            line-height: 1.8;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .answer-line {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px dashed #ccc;
+            color: #666;
+            font-weight: bold;
+        }
+        
+        .answer-key {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .container {
+                padding: 0;
+                margin: 0;
+            }
+            
+            .controls {
+                display: none;
+            }
+            
+            .paper {
+                box-shadow: none;
+                page-break-after: always;
+                margin: 0;
+                padding: 20px;
+            }
+            
+            .paper-title {
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+            }
+            
+            .info-box {
+                margin-bottom: 15px;
+            }
+            
+            .section {
+                margin-bottom: 25px;
+            }
+            
+            .subsection {
+                margin-bottom: 20px;
+                padding: 15px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .paper {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <h1>📝 문장 배열 시험지 생성기</h1>
+            
+            <div class="lesson-select">
+                <label>
+                    <input type="checkbox" id="lesson3" checked> Lesson 3
+                </label>
+                <label>
+                    <input type="checkbox" id="lesson4" checked> Lesson 4
+                </label>
+                <label>
+                    <input type="checkbox" id="olympus" checked> 올림포스 (12지문)
+                </label>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-primary" onclick="generateTest()">🎲 새 시험지 생성</button>
+                <button class="btn-secondary" onclick="window.print()">🖨️ 인쇄하기</button>
+            </div>
+            
+            <div class="info-box">
+                <strong>💡 사용 방법:</strong> 원하는 교재를 선택하고 "새 시험지 생성" 버튼을 클릭하세요. 
+                각 지문별로 문장이 무작위로 섞입니다. 인쇄 시 시험지와 답안지가 자동으로 분리됩니다.
+            </div>
+        </div>
+        
+        <div id="testPaper"></div>
+        <div id="answerPaper"></div>
+    </div>
+
+    <script>
+        const lesson3Data = {
+            title: "Lesson 3: Our Heritage, Our Treasure - Rescuing Cultural Treasures",
+            sections: [
+                {
+                    title: "From Preventing Destruction to Saving Treasures",
+                    sentences: [
+                        "When the MFAA was first formed, its main goal was to prevent the destruction of cultural landmarks. The Monuments Men persuaded the Allied forces not to bomb areas with museums, churches, or other culturally significant buildings.",
+                        "They also visited areas that had already been destroyed to restore damaged architecture and works of art. It wasn't long before their role expanded.",
+                        "During the war, the Nazis had been stealing works of art and other cultural treasures from countries across Europe. They hid these treasures in places like castles, mines, and caves.",
+                        "When the Monuments Men learned about this, they started looking for the stolen treasures. Their search has since been called 'the greatest treasure hunt in history.'",
+                        "When Germany began to lose the war, the stolen objects came under threat. Hitler ordered his forces to destroy everything that could be useful to the Allied armies before they retreated from an area.",
+                        "Some Nazi leaders believed that this included not just military and industrial equipment but everything of value—even the stolen works of art."
+                    ]
+                },
+                {
+                    title: "A Race against the Clock of Altaussee",
+                    sentences: [
+                        "One of the largest collections of stolen items was hidden in the salt mines of Altaussee, Austria. Upon discovering its location, some of the Monuments Men rushed to the mines.",
+                        "They hoped to recover everything before it was too late. Meanwhile, the Nazi leader who was in charge of the area tried to destroy everything by setting off large explosives inside the mines.",
+                        "This could have been disastrous. Luckily, some local miners found the explosives in the mines and came up with a plan to protect their livelihood.",
+                        "They secretly removed the large explosives and put smaller ones at the entrances. Once they went off, the Nazi leader believed that everything was destroyed.",
+                        "However, while the small explosions sealed off the entrances, they left the rest of the mines and the works of art unharmed. When the Monuments Men arrived and squeezed their way into the mines, they must have been amazed to see what was inside.",
+                        "There were thousands of priceless objects, including paintings, statues, books, furniture, and more. The Monuments Men thought it would take about one year to transport everything they found to a safe location.",
+                        "However, because control of the area was going to change at the end of the war, they would have access to the mines for just two months. With insufficient packing supplies and only a few trucks, the transporting mission seemed impossible.",
+                        "Not only that, but food was in short supply. Even without eating proper meals, they worked up to twenty hours a day.",
+                        "They used coats and gas masks as packing materials and did everything they could to accomplish this vital mission in time. In the end, the Monuments Men succeeded in rescuing thousands of stolen works of art, including important pieces such as Jan van Eyck's Adoration of the Mystic Lamb, Johannes Vermeer's The Astronomer, and Michelangelo's Madonna of Bruges."
+                    ]
+                },
+                {
+                    title: "The Continuing Impact of the Monuments Men",
+                    sentences: [
+                        "The efforts of the Monuments Men did not end with the war. For several years, they continued the work of recovering cultural treasures and identifying where they had been stolen from.",
+                        "In the end, the Monuments Men returned more than five million works of art and objects of cultural importance to their places of origin. Not everything that was stolen by the Nazis has been found, but what the Monuments Men accomplished is truly amazing.",
+                        "Without this determined group, the search for stolen works of art might never have begun. In addition, countless historical and cultural landmarks would have been lost forever due to the destruction of war.",
+                        "It is worth remembering the Monuments Men's contribution to the preservation of cultural heritage. Thanks to their efforts, many incredible cultural sites and works of art have survived and can still be appreciated to this day."
+                    ]
+                }
+            ]
+        };
+
+        const lesson4Data = {
+            title: "Lesson 4: Good for All of Us - Opening Up the Web to Everyone",
+            sections: [
+                {
+                    title: "Text Descriptions of Images",
+                    sentences: [
+                        "Along with text, most websites include other forms of information, such as images. Sometimes such visual information is important for understanding the text.",
+                        "This is a problem for users with visual disabilities. When they go on a website, they often use programs called 'screen readers,' which read online text aloud.",
+                        "However, these programs cannot 'read' images. Accessible websites solve this problem by providing alternative text, also known as 'alt text.'",
+                        "Alt text is a brief description of non-textual information. For instance, if an image shows a group of students, its alt text would explain how many students are in the image and what they are doing.",
+                        "Screen readers can detect this alt text and read it aloud. This way, alt text ensures that people with visual disabilities can access more of the information on a website."
+                    ]
+                },
+                {
+                    title: "Transcripts and Captions for Multimedia Content",
+                    sentences: [
+                        "In some cases, audio content cannot be accessed or understood. Some people may have hearing disabilities, while others might be in places where they can't listen to audio, such as a quiet library.",
+                        "Therefore, accessible websites often offer other ways to access information that is presented in audio form. For example, they may provide transcripts or captions that can help users access this information.",
+                        "Transcripts are text versions of the entire audio content, while captions are text versions of the audio that appear in a video as it plays. Captions include not only the text version of the spoken words but also descriptions of the music and other sounds in the video."
+                    ]
+                },
+                {
+                    title: "Content That Is Easy to See and Hear",
+                    sentences: [
+                        "Having a visual disability doesn't necessarily mean a person can't see at all. Some people, including many elderly people, simply have poor eyesight.",
+                        "This makes it difficult for them to read. For this reason, accessible websites have a background color that contrasts with the color of their text.",
+                        "This makes the text clear enough for most people to see. As for audio content, accessible websites allow users to adjust the volume of background sound or to turn it off altogether.",
+                        "This gives users both with and without hearing difficulties more control over their experience while they are using the sites."
+                    ]
+                },
+                {
+                    title: "Complete Navigation Using the Keyboard",
+                    sentences: [
+                        "Some users have disabilities that limit the movement of their hands. They rely on their keyboards, rather than a mouse, to navigate websites.",
+                        "On accessible websites, users can access everything on the site using only a keyboard. This means that links, buttons, and fields, which are spaces where information is entered, can be accessed through keyboard navigation.",
+                        "Users navigate the websites by making use of keys such as the space bar, the arrow keys, the enter key, and the tab key. For example, they can use the tab key to jump from one part of a web page to another.",
+                        "Both users with disabilities and those with temporarily injured hands can benefit from this kind of navigation."
+                    ]
+                },
+                {
+                    title: "Indicators Other than Color That Convey Information",
+                    sentences: [
+                        "Color blindness is a common visual disability. People with color blindness find it difficult to tell some colors apart.",
+                        "This can cause problems, especially when graphs and charts only use colors to show the differences between sets of information. Accessible websites use other indicators along with the colors.",
+                        "For example, a line in green may also be dotted, while a line in blue is solid. This ensures that everyone can tell the two lines apart.",
+                        "The accessibility features of websites don't just help people with disabilities. They can make online experiences easier for everyone, regardless of abilities or situations.",
+                        "When websites are easy to navigate and understand, we can all benefit from a more inclusive online experience."
+                    ]
+                }
+            ]
+        };
+
+        const olympusData = {
+            title: "올림포스 독해의 기본 (Ch.03-04)",
+            sections: [
+                {
+                    title: "Ch.03 Unit 09-1: Natural Law Theory",
+                    sentences: [
+                        "According to natural law theory, moral principles are not simply the result of human convention or social agreement, but are based on fundamental principles of nature, including human nature.",
+                        "The term 'natural law' refers to a set of ethical and moral principles that are thought to be inherent in the natural world and applicable to all human beings.",
+                        "These principles are considered to be objective, universal, and immutable, and are often seen as a source of guidance for human behaviour.",
+                        "Natural law theorists believe that the natural world operates according to a set of rational principles, and that these principles can be discovered through human reason and observation.",
+                        "They argue that these principles provide a foundation for moral and legal systems, and that they are binding on all individuals, regardless of their cultural or social background.",
+                        "Critics of natural law theory argue that it relies too heavily on unprovable assumptions about the existence of a divine purpose, and that it fails to account for the diversity of moral beliefs and practices across cultures and historical periods."
+                    ]
+                },
+                {
+                    title: "Ch.03 Unit 09-2: Academic Writing Style",
+                    sentences: [
+                        "Most academic writing involves constructing an argument or supporting a position about some question or topic.",
+                        "This requires clear organization with all your points directly connected to your argument or position.",
+                        "In Western academic writing, a 'linear' style is preferred, where one point leads directly and unambiguously to the next, with little room for digressions.",
+                        "The organization will depend on the purpose of the composition; a literary critique will have a different structure from a chemistry report.",
+                        "Part of learning a discipline is learning the writing organization appropriately to that discipline.",
+                        "For example, academic papers in my discipline (Applied Linguistics) usually have sections (e.g., Introduction, Literature review, Discussion, Conclusion), which are typically signposted with headings that make the organization of the paper explicit."
+                    ]
+                },
+                {
+                    title: "Ch.03 Unit 09-3: Breaking Habits",
+                    sentences: [
+                        "Habits are part of our everyday lives and therefore, when we don't clean our teeth, eat breakfast, have our morning coffee or have biscuits in the afternoon, we feel unsettled and a little bit stressed.",
+                        "This feeling is unpleasant and we quickly learn that it can be avoided by carrying on with our habit.",
+                        "Therefore, not eating biscuits feels unusual, but this can all be made OK with a few biscuits.",
+                        "And the habit carries on as it becomes the solution to the problem created when trying to change it.",
+                        "It's a vicious circle.",
+                        "But it's the change in the habit which makes us feel stressed, not the absence of the actual behaviour.",
+                        "And if we start to realise that the feeling of stress or worry is just 'withdrawal' and will only be made worse in the longer term if we give in and use the habit to get rid of it, then we can start to break the habit itself."
+                    ]
+                },
+                {
+                    title: "Ch.04 Unit 10-1: Group Morality and Cooperation",
+                    sentences: [
+                        "We not only absorb our moral codes and definitions of right and wrong from the group; the group also transmits cues about cooperation and defection and what it means to act in a trustworthy manner.",
+                        "People are more likely to suppress their self-interest in favor of the group interest if they feel that others are doing so as well, and they're less likely to do so if they feel that others are taking advantage of them.",
+                        "The psychological mechanism for this is unclear, but certainly it is related to our innate sense of fairness.",
+                        "We generally don't mind sacrificing for the group, as long as we're all sacrificing equally.",
+                        "But if we feel like we're being taken advantage of by others who are defecting, we're more likely to defect as well."
+                    ]
+                },
+                {
+                    title: "Ch.04 Unit 10-2: Biological First Contact",
+                    sentences: [
+                        "In their pre-predatory stage, our primate ancestors had moved through the world among other creatures that did not fear them.",
+                        "Once they adopted carnivory, the prey they were interested in learned to allow close approaches at their own risk.",
+                        "But unlike big cats or terrifying wolves that were obvious predators, upright primates didn't automatically fit the predator template for most animals.",
+                        "Numerous examples from around the world during the past five centuries testify that upon initially encountering humans, many wild creatures did not associate us with a threat.",
+                        "In their first encounters with humans, scores of species reacted with trust and tameness.",
+                        "There is a term of art for this: biological first contact.",
+                        "When we appeared in new geographies for the first time, wild animals had to learn to be afraid of us.",
+                        "Many died standing and looking, never absorbing the lesson."
+                    ]
+                },
+                {
+                    title: "Ch.04 Unit 10-3: Metaphor in Language",
+                    sentences: [
+                        "Consider the following two everyday linguistic expressions: 'The election is ahead of us' and 'the long Winter is now behind us.'",
+                        "Literally, these expressions do not make any sense.",
+                        "'An election' is not something that can physically be 'ahead' of us in any measurable or observable way, and the 'Winter' is not something that can be physically 'behind' us.",
+                        "Hundreds of thousands of these expressions, whose meaning is not literal but metaphorical, can be observed in human everyday language: 'he is a cold person,' 'she has strong opinions,' 'the market is quite depressed.'",
+                        "Metaphor, in this sense, is not just a figure of speech, or an exceptional communicational tool in the hands of poets and artists.",
+                        "It is an ordinary mechanism of thought.",
+                        "Usually operating unconsciously and effortlessly, it permeates nearly every aspect of human everyday (and technical) language, making imagination possible."
+                    ]
+                },
+                {
+                    title: "Ch.04 Unit 11-1: Mental Maps",
+                    sentences: [
+                        "I suppose everyone has at one time or another drawn a mental map, and it offers little conceptual difficulty.",
+                        "In my classes, I ask students to draw a map by hand, in just five minutes, showing their route to and from class.",
+                        "No two maps are ever entirely the same, of course, and none are to scale.",
+                        "Nevertheless, most of the maps are easily understood.",
+                        "This shows that while we all produce our own versions of spatial reality, we can see particular landmarks that communicate to all of us in a social community.",
+                        "Mental maps tend to highlight important parts of a route, with streets labeled to indicate where to turn.",
+                        "Such maps tend to include informal but understood cultural references.",
+                        "Where a professionally made street map might give you numbered addresses, a mental map is more likely to describe a route by referencing visible features like 'a giant blue gorilla' outside a car dealership or 'that old pink Victorian house.'"
+                    ]
+                },
+                {
+                    title: "Ch.04 Unit 11-2: Brain Adaptation",
+                    sentences: [
+                        "People tend to pay less attention to familiar things, whether it's a possession or even a person.",
+                        "On the whole, this adaptive behavior is biologically useful (for objects, events, and situations), because it is usually the novel, unexpected things in life that require the most attention.",
+                        "The brain naturally adapts to repeated experiences.",
+                        "If I were to show you a series of repeated images and measure your brain responses, the activity would diminish with the repetitions.",
+                        "Your brain would respond again only when something new was presented.",
+                        "Scientists have shown that the biggest responses always come with the least expected event.",
+                        "A simple sentence such as, 'He picked up the hammer and nail' gives a tiny response; change the last few words, 'He picked up the hammer and ate it,' and you'll see a much larger one."
+                    ]
+                },
+                {
+                    title: "Ch.04 Unit 11-3: Power of Regret",
+                    sentences: [
+                        "In one experiment, Keith Markman and two colleagues gave participants ten anagrams to solve.",
+                        "After supposedly 'grading' the results, they told participants that they'd found only half of the available words.",
+                        "Then they poked people with a little regret.",
+                        "'Close your eyes and think about your actual performance on the anagrams compared to how you might have performed better,' they told the participants.",
+                        "'Take a minute and vividly evaluate your performance in comparison to how you might have performed better.'",
+                        "Their heads now swimming with If Onlys, these puzzle-solvers felt worse especially compared to another group that had been asked to make At Least comparisons.",
+                        "But on the next round, the regretful group solved more puzzles and stuck with the task longer than anyone else in the experiment.",
+                        "This is one of the central findings on regret: it can deepen persistence, which almost always elevates performance."
+                    ]
+                },
+                {
+                    title: "Ch.04 Unit 12-1: Literacy in Middle School",
+                    sentences: [
+                        "Literacy is crucial to the teaching-learning process that occurs in the middle grades because this is when young adolescents begin to move from narrative to expository text, a process that places increasing demands on the students' literacy skills.",
+                        "Unfortunately, despite these increasing demands on their literacy skills, formal reading instruction ends for many young adolescents once they enter middle school.",
+                        "One reason for this is that only about 50 percent of middle-grades teachers receive training in the teaching of literacy, broadly conceived as integrated reading, writing, speaking, and listening.",
+                        "Fewer still receive specific training in programs such as writing across the curriculum.",
+                        "Consequently, many teachers are less than ideally prepared to teach content-area literacy strategies to their students.",
+                        "Given the increasing emphasis on integrated curricula in the middle grades, all teachers, regardless of the subjects they teach, are being called on to integrate the language arts into their subjects."
+                    ]
+                },
+                {
+                    title: "Ch.04 Unit 12-2: Journalists to Novelists",
+                    sentences: [
+                        "Many people who aspire to be novelists began their writing careers as journalists.",
+                        "The thirteen-year-old Anne Frank had exactly this in mind for herself, and it is hard to believe that someone so full of life and so gifted at writing as a child would not have accomplished what she set out to do had the Nazis not murdered her.",
+                        "She wrote in her diary about 'the big question, will I ever be able to write something great, will I ever become a journalist or a writer?'",
+                        "There are many others, too—Martha Gellhorn, Jack London, Margaret Mitchell (Gone With the Wind), Tom Wolfe—who wrote for newspapers or magazines before turning to fiction.",
+                        "John Steinbeck, already a published novelist, wrote a series of pieces on the Okie migrant camps of California for the San Francisco News before writing his most celebrated book, also about the migrants, The Grapes of Wrath."
+                    ]
+                },
+                {
+                    title: "Ch.04 Unit 12-3: Wayfinding and Human Success",
+                    sentences: [
+                        "Over the course of our evolution between 350,000 and 150,000 years ago, Homo sapiens developed an appetite for exploration and a wayfinding spirit that set us apart from other human species.",
+                        "It had a huge effect on our future.",
+                        "One of the most intriguing recent ideas in anthropology is that our ability to navigate was essential to our success as a species, because it allowed us to cultivate extensive social networks.",
+                        "In prehistoric times, when people lived in small family units and spent much of their time looking for food and shelter, being able to share information with other groups about the whereabouts of resources and the movements of predators would have given us an evolutionary edge.",
+                        "Friends were a survival asset.",
+                        "If you ran out of food, you knew where to go; if you needed help on a hunt, you knew who to ask."
+                    ]
+                }
+            ]
+        };
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function groupSentences(sentences, isTextbook) {
+            // 올림포스는 그대로, 교과서만 6개 이상일 때 2개씩 묶기
+            if (!isTextbook || sentences.length <= 5) {
+                return sentences.map(s => [s]);
+            }
+            
+            const grouped = [];
+            for (let i = 0; i < sentences.length; i += 2) {
+                if (i + 1 < sentences.length) {
+                    grouped.push([sentences[i], sentences[i + 1]]);
+                } else {
+                    grouped.push([sentences[i]]);
+                }
+            }
+            return grouped;
+        }
+
+        function generateTest() {
+            const includeLesson3 = document.getElementById('lesson3').checked;
+            const includeLesson4 = document.getElementById('lesson4').checked;
+            const includeOlympus = document.getElementById('olympus').checked;
+            
+            if (!includeLesson3 && !includeLesson4 && !includeOlympus) {
+                alert('최소 하나의 교재를 선택해주세요!');
+                return;
+            }
+            
+            let testHTML = '<div class="paper">';
+            testHTML += '<div class="paper-title">';
+            testHTML += '<h2>문장 배열 시험지</h2>';
+            testHTML += '<div class="subtitle">Student Name: _______________ Class: _____ Number: _____ Date: ___________</div>';
+            testHTML += '</div>';
+            testHTML += '<div class="info-box"><strong>문제:</strong> 각 지문별로 섞인 문장들을 올바른 순서로 배열하세요. 정답은 A, B, C, D... 순서로 답란에 적으세요.</div>';
+            
+            let answerHTML = '<div class="paper">';
+            answerHTML += '<div class="paper-title">';
+            answerHTML += '<h2>문장 배열 답안지</h2>';
+            answerHTML += '<div class="subtitle">Teacher\'s Answer Key</div>';
+            answerHTML += '</div>';
+            
+            const lessonsToInclude = [];
+            if (includeLesson3) lessonsToInclude.push({data: lesson3Data, isTextbook: true});
+            if (includeLesson4) lessonsToInclude.push({data: lesson4Data, isTextbook: true});
+            if (includeOlympus) lessonsToInclude.push({data: olympusData, isTextbook: false});
+            
+            lessonsToInclude.forEach(({data: lessonData, isTextbook}) => {
+                testHTML += `<div class="section">`;
+                testHTML += `<div class="section-header">${lessonData.title}</div>`;
+                
+                answerHTML += `<div class="section">`;
+                answerHTML += `<div class="section-header">${lessonData.title}</div>`;
+                
+                lessonData.sections.forEach(section => {
+                    const originalSentences = [...section.sentences];
+                    const groupedOriginal = groupSentences(originalSentences, isTextbook);
+                    const shuffledGroups = shuffleArray(groupedOriginal);
+                    
+                    testHTML += `<div class="subsection">`;
+                    testHTML += `<div class="subsection-title">${section.title}</div>`;
+                    
+                    shuffledGroups.forEach((group, index) => {
+                        const letter = String.fromCharCode(65 + index);
+                        const sentenceText = group.join(' ');
+                        testHTML += `<div class="sentence-item"><strong>${letter}.</strong> ${sentenceText}</div>`;
+                    });
+                    
+                    testHTML += `<div class="answer-line">Answer: _______________________________</div>`;
+                    testHTML += `</div>`;
+                    
+                    answerHTML += `<div class="subsection">`;
+                    answerHTML += `<div class="subsection-title">${section.title}</div>`;
+                    
+                    const answerKey = groupedOriginal.map(group => {
+                        const groupText = group.join(' ');
+                        const index = shuffledGroups.findIndex(g => g.join(' ') === groupText);
+                        return String.fromCharCode(65 + index);
+                    }).join(' → ');
+                    
+                    answerHTML += `<div class="answer-key">Answer: ${answerKey}</div>`;
+                    answerHTML += `</div>`;
+                });
+                
+                testHTML += `</div>`;
+                answerHTML += `</div>`;
+            });
+            
+            testHTML += '</div>';
+            answerHTML += '</div>';
+            
+            document.getElementById('testPaper').innerHTML = testHTML;
+            document.getElementById('answerPaper').innerHTML = answerHTML;
+        }
+
+        generateTest();
+    </script>
+</body>
+</html>
