@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문제 PDF 생성기</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            text-align: center;
+        }
+        .header {
+            background: linear-gradient(45deg, #485563, #29323c);
+            color: white;
+            padding: 30px 20px;
+            position: relative;
+        }
+        .back-btn {
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        .controls {
+            padding: 40px 20px;
+        }
+        .generate-btn {
+            background: linear-gradient(45deg, #5b86e5, #36d1dc);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="main.html" class="back-btn">← 메인으로</a>
+            <h1>📄 문제 PDF 생성기</h1>
+            <p>올림포스 & 모의고사 문제를 PDF로 생성하세요</p>
+        </div>
+        
+        <div class="controls">
+            <button class="generate-btn" onclick="generatePDF()">PDF 생성 및 다운로드</button>
+        </div>
+    </div>
+
+    <script>
+        const problems = {
+            "Mock Test 2025-09-20: Class Opening Routine": [
+                "Inefficient teachers overlook the potential power of the opening minutes of class.",
+                "Often, if students are quiet enough and if there are many pressing demands on a teacher's time at that moment, more than ten minutes can disappear before class starts.",
+                "It's no wonder that students are late for class; they have little reason to be on time.",
+                "You can use the first ten minutes to get your class off to a great start, or you can choose to waste this time.",
+                "The first minutes set the tone for the rest of the class.",
+                "If you are prepared for class and have taught your students an opening routine, they can use this brief time to make mental and emotional transitions from the last class or subject and prepare to focus on learning new material.",
+                "In summary, you should establish an opening routine to develop your class with an effective start."
+            ],
+            "Mock Test 2025-09-22: Benefits of Gardening": [
+                "The act of gardening itself is a fantastic form of physical activity.",
+                "It involves a range of motions, from digging and planting to watering and harvesting.",
+                "These activities help improve strength, flexibility, and endurance.",
+                "You might not realize it, but small tasks like weeding or turning compost can burn many calories.",
+                "Gardening is particularly beneficial for those who find traditional exercise challenging.",
+                "It's a low-impact way to stay active and fit, making it accessible for people of all ages and physical abilities.",
+                "Besides physical health, gardening has profound mental health benefits.",
+                "Tending to plants can be incredibly calming and meditative.",
+                "It allows you to focus on the present moment, reducing stress and anxiety.",
+                "The repetitive tasks involved in gardening can induce a state of mindfulness, similar to meditation.",
+                "Studies have shown that spending time in nature, even in a small garden, can elevate mood, improve cognition, and lessen depression symptoms.",
+                "The sense of accomplishment from watching your plants grow and thrive can also boost self-esteem and overall well-being."
+            ],
+            "Mock Test 2025-09-23: Tools for Perception": [
+                "For many centuries, humans have taken advantage of tools that translate and bring into our perception natural phenomena that we can't perceive with our senses.",
+                "In some cases, this consists of simply amplifying signals that feed into our normal sensory inputs (e.g., telescopes can bring into clear view that which is too far away for our eyes to perceive on their own).",
+                "Other instruments turn signals that we cannot perceive into ones that we can observe.",
+                "Some of these take the form of expanding the reach of our current senses, such as creating visible images based on the ultraviolet spectrum of light or changing sounds that are normally outside the range of what human ears can hear into audible signals.",
+                "Alternatively, some instruments measure properties for which we have no sensory capacity at all and change them into that which we can observe."
+            ],
+            "Mock Test 2025-09-30: Ownership and Sharing": [
+                "For a species born in a time when resources were limited and dangers were great, our natural tendency to share and cooperate is complicated when resources are plenty and outside dangers are few.",
+                "When we have less, we tend to be more open to sharing what we have.",
+                "Certain nomadic tribes don't have much, yet they are happy to share because it is in their interest to do so.",
+                "If you happen upon them in your travels, they will open up their homes and give you their food and hospitality.",
+                "It's not just because they are nice people; it's because their survival depends on sharing, for they know that they may be the travelers in need of food and shelter another day.",
+                "Ironically, the more we have, the bigger our fences, the more sophisticated our security to keep people away and the less we want to share.",
+                "Our desire for more, combined with our decreased physical interaction with the \"common folk,\" starts to create a disconnection or blindness to reality."
+            ],
+            "Mock Test 2025-09-31: Returning to Baseline Happiness": [
+                "Whether we feel happy or sad, content or discontent, is not determined merely by each individual successive moment of life experience a good thing happens and I'm happy, a bad thing happens and I'm sad.",
+                "While our experiences affect our mood, we are not blown in a completely new direction by each gust of wind.",
+                "As humans, we adjust to new information and events both good and bad and return to our personal default level of well-being.",
+                "There will be highs and lows, but over time, like water seeking its own level, we are pulled toward our baseline back up after bad news and back down after good.",
+                "The euphoria of first love fades, and so does the despair of a break-up.",
+                "This tendency is best seen with little kids and their toy joy:",
+                "When they get what they've longed for, they believe they will be happy for the rest of their lives.",
+                "And for the first few minutes of the rest of their lives, they are.",
+                "But then the kids like adults adapt."
+            ],
+            "Mock Test 2025-09-33: The Relativity of Uncertainty": [
+                "One of the things that makes uncertainty difficult for members of the public to appreciate is that the significance of uncertainty is relative.",
+                "Take, for example, the distance between Earth and the sun: 1.49597 x 108 km, as measured at one point during the year.",
+                "This seems relatively precise; after all, using six significant digits means I know the distance to an accuracy of one part in a million or so.",
+                "However, if the next digit is uncertain, that means the uncertainty in knowing the precise Earth-sun distance is larger than the distance between New York and Chicago!",
+                "Whether or not the quoted number is \"precise\" therefore depends on what I'm intending to do with it.",
+                "If I care only about what minute the sun will rise tomorrow, then the number quoted here is fine.",
+                "If I want to send a satellite to orbit just above the sun, however, then I would need to know distances more accurately."
+            ],
+            "Mock Test 2025-09-39: Judging Moral Goodness": [
+                "A morally good person is one who does morally bad actions significantly less often than most and does morally good ones significantly more often than most.",
+                "In judging a person not only her actions but also her intentions and motives are relevant.",
+                "A morally good person must intend to do morally good actions and intend to avoid morally bad ones.",
+                "A person who unintentionally prevents harm to others and does not harm them simply because things do not turn out as she intends is not morally good.",
+                "Although this kind of situation generally occurs only in slapstick movies, it is worth mentioning to avoid the false impression that it is the actual consequences of a person's actions that count toward her being judged morally good or bad.",
+                "But actual consequences are important.",
+                "A person who always tries to prevent harm but never does, is not generally thought of as morally good.",
+                "Of such a person, it may be said that she means well; but, contrary to Kant, some results are necessary before she is regarded as morally good."
+            ],
+            "Mock Test 2025-09-40: Vision and Objective Reality": [
+                "Vision is influenced by our preconceptions about reality.",
+                "In viewing a scene, we establish unconscious hierarchies that reflect our functional relationship to objects and our momentary priorities.",
+                "For example, when visualizing a hammer in our mind's eye, we tend to \"see\" it in profile or at some other 'ready for use' angle.",
+                "One would probably not visualize a hammer as seen from the top so that the handle is hidden by the hammer's head.",
+                "The functional relationship we have with objects creates visual expectations that interfere with our ability to see \"like a camera.\"",
+                "The camera, like the human eye, sees only shapes and colors.",
+                "It documents the world impartially through a lens that is similar to the eye.",
+                "When we look at them carefully, photographs are often surprising because they don't interpret confusing details but simply serve them up to us with a mechanical indifference.",
+                "And because of their flatness, photographs often contain areas that appear as unrecognizable colors and shapes.",
+                "[Summary] Our visual perception is shaped by an established hierarchy based on functional relationships, which interrupts our ability to see objects as they truly are, unlike the objective perspective of a camera."
+            ],
+            "Olympus Ch.01 Unit 03-1: Urban Greening": [
+                "Why have cities only recently seen a sudden increase in \"greening\" from green roofs to new parks to tree planting to more energy efficient buses despite the fact that sweeping federal environmental legislation was enacted more than 30 years ago?",
+                "Quite simply, city leaders are recognizing that a cleaner environment is needed both to provide residents with a good quality of life and to compete in the global economy.",
+                "America's manufacturing-based economy of the twentieth century has been transformed into a service-based knowledge economy.",
+                "For the information age economy, environmental quality is a major economic asset.",
+                "Skilled workers are increasingly footloose, able to settle just about anywhere there is broadband Internet access, and they are drawn to healthy, aesthetically pleasing environments.",
+                "Moreover, green cities are demonstrating that the alleged trade-off between jobs and the environment is a false dichotomy.",
+                "A quality environment produces jobs; a polluted environment costs jobs."
+            ],
+            "Olympus Ch.01 Unit 03-2: Importance of Memos": [
+                "The brevity of memos can be wonderful, but you do need to make sure you communicate everything, or you'll just end up creating more work for yourself.",
+                "For example, if you're using a memo to take a telephone message, make sure you include who called and when, what their message was, and how to call them back.",
+                "If you forget any of these details, your memo will be practically pointless.",
+                "As you can see, it's very important not to sacrifice the content of your memo simply because memos are normally brief.",
+                "If you can't fit all of the information you need into a memo, opt instead to write a letter or an e-mail.",
+                "It's better to include all of the information you need to transmit than it is to omit critical details simply for the sake of making your message short."
+            ],
+            "Olympus Ch.01 Unit 03-3: Brain Differences and Similarities": [
+                "It is relatively uncontroversial that there are small structural and functional differences between male and female brains, perhaps contributing to some performance differences on tests of spatial and verbal abilities.",
+                "Of paramount importance, but usually overlooked, is that similarities between the sexes far outweigh differences: differences between men and women are not as large as differences among members of the same sex.",
+                "Even those scientists who have discovered functional performance differences between the brains of males and females are careful to point out that their research is tentative and suggestive.",
+                "And that while their research attends to differences, similarities abound.",
+                "\"Fundamentally, the brains of men and women are more similar than different.\""
+            ],
+            "Olympus Ch.01 Unit 04-1: Dangers in the Wild": [
+                "In the complex story of nature's ways, people exploring the wild's twisting paths often discover themselves caught in dangerous situations.",
+                "Bears, cougars, and other wild animals sometimes remind us of their formidable presence.",
+                "Despite the infrequency, there are a considerable number of accumulated instances where these guardians of the wilderness become aggressors, resulting in tragic outcomes for unsuspecting explorers.",
+                "Yet amid these serious situations, a remarkable turn of events occurs, like unexpected notes in a familiar song.",
+                "In Oregon's forests in 1995, a man was found dead, initially blamed on a cougar, but subsequent investigation revealed otherwise.",
+                "Similarly, in 2015, a comparable incident occurred, with initial suspicions falling on a nearby wolf pack.",
+                "However, upon closer investigation, it became apparent that the wolves were innocent bystanders in the man's tragic fate, emphasizing the complexity inherent in such wilderness tragedies."
+            ],
+            "Olympus Ch.01 Unit 04-2: Ambivalence about Competitions": [
+                "Architects are ambivalent about competitions.",
+                "On a practical level, competitions are extremely expensive: entering a large competition can cost millions of dollars.",
+                "More important, competitions oblige the architect to work in a vacuum.",
+                "In later life, I. M. Pei refused to enter competitions, since he considered that the best architecture could emerge only from a considered dialogue between architect and client.",
+                "Nevertheless, the public favors competitions, since they provide an opportunity for young talent to be recognized in a field that tends to privilege age and experience.",
+                "Clients like competitions, since they provide an opportunity to choose between several designs and several architects while fund-raisers use competitions as a way to raise public interest in a building project.",
+                "Everyone loves a horse race except, perhaps, the horses."
+            ],
+            "Olympus Ch.01 Unit 04-3: Unconscious Cognition Experiment": [
+                "In an experiment conducted by Antoine Bechara, participants were given $2,000 in play money and four decks of cards and were told that they were to use them in a game.",
+                "Different individual cards won or lost different sums of money.",
+                "They should just go ahead and turn the cards and try to win as much money as they could.",
+                "But the cards were not random.",
+                "In fact, some of the piles were far more profitable than others.", 
+                "On average, it took the gamblers around fifty card-turns before they began to report a conscious 'hunch' that some of the decks were more profitable.",
+                "But when their behaviour was analysed, Bechara discovered something remarkable.",
+                "Measurements of the electrical conductance of their skin, which can reveal levels of anxiety and nervousness, indicated that their emotions were subtly warning them against the bad decks after just ten turns.",
+                "Their unconscious mind had worked out what was happening far quicker than their conscious minds and had warned them with a hit of bad feeling.",
+                "They knew before they knew."
+            ],
+            "Olympus Ch.01 Unit 05-1: Sea Turtles and Urbanization": [
+                "For millions of years, sea turtles would come to the beaches of Florida to spawn and their hatchlings would head toward the sea to live a life far away and to return to Florida years later.",
+                "It turns out that the way the young turtles knew to head toward the direction of the ocean was based on light glimmering off the sea at night.",
+                "The sea beautifully reflects the light of the moon and the stars, and for millions of years, a simple algorithm of \"head toward the light at night\" allowed the turtles to effectively head toward the sea to pursue an effective life strategy.",
+                "Well, then came Miami.",
+                "Miami and the other big cities on the coast of Florida are filled with lots of bright lights at night, so this led to an ecological disaster for the sea turtles.",
+                "Shaped by evolution to head toward light at night, hatchlings started toward the highways and cities by the millions meeting premature death instead of a long sea-dwelling life."
+            ],
+            "Olympus Ch.01 Unit 05-2: Immigrant Entrepreneurship": [
+                "Those who migrate out of poor countries today need to have the money to afford the cost of travel and have the grit (or the advanced degrees) required to overcome a system of immigration control typically loaded against them.",
+                "For this reason, a lot of them bring exceptional talents, skills, ambition, patience, and stamina that help them become job creators, or raise children who will be job creators.",
+                "A report by the Center for American Entrepreneurship found that, in 2017, out of the largest five hundred US companies by revenue, 43 percent were founded or co-founded by immigrants or the children of immigrants.",
+                "Moreover, immigrant-founded firms account for 52 percent of the top twenty-five firms, 57 percent of the top thirty-five firms, and nine of the top thirteen most valuable brands.",
+                "Henry Ford was the son of an Irish immigrant.",
+                "Steve Jobs's biological father was from Syria.",
+                "Sergey Brin was born in Russia."
+            ],
+            "Olympus Ch.01 Unit 05-3: Trash as a Resource": [
+                "Traditionally, garbage is considered the detritus of consumer and industrial practices.",
+                "It is the stuff that is no longer useful, that we no longer wish to have in our homes or personal spaces, that we want to throw away.",
+                "Perhaps precisely due to the proliferation of trash in material space, it has arguably also become a resource something that has value and can be sold on at a profit.",
+                "Artists most often at the leading edge of rethinking materiality, value, and beauty are among the first social actors to have taken seriously the possibility of reusing trash to make new things.",
+                "Taking the discarded objects of others as found materials, many artists work with trash in order to create new aesthetic objects while at the same time making a commentary on the place of trash in the social and cultural world."
+            ],
+            "Olympus Ch.03 Unit 08-1: Children's Role-Playing": [
+                "Role-playing is an extension of representational skills.",
+                "Children role-play when they use not only materials and objects but also voice and actions to represent others during play.",
+                "Infants and toddlers begin to play a role when they imitate adults' language, dress, or actions.",
+                "An older child expands on this role by imitating familiar roles, such as a parent or doctor.",
+                "The child uses gestures and language to communicate his understanding of what this role represents.",
+                "He uses the doctor kit or kitchen playthings as props to support his actions while he plays.",
+                "For instance, he may use a cylinder-shaped block as a syringe when pretending to be a doctor.",
+                "As he becomes familiar with other people and their roles, he may imitate them with the actions and verbalizations of a grocer, waiter, or firefighter.",
+                "Playing fantasy characters, such as a monster or a superhero, becomes common once a child is able to engage in more abstract thinking."
+            ],
+            "Olympus Ch.03 Unit 08-2: Language and Culture": [
+                "People are inherently social creatures, and in order to connect and regulate their social interactions, they must internalize their cultures.",
+                "But cultures cannot be internalized without language.",
+                "Indeed, language is the vehicle through which we learn about our social world, discover its rules and values, and express our personal natures, allowing us to connect with others, both in relationships of exchange and of caring.",
+                "Cultures themselves interact.",
+                "As far back as the origins of human history, groups of individuals sharing a common culture and language made contact with other groups, each unified by their own shared tongue.",
+                "Of great value was anyone who could ably facilitate those intergroup contacts those people who were multilingual.",
+                "Today we humans exist in a globally interconnected world."
+            ],
+            "Olympus Ch.03 Unit 08-3: Creative Art Education": [
+                "To make art and design irresistible, the teacher must commit to providing opportunities that incite feelings of surprise and, thus motivational discovery and learning.",
+                "This teaching approach is exciting it allows the practitioner to consider what is tempting in learning, what drives an individual to find out and discover.",
+                "The teacher needs to remember what it is about learning that makes it irresistible, and then design their lessons, their spaces of learning and their teaching materials accordingly.",
+                "This is not teaching that rigidly conforms to an instructional, target-bound paradigm.",
+                "It is essential to provide classrooms that have no ceiling when creative minds are operating and finding out.",
+                "Classrooms of young children should be alive, dynamic and changeable, encouraged by a theme of the moment or an interest that pervades children's imaginations."
+            ]
+        };
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            let yPos = 20;
+
+            const problemEntries = Object.entries(problems);
+
+            problemEntries.forEach(([title, sentences], index) => {
+                if (yPos > 240) { // 페이지 여백 확보
+                    doc.addPage();
+                    yPos = 20;
+                }
+
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(12);
+                doc.text(title, 14, yPos);
+                yPos += 10;
+
+                const shuffledSentences = [...sentences].sort(() => Math.random() - 0.5);
+
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+                shuffledSentences.forEach((sentence, i) => {
+                    if (yPos > 270) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    const label = `(${String.fromCharCode(65 + i)})`;
+                    const lines = doc.splitTextToSize(`${label} ${sentence}`, 180);
+                    doc.text(lines, 14, yPos);
+                    yPos += (lines.length * 5) + 4;
+                });
+
+                yPos += 5;
+                doc.text("Answer: ___________________", 14, yPos);
+                yPos += 15;
+
+                if (index < problemEntries.length - 1) {
+                    doc.setDrawColor(200);
+                    doc.line(14, yPos, 196, yPos);
+                    yPos += 10;
+                }
+            });
+
+            doc.addPage();
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(16);
+            doc.text("Answer Key", 105, 20, { align: 'center' });
+            let answerY = 35;
+
+            problemEntries.forEach(([title, sentences]) => {
+                if (answerY > 270) {
+                    doc.addPage();
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(16);
+                    doc.text("Answer Key (continued)", 105, 20, { align: 'center' });
+                    answerY = 35;
+                }
+                
+                // 정답을 항상 알파벳 순서로 생성합니다.
+                const answer = Array.from({ length: sentences.length }, (_, i) => String.fromCharCode(65 + i)).join(" → ");
+
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(10);
+                doc.text(title, 14, answerY);
+                answerY += 6;
+                
+                doc.setFont("helvetica", "normal");
+                doc.text(answer, 14, answerY);
+                answerY += 10;
+            });
+
+            doc.save("Sentence_Arrangement_Practice.pdf");
+        }
+    </script>
+</body>
+</html>

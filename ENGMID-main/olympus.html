@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>올림포스 영어독해의 기본 - 문장 순서 배열 연습</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #6f42c1, #e83e8c);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .exercise-container {
+            padding: 30px 20px;
+        }
+
+        .exercise-info {
+            background: #f8f9fa;
+            border-left: 5px solid #6f42c1;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        .exercise-select {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .exercise-select select {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            min-width: 300px;
+            max-width: 100%;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #6f42c1, #e83e8c);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 0 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(111, 66, 193, 0.4);
+        }
+
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .exercise-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .back-btn {
+                left: 15px;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .header {
+                padding: 25px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
+            .exercise-container {
+                padding: 20px 15px;
+            }
+
+            .exercise-select select {
+                min-width: 250px;
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                margin: 5px;
+            }
+
+            .sentence-item {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .drop-zone {
+                padding: 15px;
+                min-height: 60px;
+                font-size: 14px;
+            }
+
+            .exercise-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .back-btn {
+                left: 10px;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .header {
+                padding: 20px 10px;
+            }
+
+            .header h1 {
+                font-size: 1.6em;
+            }
+
+            .exercise-container {
+                padding: 15px 10px;
+            }
+
+            .exercise-select select {
+                min-width: 200px;
+                font-size: 13px;
+            }
+
+            .btn {
+                padding: 8px 15px;
+                font-size: 13px;
+            }
+
+            .sentence-item {
+                padding: 10px;
+                font-size: 13px;
+            }
+        }
+
+        .scrambled-sentences, .ordered-sentences {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .scrambled-sentences h3, .ordered-sentences h3 {
+            color: #6f42c1;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #6f42c1;
+            padding-bottom: 5px;
+        }
+
+        .sentence-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            position: relative;
+            line-height: 1.5;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .sentence-item:hover {
+            border-color: #6f42c1;
+            box-shadow: 0 4px 12px rgba(111, 66, 193, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .sentence-item:active {
+            transform: scale(0.98);
+        }
+
+        .sentence-item.selected {
+            border-color: #007bff;
+            background-color: rgba(0, 123, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .drop-zone {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 5px 0;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            transition: all 0.3s ease;
+            font-style: italic;
+            cursor: pointer;
+        }
+
+        .drop-zone:hover {
+            border-color: #6f42c1;
+            background-color: rgba(111, 66, 193, 0.1);
+            color: #6f42c1;
+        }
+
+        .drop-zone.highlight {
+            border-color: #007bff;
+            background-color: rgba(0, 123, 255, 0.1);
+            color: #007bff;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+        }
+
+        .score-display {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .feedback {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feedback.correct {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            opacity: 1;
+        }
+
+        .feedback.incorrect {
+            background: linear-gradient(45deg, #dc3545, #fd7e14);
+            color: white;
+            opacity: 1;
+        }
+
+        .correct-sentence {
+            border-color: #28a745 !important;
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+
+        .incorrect-sentence {
+            border-color: #dc3545 !important;
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="main.html" class="back-btn">← 과 선택</a>
+            <h1>📚 올림포스 영어독해의 기본</h1>
+            <p>Ch.03 & Ch.04 Units - 영어 문장들을 올바른 순서로 배열해보세요!</p>
+        </div>
+
+        <div class="exercise-container">
+            <div class="exercise-info">
+                <h3>📚 연습 방법</h3>
+                <p>1. 아래에서 연습할 지문을 선택하세요<br>
+                2. 왼쪽의 문장을 클릭해서 선택한 후, 오른쪽의 원하는 위치를 클릭하세요<br>
+                3. 잘못 배치한 문장은 클릭해서 다시 왼쪽으로 돌려보낼 수 있습니다<br>
+                4. '정답 확인' 버튼을 눌러 결과를 확인하세요</p>
+            </div>
+
+            <div class="exercise-select">
+                <select id="exerciseSelect">
+                    <option value="">연습할 지문을 선택하세요</option>
+                    <option value="ch03_unit09_1">Ch.03 Unit 09-1: 자연법 이론 - 6문장</option>
+                    <option value="ch03_unit09_2">Ch.03 Unit 09-2: 학술적 글쓰기의 특징 - 6문장</option>
+                    <option value="ch03_unit09_3">Ch.03 Unit 09-3: 습관의 본질 - 7문장</option>
+                    <option value="ch04_unit10_1">Ch.04 Unit 10-1: 집단과 개인의 이해관계 - 5문장</option>
+                    <option value="ch04_unit10_2">Ch.04 Unit 10-2: 초기 인류와 동물의 관계 - 8문장</option>
+                    <option value="ch04_unit10_3">Ch.04 Unit 10-3: 일상 언어의 은유적 특성 - 7문장</option>
+                    <option value="ch04_unit11_1">Ch.04 Unit 11-1: 정신적 지도 그리기 - 8문장</option>
+                    <option value="ch04_unit11_2">Ch.04 Unit 11-2: 친숙함과 뇌의 반응 - 8문장</option>
+                    <option value="ch04_unit11_3">Ch.04 Unit 11-3: 자아의 개념 - 7문장</option>
+                    <option value="ch04_unit12_1">Ch.04 Unit 12-1: 몰입(플로우)의 심리학 - 7문장</option>
+                    <option value="ch04_unit12_2">Ch.04 Unit 12-2: 부정성 편향 - 7문장</option>
+                    <option value="ch04_unit12_3">Ch.04 Unit 12-3: 감성 지능 - 7문장</option>
+                </select>
+            </div>
+
+            <div class="controls">
+                <button class="btn" id="shuffleBtn" disabled>다시 섞기</button>
+                <button class="btn" id="checkBtn" disabled>정답 확인</button>
+                <button class="btn" id="resetBtn" disabled>초기화</button>
+            </div>
+
+            <div class="score-display" id="scoreDisplay" style="display: none;">
+                점수: <span id="score">0</span>/100
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="exercise-area" id="exerciseArea" style="display: none;">
+                <div class="scrambled-sentences">
+                    <h3>🔀 Scrambled Sentences</h3>
+                    <div id="scrambledContainer"></div>
+                </div>
+
+                <div class="ordered-sentences">
+                    <h3>✅ Correct Order</h3>
+                    <div id="orderedContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const exercises = {
+            ch03_unit09_1: [
+                "According to natural law theory, moral principles are not simply the result of human convention or social agreement, but are based on fundamental principles of nature, including human nature.",
+                "The term \"natural law\" refers to a set of ethical and moral principles that are thought to be inherent in the natural world and applicable to all human beings.",
+                "These principles are considered to be objective, universal, and immutable, and are often seen as a source of guidance for human behaviour.",
+                "Natural law theorists believe that the natural world operates according to a set of rational principles, and that these principles can be discovered through human reason and observation.",
+                "They argue that these principles provide a foundation for moral and legal systems, and that they are binding on all individuals, regardless of their cultural or social background.",
+                "Critics of natural law theory argue that it relies too heavily on unprovable assumptions about the existence of a divine purpose, and that it fails to account for the diversity of moral beliefs and practices across cultures and historical periods."
+            ],
+            ch03_unit09_2: [
+                "Most academic writing involves constructing an argument or supporting a position about some question or topic.",
+                "This requires clear organization with all your points directly connected to your argument or position.",
+                "In Western academic writing, a 'linear' style is preferred, where one point leads directly and unambiguously to the next, with little room for digressions.",
+                "The organization will depend on the purpose of the composition; a literary critique will have a different structure from a chemistry report.",
+                "Part of learning a discipline is learning the writing organization appropriately to that discipline.",
+                "For example, academic papers in my discipline (Applied Linguistics) usually have sections (e.g., Introduction, Literature review, Discussion, Conclusion), which are typically signposted with headings that make the organization of the paper explicit."
+            ],
+            ch03_unit09_3: [
+                "Habits are part of our everyday lives and therefore, when we don't clean our teeth, eat breakfast, have our morning coffee or have biscuits in the afternoon, we feel unsettled and a little bit stressed.",
+                "This feeling is unpleasant and we quickly learn that it can be avoided by carrying on with our habit.",
+                "Therefore, not eating biscuits feels unusual, but this can all be made OK with a few biscuits.",
+                "And the habit carries on as it becomes the solution to the problem created when trying to change it.",
+                "It's a vicious circle.",
+                "But it's the change in the habit which makes us feel stressed, not the absence of the actual behaviour.",
+                "And if we start to realise that the feeling of stress or worry is just 'withdrawal' and will only be made worse in the longer term if we give in and use the habit to get rid of it, then we can start to break the habit itself."
+            ],
+            ch04_unit10_1: [
+                "We not only absorb our moral codes and definitions of right and wrong from the group; the group also transmits cues about cooperation and defection and what it means to act in a trustworthy manner.",
+                "People are more likely to suppress their self-interest in favor of the group interest if they feel that others are doing so as well, and they're less likely to do so if they feel that others are taking advantage of them.",
+                "The psychological mechanism for this is unclear, but certainly it is related to our innate sense of fairness.",
+                "We generally don't mind sacrificing for the group, as long as we're all sacrificing equally.",
+                "But if we feel like we're being taken advantage of by others who are defecting, we're more likely to defect as well."
+            ],
+            ch04_unit10_2: [
+                "In their pre-predatory stage, our primate ancestors had moved through the world among other creatures that did not fear them.",
+                "Once they adopted carnivory, the prey they were interested in learned to allow close approaches at their own risk.",
+                "But unlike big cats or terrifying wolves that were obvious predators, upright primates didn't automatically fit the predator template for most animals.",
+                "Numerous examples from around the world during the past five centuries testify that upon initially encountering humans, many wild creatures did not associate us with a threat.",
+                "In their first encounters with humans, scores of species reacted with trust and tameness.",
+                "There is a term of art for this: biological first contact.",
+                "When we appeared in new geographies for the first time, wild animals had to learn to be afraid of us.",
+                "Many died standing and looking, never absorbing the lesson."
+            ],
+            ch04_unit10_3: [
+                "Consider the following two everyday linguistic expressions: \"The election is ahead of us\" and \"the long Winter is now behind us.\"",
+                "Literally, these expressions do not make any sense.",
+                "\"An election\" is not something that can physically be \"ahead\" of us in any measurable or observable way, and the \"Winter\" is not something that can be physically \"behind\" us.",
+                "Hundreds of thousands of these expressions, whose meaning is not literal but metaphorical, can be observed in human everyday language: \"he is a cold person,\" \"she has strong opinions,\" \"the market is quite depressed.\"",
+                "Metaphor, in this sense, is not just a figure of speech, or an exceptional communicational tool in the hands of poets and artists.",
+                "It is an ordinary mechanism of thought.",
+                "Usually operating unconsciously and effortlessly, it permeates nearly every aspect of human everyday (and technical) language, making imagination possible."
+            ],
+            ch04_unit11_1: [
+                "I suppose everyone has at one time or another drawn a mental map, and it offers little conceptual difficulty.",
+                "In my classes, I ask students to draw a map by hand, in just five minutes, showing their route to and from class.",
+                "No two maps are ever entirely the same, of course, and none are to scale.",
+                "Nevertheless, most of the maps are easily understood.",
+                "This shows that while we all produce our own versions of spatial reality, we can see particular landmarks that communicate to all of us in a social community.",
+                "Mental maps tend to highlight important parts of a route, with streets labeled to indicate where to turn.",
+                "Such maps tend to include informal but understood cultural references.",
+                "Where a professionally made street map might give you numbered addresses, a mental map is more likely to describe a route by referencing visible features like \"a giant blue gorilla\" outside a car dealership or \"that old pink Victorian house.\""
+            ],
+            ch04_unit11_2: [
+                "People tend to pay less attention to familiar things, whether it's a possession or even a person.",
+                "On the whole, this adaptive behavior is biologically useful (for objects, events, and situations), because it is usually the novel, unexpected things in life that require the most attention.",
+                "The brain naturally adapts to repeated experiences.",
+                "If I were to show you a series of repeated images and measure your brain responses, the activity would diminish with the repetitions.",
+                "Your brain would respond again only when something new was presented.",
+                "Scientists have shown that the biggest responses always come with the least expected event.",
+                "For example, a sentence like \"He picked up the hammer and nail\" gives a tiny response; change the last few words, \"He picked up the hammer and ate it,\" and the brain response is much larger.",
+                "This is because the brain is constantly making predictions about what will happen next, and it is the violation of these predictions that causes the biggest responses."
+            ],
+            ch04_unit11_3: [
+                "The idea of a \"self\" is a mental construct, a story we tell ourselves about who we are.",
+                "It is a useful fiction that helps us navigate the world, but it is not a fixed or unchanging entity.",
+                "Our sense of self is constantly being updated and revised based on our experiences and interactions with others.",
+                "This is why our sense of self can feel so fragile and contingent - because it is.",
+                "The self is not a thing but a process, a continuous act of self-creation and self-interpretation.",
+                "This is why mindfulness practices that encourage us to observe our thoughts and feelings without identifying with them can be so powerful.",
+                "They help us recognize that we are not our thoughts or our feelings, but the awareness that contains them."
+            ],
+            ch04_unit12_1: [
+                "The concept of \"flow\" was introduced by psychologist Mihaly Csikszentmihalyi to describe a state of complete immersion in an activity.",
+                "When in flow, people are so absorbed in what they're doing that they lose track of time and self-consciousness.",
+                "This state occurs when there's a perfect balance between the challenge of the task and the skill level of the person.",
+                "If the challenge is too great for one's skills, anxiety results; if skills exceed the challenge, boredom sets in.",
+                "Flow experiences are intrinsically rewarding, meaning people engage in flow-producing activities for their own sake rather than for external rewards.",
+                "Research has shown that people who frequently experience flow tend to report higher levels of happiness and life satisfaction.",
+                "Flow can be experienced in various domains, from creative pursuits and sports to work and even routine daily activities, as long as they provide the right balance of challenge and skill."
+            ],
+            ch04_unit12_2: [
+                "The human brain has evolved to be highly sensitive to negative information.",
+                "This negativity bias means that we generally register negative stimuli more readily and dwell on them longer than positive ones.",
+                "From an evolutionary perspective, this makes perfect sense: it's more important for survival to remember which berries made you sick than which ones tasted good.",
+                "However, in our modern environment, this bias can lead to unnecessary stress and anxiety.",
+                "Negative events and emotions impact us more strongly than positive ones of equal intensity.",
+                "Research has shown that we need approximately five positive interactions to counterbalance a single negative one in relationships.",
+                "Understanding this bias can help us consciously work to give positive experiences the attention and weight they deserve."
+            ],
+            ch04_unit12_3: [
+                "The concept of emotional intelligence involves the ability to recognize, understand, and manage our own emotions, as well as recognize, understand, and influence the emotions of others.",
+                "Unlike IQ, which remains relatively stable throughout life, emotional intelligence can be developed and improved with practice and attention.",
+                "People with high emotional intelligence tend to be more effective leaders and team members because they can navigate social complexities and build strong relationships.",
+                "They also tend to be more resilient in the face of challenges, as they can regulate their emotional responses to stressful situations.",
+                "Emotional intelligence includes several key components: self-awareness, self-regulation, motivation, empathy, and social skills.",
+                "By developing these components, individuals can improve their personal and professional relationships and overall well-being.",
+                "Training in emotional intelligence has become increasingly common in educational and workplace settings, reflecting growing recognition of its importance for success in various domains of life."
+            ]
+        };
+
+        let currentExercise = [];
+        let correctOrder = [];
+        let userOrder = [];
+        let selectedSentence = null;
+
+        const exerciseSelect = document.getElementById('exerciseSelect');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const checkBtn = document.getElementById('checkBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const exerciseArea = document.getElementById('exerciseArea');
+        const scrambledContainer = document.getElementById('scrambledContainer');
+        const orderedContainer = document.getElementById('orderedContainer');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const scoreElement = document.getElementById('score');
+        const feedback = document.getElementById('feedback');
+
+        exerciseSelect.addEventListener('change', function() {
+            const selectedExercise = this.value;
+            if (selectedExercise) {
+                loadExercise(selectedExercise);
+            }
+        });
+
+        shuffleBtn.addEventListener('click', shuffleSentences);
+        checkBtn.addEventListener('click', checkAnswer);
+        resetBtn.addEventListener('click', resetExercise);
+
+        function loadExercise(exerciseKey) {
+            currentExercise = [...exercises[exerciseKey]];
+            correctOrder = [...currentExercise];
+            userOrder = [];
+            selectedSentence = null;
+
+            shuffleSentences();
+            exerciseArea.style.display = 'block';
+            shuffleBtn.disabled = false;
+            resetBtn.disabled = false;
+            scoreDisplay.style.display = 'none';
+            hideFeedback();
+        }
+
+        function shuffleSentences() {
+            const shuffled = [...currentExercise];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+
+            displayScrambledSentences(shuffled);
+            createDropZones();
+            checkBtn.disabled = true;
+            userOrder = [];
+            selectedSentence = null;
+        }
+
+        function displayScrambledSentences(sentences) {
+            scrambledContainer.innerHTML = '';
+            sentences.forEach((sentence, index) => {
+                const sentenceDiv = document.createElement('div');
+                sentenceDiv.className = 'sentence-item';
+                sentenceDiv.textContent = sentence;
+                sentenceDiv.dataset.sentence = sentence;
+
+                sentenceDiv.addEventListener('click', function() {
+                    selectSentence(this);
+                });
+
+                scrambledContainer.appendChild(sentenceDiv);
+            });
+        }
+
+        function selectSentence(element) {
+            document.querySelectorAll('.sentence-item.selected').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
+                zone.classList.remove('highlight');
+            });
+
+            element.classList.add('selected');
+            selectedSentence = element;
+
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.classList.add('highlight');
+            });
+
+            showFeedback('선택된 문장을 배치할 위치를 클릭하세요!', 'correct');
+        }
+
+        function createDropZones() {
+            orderedContainer.innerHTML = '';
+            for (let i = 0; i < currentExercise.length; i++) {
+                const dropZone = document.createElement('div');
+                dropZone.className = 'drop-zone';
+                dropZone.textContent = `문장 ${i + 1}을 여기에 배치하세요`;
+                dropZone.dataset.position = i;
+
+                dropZone.addEventListener('click', function() {
+                    handleDropZoneClick(this);
+                });
+
+                orderedContainer.appendChild(dropZone);
+            }
+        }
+
+        function handleDropZoneClick(dropZone) {
+            if (!selectedSentence) {
+                showFeedback('먼저 왼쪽에서 문장을 선택하세요!', 'incorrect');
+                return;
+            }
+
+            const sentence = selectedSentence.dataset.sentence;
+            const position = parseInt(dropZone.dataset.position);
+
+            const sentenceDiv = document.createElement('div');
+            sentenceDiv.className = 'sentence-item';
+            sentenceDiv.textContent = sentence;
+            sentenceDiv.dataset.sentence = sentence;
+            sentenceDiv.dataset.position = position;
+
+            sentenceDiv.addEventListener('click', function() {
+                returnSentence(this);
+            });
+
+            dropZone.parentNode.replaceChild(sentenceDiv, dropZone);
+            selectedSentence.remove();
+            selectedSentence = null;
+
+            document.querySelectorAll('.sentence-item.selected').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
+                zone.classList.remove('highlight');
+            });
+
+            updateUserOrder();
+            hideFeedback();
+        }
+
+        function returnSentence(sentenceElement) {
+            const position = parseInt(sentenceElement.dataset.position);
+            const sentence = sentenceElement.dataset.sentence;
+
+            const dropZone = document.createElement('div');
+            dropZone.className = 'drop-zone';
+            dropZone.textContent = `문장 ${position + 1}을 여기에 배치하세요`;
+            dropZone.dataset.position = position;
+
+            dropZone.addEventListener('click', function() {
+                handleDropZoneClick(this);
+            });
+
+            sentenceElement.parentNode.replaceChild(dropZone, sentenceElement);
+
+            const newSentenceDiv = document.createElement('div');
+            newSentenceDiv.className = 'sentence-item';
+            newSentenceDiv.textContent = sentence;
+            newSentenceDiv.dataset.sentence = sentence;
+
+            newSentenceDiv.addEventListener('click', function() {
+                selectSentence(this);
+            });
+
+            scrambledContainer.appendChild(newSentenceDiv);
+
+            selectedSentence = null;
+            document.querySelectorAll('.sentence-item.selected').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
+                zone.classList.remove('highlight');
+            });
+
+            updateUserOrder();
+        }
+
+        function updateUserOrder() {
+            userOrder = [];
+            const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
+            placedSentences.forEach(sentence => {
+                const position = parseInt(sentence.dataset.position);
+                userOrder[position] = sentence.dataset.sentence;
+            });
+
+            const hasEmptySlots = userOrder.includes(undefined) || userOrder.length !== currentExercise.length;
+            checkBtn.disabled = hasEmptySlots;
+        }
+
+        function checkAnswer() {
+            let correct = 0;
+            const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
+            
+            placedSentences.forEach((sentence, index) => {
+                sentence.classList.remove('correct-sentence', 'incorrect-sentence');
+                const position = parseInt(sentence.dataset.position);
+                const userSentence = sentence.dataset.sentence;
+                const correctSentence = correctOrder[position];
+                
+                if (userSentence === correctSentence) {
+                    sentence.classList.add('correct-sentence');
+                    correct++;
+                } else {
+                    sentence.classList.add('incorrect-sentence');
+                }
+            });
+
+            const score = Math.round((correct / currentExercise.length) * 100);
+            scoreElement.textContent = score;
+            scoreDisplay.style.display = 'block';
+
+            if (score === 100) {
+                showFeedback('🎉 완벽합니다! 모든 문장을 올바르게 배열했습니다!', 'correct');
+            } else if (score >= 70) {
+                showFeedback(`👍 잘했습니다! ${correct}/${currentExercise.length}개 정답입니다.`, 'correct');
+            } else {
+                showFeedback(`💪 다시 한번 시도해보세요! ${correct}/${currentExercise.length}개 정답입니다.`, 'incorrect');
+            }
+        }
+
+        function resetExercise() {
+            const selectedExercise = exerciseSelect.value;
+            if (selectedExercise) {
+                loadExercise(selectedExercise);
+            }
+            hideFeedback();
+        }
+
+        function showFeedback(message, type) {
+            feedback.textContent = message;
+            feedback.className = `feedback ${type}`;
+        }
+
+        function hideFeedback() {
+            feedback.className = 'feedback';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모의고사 - 문장 순서 배열 연습</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .exercise-container {
+            padding: 30px 20px;
+        }
+
+        .exercise-info {
+            background: #f8f9fa;
+            border-left: 5px solid #ff6b6b;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        .exercise-select {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .exercise-select select {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            min-width: 300px;
+            max-width: 100%;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 0 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .exercise-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .back-btn {
+                left: 15px;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .header {
+                padding: 25px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
+            .exercise-container {
+                padding: 20px 15px;
+            }
+
+            .exercise-select select {
+                min-width: 250px;
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                margin: 5px;
+            }
+
+            .sentence-item {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .drop-zone {
+                padding: 15px;
+                min-height: 60px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .back-btn {
+                left: 10px;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .header {
+                padding: 20px 10px;
+            }
+
+            .header h1 {
+                font-size: 1.6em;
+            }
+
+            .exercise-container {
+                padding: 15px 10px;
+            }
+
+            .exercise-select select {
+                min-width: 200px;
+                font-size: 13px;
+            }
+
+            .btn {
+                padding: 8px 15px;
+                font-size: 13px;
+            }
+
+            .sentence-item {
+                padding: 10px;
+                font-size: 13px;
+            }
+        }
+
+        .exercise-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .exercise-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .scrambled-sentences, .ordered-sentences {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .scrambled-sentences h3, .ordered-sentences h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #ff6b6b;
+            padding-bottom: 5px;
+        }
+
+        .sentence-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            position: relative;
+            line-height: 1.5;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .sentence-item:hover {
+            border-color: #ff6b6b;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .sentence-item:active {
+            transform: scale(0.98);
+        }
+
+        .sentence-item.selected {
+            border-color: #007bff;
+            background-color: rgba(0, 123, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .drop-zone {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 5px 0;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            transition: all 0.3s ease;
+            font-style: italic;
+            cursor: pointer;
+        }
+
+        .drop-zone:hover {
+            border-color: #ff6b6b;
+            background-color: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+        }
+
+        .drop-zone.highlight {
+            border-color: #007bff;
+            background-color: rgba(0, 123, 255, 0.1);
+            color: #007bff;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+        }
+
+        .score-display {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .feedback {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feedback.correct {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            opacity: 1;
+        }
+
+        .feedback.incorrect {
+            background: linear-gradient(45deg, #dc3545, #fd7e14);
+            color: white;
+            opacity: 1;
+        }
+
+        .correct-sentence {
+            border-color: #28a745 !important;
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+
+        .incorrect-sentence {
+            border-color: #dc3545 !important;
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+
+        .creator-credit {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            font-weight: bold;
+            color: #ff6b6b;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="main.html" class="back-btn">← 과 선택</a>
+            <h1>📝 모의고사 연습</h1>
+            <p>문장 순서 배열 문제 - 영어 문장들을 올바른 순서로 배열해보세요!</p>
+        </div>
+
+        <div class="exercise-container">
+            <div class="exercise-info">
+                <h3>📚 연습 방법</h3>
+                <p>1. 아래에서 연습할 문제를 선택하세요<br>
+                2. 왼쪽의 문장을 클릭해서 선택한 후, 오른쪽의 원하는 위치를 클릭하세요<br>
+                3. 잘못 배치한 문장은 클릭해서 다시 왼쪽으로 돌려보낼 수 있습니다<br>
+                4. '정답 확인' 버튼을 눌러 결과를 확인하세요</p>
+            </div>
+
+            <div class="exercise-select">
+                <select id="exerciseSelect">
+                    <option value="">연습할 문제를 선택하세요</option>
+                    <option value="mock20">2025-09-20: 수업 시작 루틴 확립 - 7문장</option>
+                    <option value="mock22">2025-09-22: 정원 가꾸기의 영향 - 12문장</option>
+                    <option value="mock23">2025-09-23: 자연 현상 인식 도구 - 5문장</option>
+                    <option value="mock30">2025-09-30: 소유와 공유의 관계 - 7문장</option>
+                    <option value="mock31">2025-09-31: 행복 기준점 되돌아가기 - 9문장</option>
+                    <option value="mock33">2025-09-33: 불확실성의 중요성 - 7문장</option>
+                    <option value="mock39">2025-09-39: 도덕적 선함의 판단 기준 - 8문장</option>
+                    <option value="mock40">2025-09-40: 시각과 객관적 인식 - 10문장</option>
+                </select>
+            </div>
+
+            <div class="controls">
+                <button class="btn" id="shuffleBtn" disabled>다시 섞기</button>
+                <button class="btn" id="checkBtn" disabled>정답 확인</button>
+                <button class="btn" id="resetBtn" disabled>초기화</button>
+            </div>
+
+            <div class="score-display" id="scoreDisplay" style="display: none;">
+                점수: <span id="score">0</span>/100
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="exercise-area" id="exerciseArea" style="display: none;">
+                <div class="scrambled-sentences">
+                    <h3>🔀 Scrambled Sentences</h3>
+                    <div id="scrambledContainer"></div>
+                </div>
+
+                <div class="ordered-sentences">
+                    <h3>✅ Correct Order</h3>
+                    <div id="orderedContainer"></div>
+                </div>
+            </div>
+
+            <div class="creator-credit">
+                Created by Sungwoo ✨
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const exercises = {
+            mock20: [
+                "Inefficient teachers overlook the potential power of the opening minutes of class.",
+                "Often, if students are quiet enough and if there are many pressing demands on a teacher's time at that moment, more than ten minutes can disappear before class starts.",
+                "It's no wonder that students are late for class; they have little reason to be on time.",
+                "You can use the first ten minutes to get your class off to a great start, or you can choose to waste this time.",
+                "The first minutes set the tone for the rest of the class.",
+                "If you are prepared for class and have taught your students an opening routine, they can use this brief time to make mental and emotional transitions from the last class or subject and prepare to focus on learning new material.",
+                "In summary, you should establish an opening routine to develop your class with an effective start."
+            ],
+            mock22: [
+                "The act of gardening itself is a fantastic form of physical activity.",
+                "It involves a range of motions, from digging and planting to watering and harvesting.",
+                "These activities help improve strength, flexibility, and endurance.",
+                "You might not realize it, but small tasks like weeding or turning compost can burn many calories.",
+                "Gardening is particularly beneficial for those who find traditional exercise challenging.",
+                "It's a low-impact way to stay active and fit, making it accessible for people of all ages and physical abilities.",
+                "Besides physical health, gardening has profound mental health benefits.",
+                "Tending to plants can be incredibly calming and meditative.",
+                "It allows you to focus on the present moment, reducing stress and anxiety.",
+                "The repetitive tasks involved in gardening can induce a state of mindfulness, similar to meditation.",
+                "Studies have shown that spending time in nature, even in a small garden, can elevate mood, improve cognition, and lessen depression symptoms.",
+                "The sense of accomplishment from watching your plants grow and thrive can also boost self-esteem and overall well-being."
+            ],
+            mock23: [
+                "For many centuries, humans have taken advantage of tools that translate and bring into our perception natural phenomena that we can't perceive with our senses.",
+                "In some cases, this consists of simply amplifying signals that feed into our normal sensory inputs (e.g., telescopes can bring into clear view that which is too far away for our eyes to perceive on their own).",
+                "Other instruments turn signals that we cannot perceive into ones that we can observe.",
+                "Some of these take the form of expanding the reach of our current senses, such as creating visible images based on the ultraviolet spectrum of light or changing sounds that are normally outside the range of what human ears can hear into audible signals.",
+                "Alternatively, some instruments measure properties for which we have no sensory capacity at all and change them into that which we can observe."
+            ],
+            mock30: [
+                "For a species born in a time when resources were limited and dangers were great, our natural tendency to share and cooperate is complicated when resources are plenty and outside dangers are few.",
+                "When we have less, we tend to be more open to sharing what we have.",
+                "Certain nomadic tribes don't have much, yet they are happy to share because it is in their interest to do so.",
+                "If you happen upon them in your travels, they will open up their homes and give you their food and hospitality.",
+                "It's not just because they are nice people; it's because their survival depends on sharing, for they know that they may be the travelers in need of food and shelter another day.",
+                "Ironically, the more we have, the bigger our fences, the more sophisticated our security to keep people away and the less we want to share.",
+                "Our desire for more, combined with our decreased physical interaction with the \"common folk,\" starts to create a disconnection or blindness to reality."
+            ],
+            mock31: [
+                "Whether we feel happy or sad, content or discontent, is not determined merely by each individual successive moment of life experience a good thing happens and I'm happy, a bad thing happens and I'm sad.",
+                "While our experiences affect our mood, we are not blown in a completely new direction by each gust of wind.",
+                "As humans, we adjust to new information and events both good and bad and return to our personal default level of well-being.",
+                "There will be highs and lows, but over time, like water seeking its own level, we are pulled toward our baseline back up after bad news and back down after good.",
+                "The euphoria of first love fades, and so does the despair of a break-up.",
+                "This tendency is best seen with little kids and their toy joy:",
+                "When they get what they've longed for, they believe they will be happy for the rest of their lives.",
+                "And for the first few minutes of the rest of their lives, they are.",
+                "But then the kids like adults adapt."
+            ],
+            mock33: [
+                "One of the things that makes uncertainty difficult for members of the public to appreciate is that the significance of uncertainty is relative.",
+                "Take, for example, the distance between Earth and the sun: 1.49597 x 108 km, as measured at one point during the year.",
+                "This seems relatively precise; after all, using six significant digits means I know the distance to an accuracy of one part in a million or so.",
+                "However, if the next digit is uncertain, that means the uncertainty in knowing the precise Earth-sun distance is larger than the distance between New York and Chicago!",
+                "Whether or not the quoted number is \"precise\" therefore depends on what I'm intending to do with it.",
+                "If I care only about what minute the sun will rise tomorrow, then the number quoted here is fine.",
+                "If I want to send a satellite to orbit just above the sun, however, then I would need to know distances more accurately."
+            ],
+            mock39: [
+                "A morally good person is one who does morally bad actions significantly less often than most and does morally good ones significantly more often than most.",
+                "In judging a person not only her actions but also her intentions and motives are relevant.",
+                "A morally good person must intend to do morally good actions and intend to avoid morally bad ones.",
+                "A person who unintentionally prevents harm to others and does not harm them simply because things do not turn out as she intends is not morally good.",
+                "Although this kind of situation generally occurs only in slapstick movies, it is worth mentioning to avoid the false impression that it is the actual consequences of a person's actions that count toward her being judged morally good or bad.",
+                "But actual consequences are important.",
+                "A person who always tries to prevent harm but never does, is not generally thought of as morally good.",
+                "Of such a person, it may be said that she means well; but, contrary to Kant, some results are necessary before she is regarded as morally good."
+            ],
+            mock40: [
+                "Vision is influenced by our preconceptions about reality.",
+                "In viewing a scene, we establish unconscious hierarchies that reflect our functional relationship to objects and our momentary priorities.",
+                "For example, when visualizing a hammer in our mind's eye, we tend to \"see\" it in profile or at some other 'ready for use' angle.",
+                "One would probably not visualize a hammer as seen from the top so that the handle is hidden by the hammer's head.",
+                "The functional relationship we have with objects creates visual expectations that interfere with our ability to see \"like a camera.\"",
+                "The camera, like the human eye, sees only shapes and colors.",
+                "It documents the world impartially through a lens that is similar to the eye.",
+                "When we look at them carefully, photographs are often surprising because they don't interpret confusing details but simply serve them up to us with a mechanical indifference.",
+                "And because of their flatness, photographs often contain areas that appear as unrecognizable colors and shapes.",
+                "[Summary] Our visual perception is shaped by an established hierarchy based on functional relationships, which interrupts our ability to see objects as they truly are, unlike the objective perspective of a camera."
+            ]
+        };
+
+        let currentExercise = [];
+        let correctOrder = [];
+        let userOrder = [];
+        let selectedSentence = null;
+
+        const exerciseSelect = document.getElementById('exerciseSelect');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const checkBtn = document.getElementById('checkBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const exerciseArea = document.getElementById('exerciseArea');
+        const scrambledContainer = document.getElementById('scrambledContainer');
+        const orderedContainer = document.getElementById('orderedContainer');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const scoreElement = document.getElementById('score');
+        const feedback = document.getElementById('feedback');
+
+        exerciseSelect.addEventListener('change', function() {
+            const selectedExercise = this.value;
+            if (selectedExercise) {
+                loadExercise(selectedExercise);
+            }
+        });
+
+        shuffleBtn.addEventListener('click', shuffleSentences);
+        checkBtn.addEventListener('click', checkAnswer);
+        resetBtn.addEventListener('click', resetExercise);
+
+        function loadExercise(exerciseKey) {
+            currentExercise = [...exercises[exerciseKey]];
+            correctOrder = [...currentExercise];
+            userOrder = [];
+            selectedSentence = null;
+
+            shuffleSentences();
+            exerciseArea.style.display = 'block';
+            shuffleBtn.disabled = false;
+            resetBtn.disabled = false;
+            scoreDisplay.style.display = 'none';
+            hideFeedback();
+        }
+
+        function shuffleSentences() {
+            const shuffled = [...currentExercise];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+
+            displayScrambledSentences(shuffled);
+            createDropZones();
+            checkBtn.disabled = true;
+            userOrder = [];
+            selectedSentence = null;
+        }
+
+        function displayScrambledSentences(sentences) {
+            scrambledContainer.innerHTML = '';
+            sentences.forEach((sentence, index) => {
+                const sentenceDiv = document.createElement('div');
+                sentenceDiv.className = 'sentence-item';
+                sentenceDiv.textContent = sentence;
+                sentenceDiv.dataset.sentence = sentence;
+
+                sentenceDiv.addEventListener('click', function() {
+                    selectSentence(this);
+                });
+
+                scrambledContainer.appendChild(sentenceDiv);
+            });
+        }
+
+        function selectSentence(element) {
+            document.querySelectorAll('.sentence-item.selected').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
+                zone.classList.remove('highlight');
+            });
+
+            element.classList.add('selected');
+            selectedSentence = element;
+
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.classList.add('highlight');
+            });
+
+            showFeedback('선택된 문장을 배치할 위치를 클릭하세요!', 'correct');
+        }
+
+        function createDropZones() {
+            orderedContainer.innerHTML = '';
+            for (let i = 0; i < currentExercise.length; i++) {
+                const dropZone = document.createElement('div');
+                dropZone.className = 'drop-zone';
+                dropZone.textContent = `문장 ${i + 1}을 여기에 배치하세요`;
+                dropZone.dataset.position = i;
+
+                dropZone.addEventListener('click', function() {
+                    handleDropZoneClick(this);
+                });
+
+                orderedContainer.appendChild(dropZone);
+            }
+        }
+
+        function handleDropZoneClick(dropZone) {
+            if (!selectedSentence) {
+                showFeedback('먼저 왼쪽에서 문장을 선택하세요!', 'incorrect');
+                return;
+            }
+
+            const sentence = selectedSentence.dataset.sentence;
+            const position = parseInt(dropZone.dataset.position);
+
+            const sentenceDiv = document.createElement('div');
+            sentenceDiv.className = 'sentence-item';
+            sentenceDiv.textContent = sentence;
+            sentenceDiv.dataset.sentence = sentence;
+            sentenceDiv.dataset.position = position;
+
+            sentenceDiv.addEventListener('click', function() {
+                returnSentence(this);
+            });
+
+            dropZone.parentNode.replaceChild(sentenceDiv, dropZone);
+            selectedSentence.remove();
+            selectedSentence = null;
+
+            document.querySelectorAll('.sentence-item.selected').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
+                zone.classList.remove('highlight');
+            });
+
+            updateUserOrder();
+            hideFeedback();
+        }
+
+        function returnSentence(sentenceElement) {
+            const position = parseInt(sentenceElement.dataset.position);
+            const sentence = sentenceElement.dataset.sentence;
+
+            const dropZone = document.createElement('div');
+            dropZone.className = 'drop-zone';
+            dropZone.textContent = `문장 ${position + 1}을 여기에 배치하세요`;
+            dropZone.dataset.position = position;
+
+            dropZone.addEventListener('click', function() {
+                handleDropZoneClick(this);
+            });
+
+            sentenceElement.parentNode.replaceChild(dropZone, sentenceElement);
+
+            const newSentenceDiv = document.createElement('div');
+            newSentenceDiv.className = 'sentence-item';
+            newSentenceDiv.textContent = sentence;
+            newSentenceDiv.dataset.sentence = sentence;
+
+            newSentenceDiv.addEventListener('click', function() {
+                selectSentence(this);
+            });
+
+            scrambledContainer.appendChild(newSentenceDiv);
+
+            selectedSentence = null;
+            document.querySelectorAll('.sentence-item.selected').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
+                zone.classList.remove('highlight');
+            });
+
+            updateUserOrder();
+            hideFeedback();
+        }
+
+        function updateUserOrder() {
+            userOrder = [];
+            const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
+            placedSentences.forEach(item => {
+                const position = parseInt(item.dataset.position);
+                userOrder[position] = item.dataset.sentence;
+            });
+
+            const allFilled = userOrder.length === currentExercise.length && 
+                            userOrder.every(item => item !== undefined);
+            checkBtn.disabled = !allFilled;
+        }
+
+        function checkAnswer() {
+            let correctCount = 0;
+            const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
+
+            placedSentences.forEach((item, index) => {
+                const position = parseInt(item.dataset.position);
+                const sentence = item.dataset.sentence;
+                const isCorrect = correctOrder[position] === sentence;
+
+                if (isCorrect) {
+                    correctCount++;
+                    item.classList.add('correct-sentence');
+                    item.classList.remove('incorrect-sentence');
+                } else {
+                    item.classList.add('incorrect-sentence');
+                    item.classList.remove('correct-sentence');
+                }
+            });
+
+            const score = Math.round((correctCount / currentExercise.length) * 100);
+            scoreElement.textContent = score;
+            scoreDisplay.style.display = 'block';
+
+            if (score === 100) {
+                showFeedback('완벽합니다! 🎉 모든 문장이 올바른 순서입니다!', 'correct');
+            } else if (score >= 80) {
+                showFeedback(`좋습니다! 👍 ${correctCount}/${currentExercise.length} 문장이 올바른 위치에 있습니다.`, 'correct');
+            } else {
+                showFeedback(`다시 시도해보세요! 💪 ${correctCount}/${currentExercise.length} 문장이 올바른 위치에 있습니다.`, 'incorrect');
+            }
+        }
+
+        function showFeedback(message, type) {
+            feedback.textContent = message;
+            feedback.className = `feedback ${type}`;
+        }
+
+        function hideFeedback() {
+            feedback.className = 'feedback';
+        }
+
+        function resetExercise() {
+            const selectedExercise = exerciseSelect.value;
+            if (selectedExercise) {
+                loadExercise(selectedExercise);
+            }
+        }
+    </script>
+</body>
+</html>
