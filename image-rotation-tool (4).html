@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지 회전 보정 도구</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9ff;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f2ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #e8ebff;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .canvas-container {
+            display: none;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        #canvas {
+            max-width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .controls {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .quick-rotate {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .quick-rotate button {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .loading-text {
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .apply-all-container {
+            display: none;
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+
+        .apply-all-container button {
+            margin-top: 10px;
+        }
+
+        .ai-correct-container {
+            display: none;
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #fff8e1;
+            border-radius: 10px;
+            border: 2px solid #ffa726;
+        }
+
+        .ai-correct-container button {
+            margin-top: 10px;
+            background: #ff9800;
+        }
+
+        .ai-correct-container button:hover {
+            background: #f57c00;
+        }
+
+        .ai-result {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div style="font-size: 48px; margin-bottom: 15px;">⏳</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="loading-text" id="loadingText">PDF 로딩 중...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>📄 이미지 회전 보정 도구</h1>
+        
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📤</div>
+            <p style="font-size: 18px; color: #667eea; font-weight: 600;">이미지를 클릭하거나 드래그하여 업로드하세요</p>
+            <p style="color: #999; margin-top: 10px;">JPG, PNG, PDF 파일 지원</p>
+            <input type="file" id="fileInput" accept="image/*,application/pdf">
+        </div>
+
+        <div class="canvas-container" id="canvasContainer">
+            <canvas id="canvas"></canvas>
+        </div>
+
+        <div class="controls" id="controls">
+            <div class="control-group">
+                <label>
+                    회전 각도: <span class="value-display" id="rotationValue">0°</span>
+                </label>
+                <input type="range" id="rotationSlider" min="-180" max="180" value="0" step="0.1">
+            </div>
+
+            <div class="quick-rotate">
+                <button onclick="quickRotate(-90)" class="btn-secondary">↶ 90° 왼쪽</button>
+                <button onclick="quickRotate(90)" class="btn-secondary">↷ 90° 오른쪽</button>
+                <button onclick="quickRotate(180)" class="btn-secondary">↻ 180°</button>
+            </div>
+
+            <div class="apply-all-container" id="applyAllContainer">
+                <p style="color: #667eea; font-weight: 600; margin: 0;">💡 모든 페이지에 동일한 각도를 적용하시겠습니까?</p>
+                <button onclick="applyRotationToAll()" class="btn-primary">모든 페이지에 적용</button>
+            </div>
+
+            <div class="ai-correct-container" id="aiCorrectContainer">
+                <p style="color: #f57c00; font-weight: 600; margin: 0;">🤖 AI가 한국어 텍스트를 감지하여 자동으로 각도를 보정합니다</p>
+                <button onclick="autoCorrectRotation()" class="btn-primary">현재 페이지 AI 보정</button>
+                <button onclick="autoCorrectAllPages()" class="btn-primary" id="aiAllPagesBtn" style="display: none;">모든 페이지 AI 보정</button>
+                <div id="aiResult" class="ai-result" style="display: none;"></div>
+            </div>
+
+            <div class="button-group">
+                <button onclick="resetImage()" class="btn-secondary">초기화</button>
+                <button onclick="downloadImage()" class="btn-success">💾 이미지 다운로드 (PNG)</button>
+                <button onclick="downloadPDF()" class="btn-success" id="pdfDownloadBtn" style="display: none;">📄 PDF 다운로드</button>
+            </div>
+
+            <div id="pageSelector" style="display: none; margin-top: 20px; text-align: center;">
+                <label style="display: inline-block; margin-right: 10px;">
+                    페이지: <span id="currentPage">1</span> / <span id="totalPages">1</span>
+                </label>
+                <button onclick="previousPage()" class="btn-secondary" style="padding: 8px 16px; font-size: 14px;">◀ 이전</button>
+                <button onclick="nextPage()" class="btn-secondary" style="padding: 8px 16px; font-size: 14px;">다음 ▶</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.0/dist/tesseract.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const { jsPDF } = window.jspdf;
+        
+        let originalImage = null;
+        let currentRotation = 0;
+        let currentPdfPages = [];
+        let currentPageIndex = 0;
+        let pageRotations = {};
+
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const canvasContainer = document.getElementById('canvasContainer');
+        const controls = document.getElementById('controls');
+        const rotationSlider = document.getElementById('rotationSlider');
+        const rotationValue = document.getElementById('rotationValue');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && (file.type.startsWith('image/') || file.type === 'application/pdf')) {
+                loadFile(file);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                loadFile(file);
+            }
+        });
+
+        rotationSlider.addEventListener('input', (e) => {
+            currentRotation = parseFloat(e.target.value);
+            rotationValue.textContent = currentRotation.toFixed(1) + '°';
+            pageRotations[currentPageIndex] = currentRotation;
+            drawRotatedImage();
+        });
+
+        async function loadFile(file) {
+            if (file.type === 'application/pdf') {
+                await loadPDF(file);
+            } else if (file.type.startsWith('image/')) {
+                loadImage(file);
+            }
+        }
+
+        async function loadPDF(file) {
+            showLoading('PDF 로딩 중...', 0);
+            
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            
+            currentPdfPages = [];
+            pageRotations = {};
+            const totalPages = pdf.numPages;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                updateLoading(`페이지 ${i}/${totalPages} 처리 중...`, (i / totalPages) * 100);
+                
+                const page = await pdf.getPage(i);
+                const viewport = page.getViewport({ scale: 2 });
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                
+                tempCanvas.width = viewport.width;
+                tempCanvas.height = viewport.height;
+                
+                await page.render({
+                    canvasContext: tempCtx,
+                    viewport: viewport
+                }).promise;
+                
+                const img = new Image();
+                await new Promise((resolve) => {
+                    img.onload = resolve;
+                    img.src = tempCanvas.toDataURL();
+                });
+                
+                currentPdfPages.push(img);
+                pageRotations[i - 1] = 0;
+            }
+            
+            hideLoading();
+            
+            currentPageIndex = 0;
+            originalImage = currentPdfPages[0];
+            currentRotation = pageRotations[0];
+            rotationSlider.value = currentRotation;
+            rotationValue.textContent = currentRotation.toFixed(1) + '°';
+            canvasContainer.style.display = 'block';
+            controls.style.display = 'block';
+            document.getElementById('aiCorrectContainer').style.display = 'block';
+            drawRotatedImage();
+            
+            if (currentPdfPages.length > 1) {
+                showPageSelector();
+                document.getElementById('applyAllContainer').style.display = 'block';
+                document.getElementById('pdfDownloadBtn').style.display = 'inline-block';
+                document.getElementById('aiAllPagesBtn').style.display = 'inline-block';
+            } else {
+                document.getElementById('pdfDownloadBtn').style.display = 'inline-block';
+            }
+        }
+
+        function loadImage(file) {
+            showLoading('이미지 로딩 중...', 50);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    originalImage = img;
+                    currentRotation = 0;
+                    pageRotations = { 0: 0 };
+                    rotationSlider.value = 0;
+                    rotationValue.textContent = '0°';
+                    canvasContainer.style.display = 'block';
+                    controls.style.display = 'block';
+                    hideLoading();
+                    drawRotatedImage();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function drawRotatedImage() {
+            if (!originalImage) return;
+
+            const angle = currentRotation * Math.PI / 180;
+            const cos = Math.abs(Math.cos(angle));
+            const sin = Math.abs(Math.sin(angle));
+            
+            const newWidth = originalImage.width * cos + originalImage.height * sin;
+            const newHeight = originalImage.width * sin + originalImage.height * cos;
+
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(angle);
+            ctx.drawImage(originalImage, -originalImage.width / 2, -originalImage.height / 2);
+            ctx.restore();
+        }
+
+        function quickRotate(degrees) {
+            currentRotation = (currentRotation + degrees) % 360;
+            if (currentRotation > 180) currentRotation -= 360;
+            if (currentRotation < -180) currentRotation += 360;
+            
+            pageRotations[currentPageIndex] = currentRotation;
+            rotationSlider.value = currentRotation;
+            rotationValue.textContent = currentRotation.toFixed(1) + '°';
+            drawRotatedImage();
+        }
+
+        function resetImage() {
+            currentRotation = 0;
+            pageRotations[currentPageIndex] = 0;
+            rotationSlider.value = 0;
+            rotationValue.textContent = '0°';
+            drawRotatedImage();
+        }
+
+        function downloadImage() {
+            const link = document.createElement('a');
+            const filename = currentPdfPages.length > 1 
+                ? `rotated-page-${currentPageIndex + 1}.png` 
+                : 'rotated-image.png';
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function showPageSelector() {
+            const pageSelector = document.getElementById('pageSelector');
+            const totalPages = document.getElementById('totalPages');
+            pageSelector.style.display = 'block';
+            totalPages.textContent = currentPdfPages.length;
+            updatePageDisplay();
+        }
+
+        function updatePageDisplay() {
+            document.getElementById('currentPage').textContent = currentPageIndex + 1;
+        }
+
+        function previousPage() {
+            if (currentPageIndex > 0) {
+                currentPageIndex--;
+                originalImage = currentPdfPages[currentPageIndex];
+                currentRotation = pageRotations[currentPageIndex] || 0;
+                rotationSlider.value = currentRotation;
+                rotationValue.textContent = currentRotation.toFixed(1) + '°';
+                drawRotatedImage();
+                updatePageDisplay();
+            }
+        }
+
+        function nextPage() {
+            if (currentPageIndex < currentPdfPages.length - 1) {
+                currentPageIndex++;
+                originalImage = currentPdfPages[currentPageIndex];
+                currentRotation = pageRotations[currentPageIndex] || 0;
+                rotationSlider.value = currentRotation;
+                rotationValue.textContent = currentRotation.toFixed(1) + '°';
+                drawRotatedImage();
+                updatePageDisplay();
+            }
+        }
+
+        function applyRotationToAll() {
+            const currentAngle = pageRotations[currentPageIndex];
+            for (let i = 0; i < currentPdfPages.length; i++) {
+                pageRotations[i] = currentAngle;
+            }
+            alert(`모든 ${currentPdfPages.length}개 페이지에 ${currentAngle.toFixed(1)}° 회전이 적용되었습니다.`);
+        }
+
+        function showLoading(text, progress) {
+            const overlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            const progressFill = document.getElementById('progressFill');
+            
+            overlay.style.display = 'flex';
+            loadingText.textContent = text;
+            progressFill.style.width = progress + '%';
+        }
+
+        function updateLoading(text, progress) {
+            const loadingText = document.getElementById('loadingText');
+            const progressFill = document.getElementById('progressFill');
+            
+            loadingText.textContent = text;
+            progressFill.style.width = progress + '%';
+        }
+
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'none';
+        }
+
+        async function downloadPDF() {
+            if (!currentPdfPages || currentPdfPages.length === 0) {
+                alert('PDF로 저장할 페이지가 없습니다.');
+                return;
+            }
+
+            showLoading('PDF 생성 중...', 0);
+
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'pt',
+                format: 'a4'
+            });
+
+            for (let i = 0; i < currentPdfPages.length; i++) {
+                updateLoading(`페이지 ${i + 1}/${currentPdfPages.length} 처리 중...`, ((i + 1) / currentPdfPages.length) * 100);
+
+                const img = currentPdfPages[i];
+                const rotation = pageRotations[i] || 0;
+
+                // 회전된 이미지를 캔버스에 그리기
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+
+                const angle = rotation * Math.PI / 180;
+                const cos = Math.abs(Math.cos(angle));
+                const sin = Math.abs(Math.sin(angle));
+                
+                const newWidth = img.width * cos + img.height * sin;
+                const newHeight = img.width * sin + img.height * cos;
+
+                tempCanvas.width = newWidth;
+                tempCanvas.height = newHeight;
+
+                tempCtx.save();
+                tempCtx.translate(tempCanvas.width / 2, tempCanvas.height / 2);
+                tempCtx.rotate(angle);
+                tempCtx.drawImage(img, -img.width / 2, -img.height / 2);
+                tempCtx.restore();
+
+                const imgData = tempCanvas.toDataURL('image/jpeg', 0.95);
+
+                // A4 크기에 맞추기
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                
+                const imgRatio = newWidth / newHeight;
+                const pdfRatio = pdfWidth / pdfHeight;
+
+                let finalWidth, finalHeight;
+                if (imgRatio > pdfRatio) {
+                    finalWidth = pdfWidth;
+                    finalHeight = pdfWidth / imgRatio;
+                } else {
+                    finalHeight = pdfHeight;
+                    finalWidth = pdfHeight * imgRatio;
+                }
+
+                const x = (pdfWidth - finalWidth) / 2;
+                const y = (pdfHeight - finalHeight) / 2;
+
+                if (i > 0) {
+                    pdf.addPage();
+                }
+
+                pdf.addImage(imgData, 'JPEG', x, y, finalWidth, finalHeight);
+            }
+
+            hideLoading();
+            pdf.save('rotated-document.pdf');
+        }
+
+        async function autoCorrectRotation() {
+            if (!originalImage) {
+                alert('이미지를 먼저 업로드해주세요.');
+                return;
+            }
+
+            const aiResult = document.getElementById('aiResult');
+            aiResult.style.display = 'block';
+            aiResult.innerHTML = '🔍 텍스트 분석 중...';
+
+            try {
+                showLoading('AI가 텍스트를 분석하는 중...', 30);
+
+                const bestAngle = await detectBestRotation(originalImage);
+
+                hideLoading();
+
+                if (bestAngle !== null) {
+                    currentRotation = bestAngle.angle;
+                    pageRotations[currentPageIndex] = bestAngle.angle;
+                    rotationSlider.value = bestAngle.angle;
+                    rotationValue.textContent = bestAngle.angle.toFixed(1) + '°';
+                    drawRotatedImage();
+
+                    aiResult.innerHTML = `
+                        ✅ <strong>AI 보정 완료!</strong><br>
+                        추천 각도: <strong>${bestAngle.angle}°</strong><br>
+                        신뢰도: <strong>${bestAngle.confidence.toFixed(1)}%</strong><br>
+                        <small style="color: #666;">감지된 텍스트의 일부: "${bestAngle.text.substring(0, 50)}..."</small>
+                    `;
+                } else {
+                    aiResult.innerHTML = `
+                        ⚠️ 텍스트를 명확하게 감지하지 못했습니다.<br>
+                        <small>이미지 품질을 확인하거나 수동으로 조정해주세요.</small>
+                    `;
+                }
+
+            } catch (error) {
+                hideLoading();
+                aiResult.innerHTML = `❌ 오류가 발생했습니다: ${error.message}`;
+                console.error('OCR Error:', error);
+            }
+        }
+
+        async function detectBestRotation(image) {
+            // 여러 각도로 테스트
+            const angles = [0, -90, 90, 180, -45, 45, -30, 30, -15, 15, -5, 5];
+            let bestAngle = 0;
+            let bestConfidence = 0;
+            let bestText = '';
+
+            for (let i = 0; i < angles.length; i++) {
+                updateLoading(`각도 테스트 중 (${i + 1}/${angles.length})...`, 30 + (i / angles.length) * 60);
+
+                const testCanvas = document.createElement('canvas');
+                const testCtx = testCanvas.getContext('2d');
+                
+                const angle = angles[i] * Math.PI / 180;
+                const cos = Math.abs(Math.cos(angle));
+                const sin = Math.abs(Math.sin(angle));
+                
+                const newWidth = image.width * cos + image.height * sin;
+                const newHeight = image.width * sin + image.height * cos;
+
+                testCanvas.width = newWidth;
+                testCanvas.height = newHeight;
+
+                testCtx.save();
+                testCtx.translate(testCanvas.width / 2, testCanvas.height / 2);
+                testCtx.rotate(angle);
+                testCtx.drawImage(image, -image.width / 2, -image.height / 2);
+                testCtx.restore();
+
+                // OCR 수행
+                const result = await Tesseract.recognize(
+                    testCanvas,
+                    'kor+eng',
+                    {
+                        logger: () => {}
+                    }
+                );
+
+                const confidence = result.data.confidence;
+                const text = result.data.text.trim();
+
+                if (confidence > bestConfidence && text.length > 10) {
+                    bestConfidence = confidence;
+                    bestAngle = angles[i];
+                    bestText = text;
+                }
+            }
+
+            if (bestConfidence > 30) {
+                return {
+                    angle: bestAngle,
+                    confidence: bestConfidence,
+                    text: bestText
+                };
+            }
+            return null;
+        }
+
+        async function autoCorrectAllPages() {
+            if (!currentPdfPages || currentPdfPages.length === 0) {
+                alert('PDF 페이지가 없습니다.');
+                return;
+            }
+
+            const aiResult = document.getElementById('aiResult');
+            aiResult.style.display = 'block';
+
+            try {
+                showLoading('모든 페이지 AI 분석 중...', 0);
+
+                const results = [];
+
+                for (let i = 0; i < currentPdfPages.length; i++) {
+                    updateLoading(`페이지 ${i + 1}/${currentPdfPages.length} 분석 중...`, (i / currentPdfPages.length) * 100);
+
+                    const image = currentPdfPages[i];
+                    const bestAngle = await detectBestRotation(image);
+
+                    if (bestAngle) {
+                        pageRotations[i] = bestAngle.angle;
+                        results.push({
+                            page: i + 1,
+                            angle: bestAngle.angle,
+                            confidence: bestAngle.confidence
+                        });
+                    } else {
+                        pageRotations[i] = 0;
+                        results.push({
+                            page: i + 1,
+                            angle: 0,
+                            confidence: 0
+                        });
+                    }
+                }
+
+                hideLoading();
+
+                // 현재 페이지 업데이트
+                currentRotation = pageRotations[currentPageIndex];
+                rotationSlider.value = currentRotation;
+                rotationValue.textContent = currentRotation.toFixed(1) + '°';
+                drawRotatedImage();
+
+                // 결과 표시
+                let resultHTML = '<strong>✅ 모든 페이지 분석 완료!</strong><br><br>';
+                resultHTML += '<div style="max-height: 150px; overflow-y: auto; text-align: left;">';
+                results.forEach(r => {
+                    resultHTML += `페이지 ${r.page}: ${r.angle}° (신뢰도 ${r.confidence.toFixed(1)}%)<br>`;
+                });
+                resultHTML += '</div>';
+
+                aiResult.innerHTML = resultHTML;
+
+            } catch (error) {
+                hideLoading();
+                aiResult.innerHTML = `❌ 오류가 발생했습니다: ${error.message}`;
+                console.error('OCR Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
