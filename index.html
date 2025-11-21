@@ -21,19 +21,18 @@
 
     h1 {
       font-size: 32px;
-      margin-bottom: 6px; /* 간격 줄임 */
+      margin-bottom: 6px;
       font-weight: 700;
       letter-spacing: -0.5px;
       color: #ffffff;
     }
 
-    /* 부제목 디자인 */
     h2 {
       font-size: 18px;
       font-weight: 300;
-      color: #ffffff; /* 하얀색으로 변경 */
+      color: #ffffff;
       letter-spacing: 1px;
-      margin-bottom: 35px; /* 버튼과 간격 */
+      margin-bottom: 35px;
       position: relative;
       display: inline-block;
       animation: fadeIn 1.2s ease-in-out;
@@ -42,6 +41,14 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-5px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 40px;
+      margin-bottom: 15px;
+      color: #ffffff;
     }
 
     .button-container {
@@ -79,10 +86,17 @@
 <body>
   <h1>WackyDocs</h1>
   <h2>- 배움은 존재의 절대법칙 -</h2>
+
   <div class="button-container">
     <a href="sentence_order_test.html" class="link-button">📘 문장 배열 생성기</a>
     <a href="vocab_test_maker.html" class="link-button">📗 올림포스 단어 생성기</a>
     <a href="/ENGMID-main/index.html" class="link-button">📙 모든 문장배열</a>
+  </div>
+
+  <div class="section-title">📄 PDF 도구</div>
+  <div class="button-container">
+    <a href="image-rotation-tool (4).html" class="link-button">🌀 기울기 회전 프로그램</a>
+    <a href="pdf-merger-tool (1).html" class="link-button">📎 꿈공 스캔기 PDF 조합기</a>
   </div>
 
   <footer>Made By Sungwoo</footer>
