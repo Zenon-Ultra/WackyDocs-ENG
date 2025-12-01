@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한자 플래시카드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        
+        .category-select {
+            margin-bottom: 30px;
+        }
+        
+        .category-select label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        select {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .card-area {
+            display: none;
+        }
+        
+        .card-area.active {
+            display: block;
+        }
+        
+        .progress {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 18px;
+            color: #555;
+        }
+        
+        .card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .hanja {
+            font-size: 120px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .option-btn {
+            padding: 20px;
+            font-size: 18px;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .option-btn.correct {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+        
+        .option-btn.wrong {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+        
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #ee5a52;
+            transform: translateY(-2px);
+        }
+        
+        .result {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .result h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        
+        .result p {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        .wrong-list {
+            margin-top: 30px;
+            text-align: left;
+            background: #f5f7fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .wrong-list h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .wrong-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: white;
+            border-left: 4px solid #f44336;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 한자 플래시카드</h1>
+        
+        <div class="category-select">
+            <label for="category">단원을 선택하세요:</label>
+            <select id="category">
+                <option value="">-- 단원 선택 --</option>
+                <option value="story">7. 이야기 성어</option>
+                <option value="self">8. 나를 돌아봄</option>
+                <option value="leesukhwan">2. 이숙원</option>
+                <option value="jeongdojeon">3. 정도전</option>
+            </select>
+        </div>
+        
+        <div id="cardArea" class="card-area">
+            <div class="progress">
+                <span id="current">1</span> / <span id="total">0</span>
+            </div>
+            
+            <div class="card">
+                <div class="hanja" id="hanja">漢</div>
+                <div class="options" id="options"></div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-primary" id="nextBtn" style="display:none;">다음 문제</button>
+            </div>
+            
+            <div id="result" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            story: [
+                {char: '螢', meaning: '반딧불이', sound: '형'},
+                {char: '雪', meaning: '눈', sound: '설'},
+                {char: '功', meaning: '공', sound: '공'},
+                {char: '刮', meaning: '눈비빌', sound: '괄'},
+                {char: '對', meaning: '대할', sound: '대'},
+                {char: '顚', meaning: '넘어질', sound: '전'},
+                {char: '起', meaning: '일어날', sound: '기'},
+                {char: '器', meaning: '그릇', sound: '기'},
+                {char: '晩', meaning: '늦을', sound: '만'},
+                {char: '磨', meaning: '갈다', sound: '마'},
+                {char: '斧', meaning: '도끼', sound: '부'},
+                {char: '作', meaning: '지을', sound: '작'},
+                {char: '針', meaning: '바늘', sound: '침'},
+                {char: '伯', meaning: '맏', sound: '백'},
+                {char: '牙', meaning: '어금니', sound: '아'},
+                {char: '絶', meaning: '끊을', sound: '절'},
+                {char: '絃', meaning: '줄', sound: '현'},
+                {char: '古', meaning: '옛', sound: '고'},
+                {char: '友', meaning: '벗', sound: '우'},
+                {char: '交', meaning: '사귈', sound: '교'}
+            ],
+            self: [
+                {char: '出', meaning: '날', sound: '출'},
+                {char: '省', meaning: '살필', sound: '성'},
+                {char: '爲', meaning: '하다', sound: '위'},
+                {char: '謀', meaning: '도모', sound: '모'},
+                {char: '而', meaning: '말이을', sound: '이'},
+                {char: '忠', meaning: '충성', sound: '충'},
+                {char: '乎', meaning: '어조사', sound: '호'},
+                {char: '與', meaning: '여/참여', sound: '여'},
+                {char: '朋', meaning: '벗', sound: '붕'},
+                {char: '傳', meaning: '전할', sound: '전'},
+                {char: '洵', meaning: '진실로', sound: '순'},
+                {char: '新', meaning: '새', sound: '신'},
+                {char: '又', meaning: '또', sound: '우'},
+                {char: '己', meaning: '자기', sound: '기'},
+                {char: '所', meaning: '~바', sound: '소'},
+                {char: '欲', meaning: '욕할', sound: '욕'},
+                {char: '勿', meaning: '말라', sound: '물'},
+                {char: '施', meaning: '베풀', sound: '시'},
+                {char: '於', meaning: '어조사', sound: '어'},
+                {char: '見', meaning: '볼', sound: '견'},
+                {char: '意', meaning: '뜻', sound: '의'},
+                {char: '勇', meaning: '용맹', sound: '용'},
+                {char: '也', meaning: '어조사', sound: '야'},
+                {char: '遠', meaning: '멀', sound: '원'},
+                {char: '慮', meaning: '생각', sound: '려'},
+                {char: '必', meaning: '반드시', sound: '필'},
+                {char: '近', meaning: '가까울', sound: '근'},
+                {char: '憂', meaning: '근심', sound: '우'},
+                {char: '求', meaning: '구할', sound: '구'},
+                {char: '追', meaning: '쫓을', sound: '추'},
+                {char: '悔', meaning: '후회', sound: '회'},
+                {char: '志', meaning: '뜻', sound: '지'},
+                {char: '者', meaning: '사람', sound: '자'},
+                {char: '竟', meaning: '마침내', sound: '경'}
+            ],
+            leesukhwan: [
+                {char: '縱', meaning: '주다', sound: '종'},
+                {char: '來', meaning: '올', sound: '래'},
+                {char: '不', meaning: '아닐', sound: '부'},
+                {char: '如', meaning: '같을', sound: '여'},
+                {char: '乎', meaning: '이를', sound: '호'},
+                {char: '紗', meaning: '비단', sound: '사'},
+                {char: '窓', meaning: '창문', sound: '창'},
+                {char: '疊', meaning: '첩첩', sound: '첩'},
+                {char: '寒', meaning: '찰', sound: '한'},
+                {char: '多', meaning: '많을', sound: '다'},
+                {char: '若', meaning: '만약', sound: '약'},
+                {char: '使', meaning: '하여금', sound: '사'},
+                {char: '魂', meaning: '넋', sound: '혼'},
+                {char: '跡', meaning: '자취', sound: '적'},
+                {char: '路', meaning: '길', sound: '로'},
+                {char: '便', meaning: '편할', sound: '편'},
+                {char: '沙', meaning: '모래', sound: '사'}
+            ],
+            jeongdojeon: [
+                {char: '訪', meaning: '찾을', sound: '방'},
+                {char: '居', meaning: '살', sound: '거'},
+                {char: '士', meaning: '선비', sound: '사'},
+                {char: '擧', meaning: '들', sound: '거'},
+                {char: '野', meaning: '가을', sound: '야'},
+                {char: '陰', meaning: '그늘', sound: '음'},
+                {char: '嶽', meaning: '넓을', sound: '악'},
+                {char: '空', meaning: '빌', sound: '공'},
+                {char: '落', meaning: '떨어질', sound: '낙'},
+                {char: '葉', meaning: '잎', sound: '엽'},
+                {char: '聲', meaning: '소리', sound: '성'},
+                {char: '滿', meaning: '찰', sound: '만'},
+                {char: '紅', meaning: '붉을', sound: '홍'},
+                {char: '立', meaning: '설', sound: '립'},
+                {char: '溪', meaning: '시내', sound: '계'},
+                {char: '橋', meaning: '다리', sound: '교'},
+                {char: '在', meaning: '있을', sound: '재'},
+                {char: '圖', meaning: '그림', sound: '도'}
+            ]
+        };
+
+        let currentCategory = [];
+        let currentIndex = 0;
+        let wrongAnswers = [];
+        let isWrongMode = false;
+        let correctAnswer = '';
+
+        const categorySelect = document.getElementById('category');
+        const cardArea = document.getElementById('cardArea');
+        const hanjaEl = document.getElementById('hanja');
+        const optionsEl = document.getElementById('options');
+        const currentEl = document.getElementById('current');
+        const totalEl = document.getElementById('total');
+        const nextBtn = document.getElementById('nextBtn');
+        const resultEl = document.getElementById('result');
+
+        categorySelect.addEventListener('change', function() {
+            if (this.value) {
+                startQuiz(this.value);
+            } else {
+                cardArea.classList.remove('active');
+            }
+        });
+
+        nextBtn.addEventListener('click', nextQuestion);
+
+        function startQuiz(category) {
+            currentCategory = [...data[category]];
+            shuffleArray(currentCategory);
+            currentIndex = 0;
+            wrongAnswers = [];
+            isWrongMode = false;
+            cardArea.classList.add('active');
+            resultEl.style.display = 'none';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentIndex >= currentCategory.length) {
+                showResult();
+                return;
+            }
+
+            const current = currentCategory[currentIndex];
+            correctAnswer = `${current.meaning} (${current.sound})`;
+            
+            hanjaEl.textContent = current.char;
+            currentEl.textContent = currentIndex + 1;
+            totalEl.textContent = currentCategory.length;
+            
+            const wrongOptions = getRandomOptions(current);
+            const allOptions = [correctAnswer, ...wrongOptions];
+            shuffleArray(allOptions);
+            
+            optionsEl.innerHTML = '';
+            allOptions.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer(btn, option);
+                optionsEl.appendChild(btn);
+            });
+            
+            nextBtn.style.display = 'none';
+        }
+
+        function getRandomOptions(current) {
+            const categoryKey = getCategoryKey();
+            const allOptions = data[categoryKey]
+                .filter(item => item.char !== current.char)
+                .map(item => `${item.meaning} (${item.sound})`);
+            
+            shuffleArray(allOptions);
+            return allOptions.slice(0, 2);
+        }
+
+        function getCategoryKey() {
+            const select = document.getElementById('category');
+            return select.value;
+        }
+
+        function checkAnswer(btn, answer) {
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(b => b.disabled = true);
+            
+            if (answer === correctAnswer) {
+                btn.classList.add('correct');
+            } else {
+                btn.classList.add('wrong');
+                buttons.forEach(b => {
+                    if (b.textContent === correctAnswer) {
+                        b.classList.add('correct');
+                    }
+                });
+                wrongAnswers.push(currentCategory[currentIndex]);
+            }
+            
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            showQuestion();
+        }
+
+        function showResult() {
+            const correct = currentCategory.length - wrongAnswers.length;
+            const percentage = Math.round((correct / currentCategory.length) * 100);
+            
+            let html = `
+                <div class="result">
+                    <h2>🎉 학습 완료!</h2>
+                    <p>총 문제: ${currentCategory.length}개</p>
+                    <p>맞은 문제: ${correct}개</p>
+                    <p>틀린 문제: ${wrongAnswers.length}개</p>
+                    <p>정답률: ${percentage}%</p>
+            `;
+            
+            if (wrongAnswers.length > 0) {
+                html += `
+                    <div class="wrong-list">
+                        <h3>❌ 틀린 문제 목록</h3>
+                `;
+                wrongAnswers.forEach(item => {
+                    html += `
+                        <div class="wrong-item">
+                            <strong>${item.char}</strong> - ${item.meaning} (${item.sound})
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                html += `
+                    <div class="controls">
+                        <button class="btn btn-secondary" onclick="retryWrong()">틀린 문제만 다시 풀기</button>
+                        <button class="btn btn-primary" onclick="restart()">처음부터 다시</button>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="controls">
+                        <button class="btn btn-primary" onclick="restart()">처음부터 다시</button>
+                    </div>
+                `;
+            }
+            
+            html += `</div>`;
+            resultEl.innerHTML = html;
+            resultEl.style.display = 'block';
+            document.querySelector('.card').style.display = 'none';
+            document.querySelector('.progress').style.display = 'none';
+        }
+
+        function retryWrong() {
+            currentCategory = [...wrongAnswers];
+            shuffleArray(currentCategory);
+            currentIndex = 0;
+            wrongAnswers = [];
+            isWrongMode = true;
+            resultEl.style.display = 'none';
+            document.querySelector('.card').style.display = 'block';
+            document.querySelector('.progress').style.display = 'block';
+            showQuestion();
+        }
+
+        function restart() {
+            categorySelect.value = '';
+            cardArea.classList.remove('active');
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+    </script>
+</body>
+</html>
