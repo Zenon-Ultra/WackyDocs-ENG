@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4과: Good for All of Us - 문장 순서 배열 연습</title>
+  <title>2과: Smart Economic Decisions for All - 문장 순서 배열 연습</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -24,14 +24,14 @@
       text-decoration: none; transition: all 0.3s ease;
     }
     .header {
-      background: linear-gradient(45deg, #00C853, #64DD17);
+      background: linear-gradient(45deg, #1a237e, #0288d1);
       color: white; padding: 30px 20px; text-align: center; position: relative;
     }
     .header h1 { font-size: 2.2em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
     .header p { font-size: 1.1em; opacity: 0.9; }
     .exercise-container { padding: 30px 20px; }
     .exercise-info {
-      background: #f8f9fa; border-left: 5px solid #00C853;
+      background: #f8f9fa; border-left: 5px solid #1a237e;
       padding: 20px; margin-bottom: 30px; border-radius: 5px;
     }
     .exercise-select { margin-bottom: 30px; text-align: center; }
@@ -42,12 +42,12 @@
     }
     .controls { text-align: center; margin: 20px 0; }
     .btn {
-      background: linear-gradient(45deg, #00C853, #64DD17);
+      background: linear-gradient(45deg, #1a237e, #0288d1);
       color: white; border: none; padding: 12px 25px; margin: 0 10px;
       border-radius: 25px; cursor: pointer; font-size: 16px;
-      transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,200,83,0.3);
+      transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(26,35,126,0.3);
     }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,200,83,0.4); }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,35,126,0.4); }
     .btn:disabled { background: #6c757d; cursor: not-allowed; transform: none; box-shadow: none; }
     .exercise-area {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -58,22 +58,24 @@
       background:#f8f9fa;border-radius:10px;padding:20px;min-height:400px;
     }
     .scrambled-sentences h3,.ordered-sentences h3{
-      color:#00C853;margin-bottom:15px;font-size:1.3em;
-      border-bottom:2px solid #00C853;padding-bottom:5px;
+      color:#1a237e;margin-bottom:15px;font-size:1.3em;
+      border-bottom:2px solid #1a237e;padding-bottom:5px;
     }
     .sentence-item{
       background:white;border:2px solid #e9ecef;border-radius:8px;
       padding:15px;margin:10px 0;cursor:pointer;transition:all .3s ease;
       user-select:none;line-height:1.5;font-family:'Times New Roman',serif;
     }
-    .sentence-item:hover{border-color:#00C853;box-shadow:0 4px 12px rgba(0,200,83,0.2);transform:translateY(-2px);}
+    .sentence-item:hover{border-color:#1a237e;box-shadow:0 4px 12px rgba(26,35,126,0.2);transform:translateY(-2px);}
     .sentence-item.selected{border-color:#007bff;background-color:rgba(0,123,255,0.1);box-shadow:0 0 15px rgba(0,123,255,0.3);}
+    .sentence-item.correct-sentence { border-color: #28a745; background-color: rgba(40,167,69,0.1); }
+    .sentence-item.incorrect-sentence { border-color: #dc3545; background-color: rgba(220,53,69,0.1); }
     .drop-zone{
       border:2px dashed #ddd;border-radius:8px;padding:20px;margin:5px 0;
       min-height:70px;display:flex;align-items:center;justify-content:center;
       color:#666;transition:all .3s ease;font-style:italic;cursor:pointer;
     }
-    .drop-zone:hover{border-color:#00C853;background-color:rgba(0,200,83,0.1);color:#00C853;}
+    .drop-zone:hover{border-color:#1a237e;background-color:rgba(26,35,126,0.1);color:#1a237e;}
     .score-display{text-align:center;margin:20px 0;padding:15px;
       background:linear-gradient(45deg,#ffd700,#ffed4e);
       border-radius:10px;font-size:1.2em;font-weight:bold;color:#333;}
@@ -87,8 +89,8 @@
 <div class="container">
   <div class="header">
     <a href="main.html" class="back-btn">← 과 선택</a>
-    <h1>🌐 4과: Good for All of Us</h1>
-    <p>Opening Up the Web to Everyone - 영어 문장들을 올바른 순서로 배열해보세요!</p>
+    <h1>📈 2과: Smart Economic Decisions for All</h1>
+    <p>The ABCs of Stocks and Stock Markets - 영어 문장들을 올바른 순서로 배열해보세요!</p>
   </div>
 
   <div class="exercise-container">
@@ -103,12 +105,12 @@
     <div class="exercise-select">
       <select id="exerciseSelect">
         <option value="">연습할 문단을 선택하세요</option>
-        <option value="intro">Opening Up the Web to Everyone (서론) - 10문장</option>
-        <option value="text_desc">Text Descriptions of Images - 10문장</option>
-        <option value="captions">Transcripts and Captions for Multimedia Content - 7문장</option>
-        <option value="visibility">Content That Is Easy to See and Hear - 6문장</option>
-        <option value="keyboard">Complete Navigation Using the Keyboard - 8문장</option>
-        <option value="color">Indicators Other than Color That Convey Information - 8문장</option>
+        <option value="intro">Intro: The World of Finance - 9문장</option>
+        <option value="concept">The Concept of a Stock - 7문장</option>
+        <option value="market">The Stock Market and Companies - 8문장</option>
+        <option value="prices">The Prices of Stocks - 6문장</option>
+        <option value="factors">Factors Affecting the Price - 8문장</option>
+        <option value="investing">How to Invest Wisely - 8문장</option>
       </select>
     </div>
 
@@ -139,303 +141,247 @@
 <script>
 const exercises = {
   intro: [
-    "Imagine you have fallen down and broken your right arm.",
-    "There are some things that would be difficult to do with your injured arm.",
-    "For example, you might not be able to carry heavy boxes or ride your bike.",
-    "What about accessing the Internet?",
-    "If you are right-handed, using a computer mouse or touchscreen with your left hand would be awkward and take a lot of time.",
-    "However, this is a minor challenge compared to what some of us face on the Internet.",
-    "For people with certain disabilities, many websites can be nearly impossible to use.",
-    "This is the reason why web accessibility is important.",
-    "Web accessibility is the practice of making sure that websites can be used by everyone, including people with disabilities.",
-    "So what exactly makes a website accessible?"
+    "Welcome to the 10-Minute Economics 101 podcast for teenagers!",
+    "I’m your host, Neil. Thank you for tuning in.",
+    "We have a very special guest with us, the renowned economist Beth Friedman.",
+    "We’ve been exploring the basics of economics.",
+    "In this 35th episode, we’ll be talking about the world of stocks.",
+    "Before we begin, Neil, I have a question for you.",
+    "Have you ever wondered what to do with your extra money?",
+    "It’s a question that often arises, especially among young people who are beginning to explore the world of finance.",
+    "Today, we’re going to provide you with an overview of stocks and stock markets, enabling you to gain insight into the economy."
   ],
-  text_desc: [
-    "Along with text, most websites include other forms of information, such as images.",
-    "Sometimes such visual information is important for understanding the text.",
-    "This is a problem for users with visual disabilities.",
-    "When they go on a website, they often use programs called “screen readers,” which read online text aloud.",
-    "However, these programs cannot “read” images.",
-    "Accessible websites solve this problem by providing alternative text, also known as “alt text.”",
-    "Alt text is a brief description of non-textual information.",
-    "For instance, if an image shows a group of students, its alt text would explain how many students are in the image and what they are doing.",
-    "Screen readers can detect this alt text and read it aloud.",
-    "This way, alt text ensures that people with visual disabilities can access more of the information on a website."
+  concept: [
+    "Okay, let’s start with the concept of a stock.",
+    "A stock is a partial share of ownership in a company.",
+    "When you buy a stock, you get a portion of the company’s ownership.",
+    "To put it simply, owning one stock is like having a slice of the company’s pie.",
+    "Does that mean stockholders themselves can actively participate in the management of the company?",
+    "Not exactly, Neil. Management is generally carried out by professional managers.",
+    "However, companies hold stockholder meetings to seek the opinions of major stockholders when they make important decisions."
   ],
-  captions: [
-    "In some cases, audio content cannot be accessed or understood.",
-    "Some people may have hearing disabilities, while others might be in places where they can’t listen to audio, such as a quiet library.",
-    "Therefore, accessible websites often offer other ways to access information that is presented in audio form.",
-    "For example, they may provide transcripts or captions that can help users access this information.",
-    "Transcripts are text versions of the entire audio content, while captions are text versions of the audio that appear in a video as it plays.",
-    "Captions include not only the text version of the spoken words but also descriptions of the music and other sounds in the video.",
-    "This allows all users to understand the multimedia content equally."
+  market: [
+    "I see. Then how do companies use the stock market?",
+    "The stock market is very important for companies because it can provide them with the money they need to grow and expand.",
+    "Let’s imagine that a small group of people start a footwear company producing innovative sneakers.",
+    "The founders are confident that their products will be popular, but they do not have enough funds to grow the business.",
+    "So they decide to put the newly formed company on the stock market.",
+    "When a company is listed on the stock market, individuals or organizations that believe in its future can buy shares.",
+    "This process makes it easy for the footwear company to raise the funds it needs to grow its business.",
+    "As the business grows, the stock value rises, and the stockholders’ profits increase."
   ],
-  visibility: [
-    "Having a visual disability doesn’t necessarily mean a person can’t see at all.",
-    "Some people, including many elderly people, simply have poor eyesight.",
-    "This makes it difficult for them to read.",
-    "For this reason, accessible websites have a background color that contrasts with the color of their text.",
-    "This makes the text clear enough for most people to see.",
-    "As for audio content, accessible websites allow users to adjust the volume of background sound or to turn it off altogether."
+  prices: [
+    "Then what factors affect the prices of stocks?",
+    "Just like other transactions, the prices of stocks are decided by the law of supply and demand.",
+    "In other words, the more successful a business is, the more people will start buying its stocks.",
+    "As demand for the stocks increases, so does the stock price.",
+    "In contrast, if a company performs disappointingly, its stock price will fall.",
+    "Understood. Are there any other factors affecting the price?"
   ],
-  keyboard: [
-    "Some users have disabilities that limit the movement of their hands.",
-    "They rely on their keyboards, rather than a mouse, to navigate websites.",
-    "On accessible websites, users can access everything on the site using only a keyboard.",
-    "This means that links, buttons, and fields, which are spaces where information is entered, can be accessed through keyboard navigation.",
-    "Users navigate the websites by making use of keys such as the space bar, the arrow keys, the enter key, and the tab key.",
-    "For example, they can use the tab key to jump from one part of a web page to another.",
-    "Both users with disabilities and those with temporarily injured hands can benefit from this kind of navigation.",
-    "This feature ensures inclusivity and convenience for all."
+  factors: [
+    "Yes, companies are constantly under the influence of market factors such as raw material prices.",
+    "For example, if the price of rubber rises, a shoe company may have to pay more to import the rubber it needs.",
+    "This, in turn, affects production costs and leads to higher prices in the consumer market.",
+    "As consumers hesitate to purchase the sneakers, the company may suffer from poor performance.",
+    "Additionally, investors may be concerned about a company’s leadership or reputation.",
+    "Nowadays, more and more people support companies that prioritize public values such as business transparency.",
+    "In purchasing such stocks, they contribute to building a more sustainable economic system.",
+    "All these variables can cause daily changes in stock prices in the stock market."
   ],
-  color: [
-    "Color blindness is a common visual disability.",
-    "People with color blindness find it difficult to tell some colors apart.",
-    "This can cause problems, especially when graphs and charts only use colors to show the differences between sets of information.",
-    "Accessible websites use other indicators along with the colors.",
-    "For example, a line in green may also be dotted, while a line in blue is solid.",
-    "This ensures that everyone can tell the two lines apart.",
-    "The accessibility features of websites don’t just help people with disabilities.",
-    "They can make online experiences easier for everyone, regardless of abilities or situations."
+  investing: [
+    "So how do we invest in the stock market?",
+    "You can buy stocks through an official place called a stock exchange.",
+    "You might think investing in stocks is an easy way to make a profit.",
+    "But if you are investing, you must be prepared to lose money.",
+    "Since the market constantly fluctuates, there is a risk of loss and debt.",
+    "Generally, it would be smart to invest in something that interests you.",
+    "Always remember to do your research and stay informed about the companies you invest in.",
+    "Investing can be a powerful tool for building wealth, but it’s essential to approach it with knowledge and caution."
   ]
-        };
+};
 
-        let currentExercise = [];
-        let correctOrder = [];
-        let userOrder = [];
-        let selectedSentence = null;
+let currentExercise = [];
+let correctOrder = [];
+let userOrder = [];
+let selectedSentence = null;
 
-        const exerciseSelect = document.getElementById('exerciseSelect');
-        const shuffleBtn = document.getElementById('shuffleBtn');
-        const checkBtn = document.getElementById('checkBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const exerciseArea = document.getElementById('exerciseArea');
-        const scrambledContainer = document.getElementById('scrambledContainer');
-        const orderedContainer = document.getElementById('orderedContainer');
-        const scoreDisplay = document.getElementById('scoreDisplay');
-        const scoreElement = document.getElementById('score');
-        const feedback = document.getElementById('feedback');
+const exerciseSelect = document.getElementById('exerciseSelect');
+const shuffleBtn = document.getElementById('shuffleBtn');
+const checkBtn = document.getElementById('checkBtn');
+const resetBtn = document.getElementById('resetBtn');
+const exerciseArea = document.getElementById('exerciseArea');
+const scrambledContainer = document.getElementById('scrambledContainer');
+const orderedContainer = document.getElementById('orderedContainer');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const scoreElement = document.getElementById('score');
+const feedback = document.getElementById('feedback');
 
-        exerciseSelect.addEventListener('change', function() {
-            const selectedExercise = this.value;
-            if (selectedExercise) {
-                loadExercise(selectedExercise);
-            }
-        });
+exerciseSelect.addEventListener('change', function() {
+    const selectedExercise = this.value;
+    if (selectedExercise) {
+        loadExercise(selectedExercise);
+    }
+});
 
-        shuffleBtn.addEventListener('click', shuffleSentences);
-        checkBtn.addEventListener('click', checkAnswer);
-        resetBtn.addEventListener('click', resetExercise);
+shuffleBtn.addEventListener('click', shuffleSentences);
+checkBtn.addEventListener('click', checkAnswer);
+resetBtn.addEventListener('click', resetExercise);
 
-        function loadExercise(exerciseKey) {
-            currentExercise = [...exercises[exerciseKey]];
-            correctOrder = [...currentExercise];
-            userOrder = [];
-            selectedSentence = null;
+function loadExercise(exerciseKey) {
+    currentExercise = [...exercises[exerciseKey]];
+    correctOrder = [...currentExercise];
+    userOrder = [];
+    selectedSentence = null;
 
-            shuffleSentences();
-            exerciseArea.style.display = 'block';
-            shuffleBtn.disabled = false;
-            resetBtn.disabled = false;
-            scoreDisplay.style.display = 'none';
-            hideFeedback();
+    shuffleSentences();
+    exerciseArea.style.display = 'block';
+    shuffleBtn.disabled = false;
+    resetBtn.disabled = false;
+    scoreDisplay.style.display = 'none';
+    hideFeedback();
+}
+
+function shuffleSentences() {
+    const shuffled = [...currentExercise];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    displayScrambledSentences(shuffled);
+    createDropZones();
+    checkBtn.disabled = true;
+    userOrder = [];
+    selectedSentence = null;
+}
+
+function displayScrambledSentences(sentences) {
+    scrambledContainer.innerHTML = '';
+    sentences.forEach((sentence) => {
+        const sentenceDiv = document.createElement('div');
+        sentenceDiv.className = 'sentence-item';
+        sentenceDiv.textContent = sentence;
+        sentenceDiv.dataset.sentence = sentence;
+        sentenceDiv.addEventListener('click', function() { selectSentence(this); });
+        scrambledContainer.appendChild(sentenceDiv);
+    });
+}
+
+function selectSentence(element) {
+    document.querySelectorAll('.sentence-item.selected').forEach(item => item.classList.remove('selected'));
+    element.classList.add('selected');
+    selectedSentence = element;
+    showFeedback('선택된 문장을 배치할 위치(오른쪽)를 클릭하세요!', 'correct');
+}
+
+function createDropZones() {
+    orderedContainer.innerHTML = '';
+    for (let i = 0; i < currentExercise.length; i++) {
+        const dropZone = document.createElement('div');
+        dropZone.className = 'drop-zone';
+        dropZone.textContent = `문장 ${i + 1}을 여기에 배치하세요`;
+        dropZone.dataset.position = i;
+        dropZone.addEventListener('click', function() { handleDropZoneClick(this); });
+        orderedContainer.appendChild(dropZone);
+    }
+}
+
+function handleDropZoneClick(dropZone) {
+    if (!selectedSentence) {
+        showFeedback('먼저 왼쪽에서 문장을 선택하세요!', 'incorrect');
+        return;
+    }
+
+    const sentence = selectedSentence.dataset.sentence;
+    const position = parseInt(dropZone.dataset.position);
+
+    const sentenceDiv = document.createElement('div');
+    sentenceDiv.className = 'sentence-item';
+    sentenceDiv.textContent = sentence;
+    sentenceDiv.dataset.sentence = sentence;
+    sentenceDiv.dataset.position = position;
+    sentenceDiv.addEventListener('click', function() { returnSentence(this); });
+
+    dropZone.parentNode.replaceChild(sentenceDiv, dropZone);
+    selectedSentence.remove();
+    selectedSentence = null;
+
+    updateUserOrder();
+    hideFeedback();
+}
+
+function returnSentence(sentenceElement) {
+    const position = parseInt(sentenceElement.dataset.position);
+    const sentence = sentenceElement.dataset.sentence;
+
+    const dropZone = document.createElement('div');
+    dropZone.className = 'drop-zone';
+    dropZone.textContent = `문장 ${position + 1}을 여기에 배치하세요`;
+    dropZone.dataset.position = position;
+    dropZone.addEventListener('click', function() { handleDropZoneClick(this); });
+
+    sentenceElement.parentNode.replaceChild(dropZone, sentenceElement);
+
+    const newSentenceDiv = document.createElement('div');
+    newSentenceDiv.className = 'sentence-item';
+    newSentenceDiv.textContent = sentence;
+    newSentenceDiv.dataset.sentence = sentence;
+    newSentenceDiv.addEventListener('click', function() { selectSentence(this); });
+    scrambledContainer.appendChild(newSentenceDiv);
+
+    updateUserOrder();
+}
+
+function updateUserOrder() {
+    userOrder = [];
+    const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
+    let count = 0;
+    placedSentences.forEach(s => count++);
+    checkBtn.disabled = (count !== currentExercise.length);
+}
+
+function checkAnswer() {
+    let correct = 0;
+    const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
+    
+    placedSentences.forEach((sentence) => {
+        const position = parseInt(sentence.dataset.position);
+        const userSentence = sentence.dataset.sentence;
+        const correctSentence = correctOrder[position];
+        
+        sentence.classList.remove('correct-sentence', 'incorrect-sentence');
+        if (userSentence === correctSentence) {
+            sentence.classList.add('correct-sentence');
+            correct++;
+        } else {
+            sentence.classList.add('incorrect-sentence');
         }
+    });
 
-        function shuffleSentences() {
-            const shuffled = [...currentExercise];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
+    const score = Math.round((correct / currentExercise.length) * 100);
+    scoreElement.textContent = score;
+    scoreDisplay.style.display = 'block';
 
-            displayScrambledSentences(shuffled);
-            createDropZones();
-            checkBtn.disabled = true;
-            userOrder = [];
-            selectedSentence = null;
-        }
+    if (score === 100) {
+        showFeedback('🎉 완벽합니다! 모든 문장을 올바르게 배열했습니다!', 'correct');
+    } else {
+        showFeedback(`💪 다시 확인해보세요! ${correct}/${currentExercise.length}개 정답입니다.`, 'incorrect');
+    }
+}
 
-        function displayScrambledSentences(sentences) {
-            scrambledContainer.innerHTML = '';
-            sentences.forEach((sentence, index) => {
-                const sentenceDiv = document.createElement('div');
-                sentenceDiv.className = 'sentence-item';
-                sentenceDiv.textContent = sentence;
-                sentenceDiv.dataset.sentence = sentence;
+function resetExercise() {
+    const selectedExercise = exerciseSelect.value;
+    if (selectedExercise) loadExercise(selectedExercise);
+}
 
-                sentenceDiv.addEventListener('click', function() {
-                    selectSentence(this);
-                });
+function showFeedback(message, type) {
+    feedback.textContent = message;
+    feedback.className = `feedback ${type}`;
+}
 
-                scrambledContainer.appendChild(sentenceDiv);
-            });
-        }
-
-        function selectSentence(element) {
-            document.querySelectorAll('.sentence-item.selected').forEach(item => {
-                item.classList.remove('selected');
-            });
-            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
-                zone.classList.remove('highlight');
-            });
-
-            element.classList.add('selected');
-            selectedSentence = element;
-
-            document.querySelectorAll('.drop-zone').forEach(zone => {
-                zone.classList.add('highlight');
-            });
-
-            showFeedback('선택된 문장을 배치할 위치를 클릭하세요!', 'correct');
-        }
-
-        function createDropZones() {
-            orderedContainer.innerHTML = '';
-            for (let i = 0; i < currentExercise.length; i++) {
-                const dropZone = document.createElement('div');
-                dropZone.className = 'drop-zone';
-                dropZone.textContent = `문장 ${i + 1}을 여기에 배치하세요`;
-                dropZone.dataset.position = i;
-
-                dropZone.addEventListener('click', function() {
-                    handleDropZoneClick(this);
-                });
-
-                orderedContainer.appendChild(dropZone);
-            }
-        }
-
-        function handleDropZoneClick(dropZone) {
-            if (!selectedSentence) {
-                showFeedback('먼저 왼쪽에서 문장을 선택하세요!', 'incorrect');
-                return;
-            }
-
-            const sentence = selectedSentence.dataset.sentence;
-            const position = parseInt(dropZone.dataset.position);
-
-            const sentenceDiv = document.createElement('div');
-            sentenceDiv.className = 'sentence-item';
-            sentenceDiv.textContent = sentence;
-            sentenceDiv.dataset.sentence = sentence;
-            sentenceDiv.dataset.position = position;
-
-            sentenceDiv.addEventListener('click', function() {
-                returnSentence(this);
-            });
-
-            dropZone.parentNode.replaceChild(sentenceDiv, dropZone);
-            selectedSentence.remove();
-            selectedSentence = null;
-
-            document.querySelectorAll('.sentence-item.selected').forEach(item => {
-                item.classList.remove('selected');
-            });
-            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
-                zone.classList.remove('highlight');
-            });
-
-            updateUserOrder();
-            hideFeedback();
-        }
-
-        function returnSentence(sentenceElement) {
-            const position = parseInt(sentenceElement.dataset.position);
-            const sentence = sentenceElement.dataset.sentence;
-
-            const dropZone = document.createElement('div');
-            dropZone.className = 'drop-zone';
-            dropZone.textContent = `문장 ${position + 1}을 여기에 배치하세요`;
-            dropZone.dataset.position = position;
-
-            dropZone.addEventListener('click', function() {
-                handleDropZoneClick(this);
-            });
-
-            sentenceElement.parentNode.replaceChild(dropZone, sentenceElement);
-
-            const newSentenceDiv = document.createElement('div');
-            newSentenceDiv.className = 'sentence-item';
-            newSentenceDiv.textContent = sentence;
-            newSentenceDiv.dataset.sentence = sentence;
-
-            newSentenceDiv.addEventListener('click', function() {
-                selectSentence(this);
-            });
-
-            scrambledContainer.appendChild(newSentenceDiv);
-
-            selectedSentence = null;
-            document.querySelectorAll('.sentence-item.selected').forEach(item => {
-                item.classList.remove('selected');
-            });
-            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
-                zone.classList.remove('highlight');
-            });
-
-            updateUserOrder();
-        }
-
-        function updateUserOrder() {
-            userOrder = [];
-            const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
-            placedSentences.forEach(sentence => {
-                const position = parseInt(sentence.dataset.position);
-                userOrder[position] = sentence.dataset.sentence;
-            });
-
-            const hasEmptySlots = userOrder.includes(undefined) || userOrder.length !== currentExercise.length;
-            checkBtn.disabled = hasEmptySlots;
-        }
-
-        function checkAnswer() {
-            let correct = 0;
-            const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
-            
-            placedSentences.forEach((sentence, index) => {
-                sentence.classList.remove('correct-sentence', 'incorrect-sentence');
-                const position = parseInt(sentence.dataset.position);
-                const userSentence = sentence.dataset.sentence;
-                const correctSentence = correctOrder[position];
-                
-                if (userSentence === correctSentence) {
-                    sentence.classList.add('correct-sentence');
-                    correct++;
-                } else {
-                    sentence.classList.add('incorrect-sentence');
-                }
-            });
-
-            const score = Math.round((correct / currentExercise.length) * 100);
-            scoreElement.textContent = score;
-            scoreDisplay.style.display = 'block';
-
-            if (score === 100) {
-                showFeedback('🎉 완벽합니다! 모든 문장을 올바르게 배열했습니다!', 'correct');
-            } else if (score >= 70) {
-                showFeedback(`👍 잘했습니다! ${correct}/${currentExercise.length}개 정답입니다.`, 'correct');
-            } else {
-                showFeedback(`💪 다시 한번 시도해보세요! ${correct}/${currentExercise.length}개 정답입니다.`, 'incorrect');
-            }
-        }
-
-        function resetExercise() {
-            const selectedExercise = exerciseSelect.value;
-            if (selectedExercise) {
-                loadExercise(selectedExercise);
-            }
-            hideFeedback();
-        }
-
-        function showFeedback(message, type) {
-            feedback.textContent = message;
-            feedback.className = `feedback ${type}`;
-        }
-
-        function hideFeedback() {
-            feedback.className = 'feedback';
-        }
-    </script>
+function hideFeedback() {
+    feedback.className = 'feedback';
+}
+</script>
 </body>
 </html>
