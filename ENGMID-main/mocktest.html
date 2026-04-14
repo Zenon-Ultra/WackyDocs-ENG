@@ -131,102 +131,11 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .back-btn {
-                left: 15px;
-                padding: 8px 15px;
-                font-size: 14px;
-            }
-
-            .header {
-                padding: 25px 15px;
-            }
-
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .header p {
-                font-size: 1em;
-            }
-
-            .exercise-container {
-                padding: 20px 15px;
-            }
-
-            .exercise-select select {
-                min-width: 250px;
-                font-size: 14px;
-                padding: 10px 15px;
-            }
-
-            .btn {
-                padding: 10px 20px;
-                font-size: 14px;
-                margin: 5px;
-            }
-
-            .sentence-item {
-                padding: 12px;
-                font-size: 14px;
-            }
-
-            .drop-zone {
-                padding: 15px;
-                min-height: 60px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .back-btn {
-                left: 10px;
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .header {
-                padding: 20px 10px;
-            }
-
-            .header h1 {
-                font-size: 1.6em;
-            }
-
-            .exercise-container {
-                padding: 15px 10px;
-            }
-
-            .exercise-select select {
-                min-width: 200px;
-                font-size: 13px;
-            }
-
-            .btn {
-                padding: 8px 15px;
-                font-size: 13px;
-            }
-
-            .sentence-item {
-                padding: 10px;
-                font-size: 13px;
-            }
-        }
-
-        .exercise-area {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .exercise-area {
-                grid-template-columns: 1fr;
-            }
+            body { padding: 10px; }
+            .back-btn { left: 15px; padding: 8px 15px; font-size: 14px; }
+            .header { padding: 25px 15px; }
+            .header h1 { font-size: 1.8em; }
+            .exercise-area { grid-template-columns: 1fr; }
         }
 
         .scrambled-sentences, .ordered-sentences {
@@ -264,14 +173,10 @@
             transform: translateY(-2px);
         }
 
-        .sentence-item:active {
-            transform: scale(0.98);
-        }
-
         .sentence-item.selected {
-            border-color: #007bff;
-            background-color: rgba(0, 123, 255, 0.1);
-            box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
+            border-color: #4ecdc4;
+            background-color: rgba(78, 205, 196, 0.1);
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
         }
 
         .drop-zone {
@@ -290,22 +195,15 @@
         }
 
         .drop-zone:hover {
-            border-color: #ff6b6b;
-            background-color: rgba(255, 107, 107, 0.1);
-            color: #ff6b6b;
+            border-color: #4ecdc4;
+            background-color: rgba(78, 205, 196, 0.1);
+            color: #4ecdc4;
         }
 
         .drop-zone.highlight {
-            border-color: #007bff;
-            background-color: rgba(0, 123, 255, 0.1);
-            color: #007bff;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+            border-color: #ff6b6b;
+            background-color: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
         }
 
         .score-display {
@@ -350,45 +248,34 @@
             border-color: #dc3545 !important;
             background-color: rgba(220, 53, 69, 0.1);
         }
-
-        .creator-credit {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #ddd;
-            font-weight: bold;
-            color: #ff6b6b;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <a href="main.html" class="back-btn">← 과 선택</a>
-            <h1>📝 모의고사 연습</h1>
-            <p>문장 순서 배열 문제 - 영어 문장들을 올바른 순서로 배열해보세요!</p>
+            <a href="main.html" class="back-btn">← 목록으로</a>
+            <h1>📝 고1 2026년 3월 모의고사</h1>
+            <p>30, 32, 33, 34, 35, 40번 문장 순서 배열 연습</p>
         </div>
 
         <div class="exercise-container">
             <div class="exercise-info">
                 <h3>📚 연습 방법</h3>
-                <p>1. 아래에서 연습할 문제를 선택하세요<br>
-                2. 왼쪽의 문장을 클릭해서 선택한 후, 오른쪽의 원하는 위치를 클릭하세요<br>
-                3. 잘못 배치한 문장은 클릭해서 다시 왼쪽으로 돌려보낼 수 있습니다<br>
-                4. '정답 확인' 버튼을 눌러 결과를 확인하세요</p>
+                <p>1. 아래 메뉴에서 연습할 문제 번호를 선택하세요.<br>
+                2. 왼쪽의 문장을 클릭해서 선택한 후, 오른쪽의 원하는 위치를 클릭하세요.<br>
+                3. 잘못 배치한 문장은 클릭해서 다시 왼쪽으로 돌려보낼 수 있습니다.<br>
+                4. '정답 확인' 버튼을 눌러 결과를 확인하세요.</p>
             </div>
 
             <div class="exercise-select">
                 <select id="exerciseSelect">
-                    <option value="">연습할 문제를 선택하세요</option>
-                    <option value="mock23">23번: 로마의 개방성과 성공의 토대 - 6문장</option>
-                    <option value="mock24">24번: 정밀한 물리 법칙과 생명 진화 - 5문장</option>
-                    <option value="mock30">30번: Gen Z의 금융 윤리와 투명성 - 8문장</option>
-                    <option value="mock32">32번: 동물의 근사 수 체계와 한계 - 7문장</option>
-                    <option value="mock33">33번: 소비재 풍부함과 창의성 저해 - 7문장</option>
-                    <option value="mock36">36번: 일상 속 다중감각 경험 - 9문장</option>
-                    <option value="mock37">37번: 확인 가능한 피해자 효과 - 9문장</option>
-                    <option value="mock38">38번: 인류와 고대 빙하기 기후 영향 - 7문장</option>
+                    <option value="">연습할 지문을 선택하세요</option>
+                    <option value="q30">30번 지문 (6문장)</option>
+                    <option value="q32">32번 지문 (5문장)</option>
+                    <option value="q33">33번 지문 (7문장)</option>
+                    <option value="q34">34번 지문 (10문장)</option>
+                    <option value="q35">35번 지문 (6문장)</option>
+                    <option value="q40">40번 지문 (7문장)</option>
                 </select>
             </div>
 
@@ -406,103 +293,74 @@
 
             <div class="exercise-area" id="exerciseArea" style="display: none;">
                 <div class="scrambled-sentences">
-                    <h3>🔀 Scrambled Sentences</h3>
+                    <h3>🔀 섞인 문장 (Scrambled)</h3>
                     <div id="scrambledContainer"></div>
                 </div>
 
                 <div class="ordered-sentences">
-                    <h3>✅ Correct Order</h3>
+                    <h3>✅ 올바른 순서 (Correct Order)</h3>
                     <div id="orderedContainer"></div>
                 </div>
-            </div>
-
-            <div class="creator-credit">
-                Created by Sungwoo ✨
             </div>
         </div>
     </div>
 
-       <script>
-
-// PDF 원문에 기반하여 교정한 mock23~mock38 영어 지문 예시
-
-const exercises = {
-  mock23: [
-    "Rome was said to have been a melting pot from the very start.",
-    "The historian Livy claimed the city's original population was comprised of immigrants flooding in from all directions, attracted by Romulus's deliberate policy of nondiscrimination.",
-    "It was this initial openness, Livy asserts, that laid the foundations for the later strength and success of the city.",
-    "Romans described their city as multicultural in the generations after its foundation.",
-    "Tradition held that only a minority of the city's legendary kings were Roman-born, with the others all arriving as immigrants before being chosen for the throne for their virtues and merits.",
-    "As the empire expanded across three continents, Rome eagerly adopted new cultural influences and absorbed incoming groups ― perhaps a little too eagerly for some, who, like the poet Juvenal, complained about the rapid rate of cultural change."
-  ],
-  mock24: [
-    "The laws and constants of physics and the fundamental forces in our universe have very precise forms and values.",
-    "This means that, if they were only very slightly different, life would not have been possible.",
-    "For instance, the precise value of gravity has enabled our universe to arise by permitting the aggregation of dust and gas particles to proto-stars around which planets later came to orbit, including the Earth around the Sun.",
-    "If the value of the electron had been ever so slightly larger or smaller, chemistry, as we know it, would not have been possible and life, which is based on organic chemistry, could not have started.",
-    "The universe was not designed for us to evolve, we have no privileged position in the universe; however, the laws and constants of physics allowed advanced life to evolve."
-  ],
-  mock30: [
-    "While convenience and technology are crucial, they are not the only factors driving Gen Z's financial decisions.",
-    "This generation is incredibly values-driven, and they want to bank with institutions that match their personal beliefs and values.",
-    "Transparency is vital. Gen Z is skeptical of large corporations and institutions that lack accountability.",
-    "They have grown up in a world where information is freely available, and they expect complete transparency from the brands they support.",
-    "Banks, for example, must clearly communicate fees, terms, and conditions, as well as how they handle customers' data.",
-    "Moreover, ethical banking practices are more important than ever.",
-    "Gen Z cares about the environment, social justice, and the ethical implications of their financial decisions.",
-    "They are interested in sustainable investing, supporting businesses that match their values, and ensuring that their money is not being used to fund harmful practices.",
-    "Banks that offer socially responsible investment opportunities and are committed to environmental sustainability will attract Gen Z's attention."
-  ],
-  mock32: [
-    "The technical term often used to describe animals' judgement of numbers is the approximate number system.",
-    "What it does not provide is precision.",
-    "It shows ― and this is the same in every species tested ― a characteristic pattern of errors, with discrimination becoming less accurate as the quantities get bigger.",
-    "Rhesus monkeys can tell one from two, two from three, three from four, four from five ... but start to fail from five upwards.",
-    "Rats that learned to press a lever a given number of times, from four up to twenty-four, became markedly less and less precise in their responses as the number increased: by the top end of the range they would merely produce a spread of numbers around the target.",
-    "It is a common observation that when testing the accuracy of animals' number sense, the size of the numbers matters."
-  ],
-  mock33: [
-    "Despite the cultural trope depicting emotions as the opposite of rational thought, cognition ― what we commonly refer to as thinking ― is actually a key building block of emotion.",
-    "How we think about our circumstances shapes the emotions we experience; then those emotions echo back to influence how we think.",
-    "For instance, if you walk into a test thinking you are bad at taking tests, your anxiety will be increased.",
-    "Then you don't feel good about your performance on the test, and that becomes evidence for continuing to think that you're bad at test taking.",
-    "In this way there's simply no pulling emotion and cognition apart.",
-    "This bi-directionality of cognition and emotion allows us to adjust difficult emotions by changing the way we think.",
-    "By thinking differently ― I get nervous sometimes, but I'm still a good test taker, or that nervous feeling is just excitement and anticipation, it means I'm ready ― you can work those pathways to your advantage."
-  ],
-  mock36: [
-    "Multisensory experiences are a central part of our everyday lives, yet we often take them for granted, especially when our senses function normally or are corrected to normal with aids like glasses.",
-    "However, closer inspection to any, even the most ordinary experiences, reveals the remarkable multisensory world in which we live.",
-    "Consider the experience of eating a regular meal.",
-    "At first, it may seem like an ordinary experience, but it is actually a fusion of the senses.",
-    "We first eat with our eyes, but we are also exposed to countless sensory signals that influence our eating experience such as food textures, tastes, and smells.",
-    "And it does not stop there.",
-    "Even the sounds that come both from the atmospheres in which we eat and our interactions with the food (such as chewing) and the tools we use to eat influence our eating experience."
-  ],
-  mock37: [
-    "As children, the principle of opposites is foreign.",
-    "Children perceive words and their meanings separately from each other.",
-    "It is only in later development that we understood that individual words directly connect to one another.",
-    "For many children, for instance, it is not clear that 'Right' is the opposite of 'Left'.",
-    "A vivid example of this can be seen when children learn to ride a bicycle.",
-    "If parents tell their child \"Don't go to the left,\" they will often find that the child will continue riding straight ahead and not automatically turn to the right.",
-    "The same applies to the logical connection between 'Yes' and 'No' as perceived by parents.",
-    "When we were children and were told, for example, \"No, don't eat with your hands,\" we were confused and didn't know what our parents expected from us.",
-    "Our confusion was about whether we should continue eating or not and if so, how?",
-    "Only later did we recognize the connection and understand that we should continue eating, but not with our hands but with a fork or a spoon."
-  ],
-  mock38: [
-    "Humans are not the most social animal.",
-    "Ants, bees, and termites put humanity to shame on many metrics of sociality.",
-    "A wide variety of relatives live together with perfectly harmonious behavior and collectively care for their young.",
-    "But while insect colonies are impressively social places, it's not our kind of social life.",
-    "Bees always build hexagonal hives, ants march in lines, and termites move in zigzag formations.",
-    "These patterns recur predictably because they are tightly programmed genetically and propelled pheromonally.",
-    "We humans are more free, less tightly programmed genetically, so our social patterns can be more diverse and dynamic.",
-    "Every group dances a slightly different dance, and these choreographies change across generations.",
-    "We still think and act in ways that are in harmony with others around us, but it is through patterns that are more shaped by nurture, not just nature."
-  ]
-};
+    <script>
+        const exercises = {
+            q30: [
+                "The principal transportation mode in the developing world, even in large cities, is still walking because of constraints on the resources needed to operate extensive transit systems.",
+                "People cover long distances on foot every day and expend human energy that they can hardly spare.",
+                "Walking under those conditions is an unavoidable burden that consumes productive capability.",
+                "In North America and Western Europe, however, the attitude and policies are just the opposite: walking is efficient, healthful, and natural.",
+                "We should do more of it — almost everybody agrees — and some of the current trends should be reversed.",
+                "Ironically, among the most popular exercise machines in health clubs and in homes are tread-mills that simulate walking, which could be otherwise accomplished with a transport purpose on the street."
+            ],
+            q32: [
+                "Students often mistake familiarity with true mastery, creating a dangerous “illusion of competence” where recognizing information feels like genuine knowledge, but they struggle when asked to recall or apply it independently.",
+                "This cognitive bias, strengthened by passive study methods, leads learners to overestimate their understanding.",
+                "Teaching materials, even informally or imaginatively, actively counters this illusion by requiring deep processing, active recall, structured organization, and revealing gaps in knowledge.",
+                "It introduces powerful methods like teaching imaginary students, peer-teaching in study groups, employing the Feynman Technique, and writing explanations for others.",
+                "Ultimately, adopting the teacher mindset transforms surface familiarity into real mastery, exposing and filling gaps in knowledge and ensuring solid, reliable understanding."
+            ],
+            q33: [
+                "From around 3000 BC, the Sumerian officials would mark their lists of goods on clay tablets.",
+                "If they wanted to record five fish, they would mark five pictures of a fish.",
+                "Their first great intellectual leap came from separating the number from the object they were counting.",
+                "In other words, they would represent five fish with a numeral for the number five alongside a symbol for the fish.",
+                "If they wanted to describe five of something else, they realized they could keep the same numeral and trade the object symbol for a cow, or a jar of oil, or whatever else they were interested in.",
+                "The Sumerians had developed the idea of an emancipated number, existing in its own right and independent of whatever it is being used to count.",
+                "It is easy to take the emancipated number for granted as it is so deeply set into modern thought, but to the earliest civilizations it was intellectually new and extremely powerful."
+            ],
+            q34: [
+                "The emphasis on learning from the ingroup takes little account of individuals.",
+                "Amazingly, while we may dislike some of the people in our ingroup, we still copy them.",
+                "Wilks, Kirby, and Nielsen studied copying behavior in the context of observing how to open a puzzle box.",
+                "Ingroups and outgroups were distinguished in a minimal way, using simple color coding of wristbands.",
+                "The children did not simply like all members of their ingroup; they disliked those who behaved in an antisocial fashion.",
+                "Indeed, they liked these antisocial ingroup members less than the prosocial members of an outgroup.",
+                "Still, their dislike did not affect their tendency to copy ingroup behavior more closely than outgroup behavior.",
+                "This overimitation reveals that we are not copying in order to learn how to open a box most efficiently.",
+                "We want to learn how to do it in the proper way — in other words, conforming to the rules and conventions of the ingroup.",
+                "This will be appropriately demonstrated even by antisocial ingroup members."
+            ],
+            q35: [
+                "The “set point theory” concept is that your body has a stable quantity of fat cells by the time you are an adult.",
+                "The more weight you carried in your childhood and your teenage years, the more fat cells you will have as an adult.",
+                "These fat cells then become “fuller” or “thinner” as you gain and lose weight as an adult.",
+                "The set point is the trigger in these cells that will send a message to your brain saying that your fat cells are getting too thin and that you must eat more.",
+                "Different people’s fat cells will have different set points, and the strength of the message is affected by the number of cells.",
+                "Thus a person with lots of fat cells and a high set point will battle with a strong desire for food when dieting."
+            ],
+            q40: [
+                "Parenting experts say children need to learn independence and resilience.",
+                "But cities and suburbs don’t offer safe walk and bike routes to school, malls kick teenagers out on the weekends, and free time disappears under a spreadsheet of activities.",
+                "All of those “musts” take more of the parents’ time or money to navigate, because the child can’t do it on their own.",
+                "As Darby Saxbe, a clinical psychologist, recently wrote in the New York Times, “underparenting requires structural change.”",
+                "Unlike most political experts, she’s not just talking about economic policies like family leave and government-supported childcare.",
+                "She’s talking about actual physical structures, and the cultural change required to populate them.",
+                "We need to “build back our tolerance for children in public spaces,” she writes, “and create safe environments where lightly supervised kids can move around freely.”"
+            ]
+        };
 
         let currentExercise = [];
         let correctOrder = [];
@@ -561,7 +419,7 @@ const exercises = {
 
         function displayScrambledSentences(sentences) {
             scrambledContainer.innerHTML = '';
-            sentences.forEach((sentence, index) => {
+            sentences.forEach((sentence) => {
                 const sentenceDiv = document.createElement('div');
                 sentenceDiv.className = 'sentence-item';
                 sentenceDiv.textContent = sentence;
@@ -669,36 +527,28 @@ const exercises = {
 
             scrambledContainer.appendChild(newSentenceDiv);
 
-            selectedSentence = null;
-            document.querySelectorAll('.sentence-item.selected').forEach(item => {
-                item.classList.remove('selected');
-            });
-            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
-                zone.classList.remove('highlight');
-            });
-
             updateUserOrder();
-            hideFeedback();
         }
 
         function updateUserOrder() {
             userOrder = [];
             const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
-            placedSentences.forEach(item => {
-                const position = parseInt(item.dataset.position);
-                userOrder[position] = item.dataset.sentence;
+            
+            placedSentences.forEach(sentence => {
+                const position = parseInt(sentence.dataset.position);
+                userOrder[position] = sentence.dataset.sentence;
             });
 
-            const allFilled = userOrder.length === currentExercise.length && 
-                            userOrder.every(item => item !== undefined);
-            checkBtn.disabled = !allFilled;
+            let count = 0;
+            placedSentences.forEach(s => count++);
+            checkBtn.disabled = (count !== currentExercise.length);
         }
 
         function checkAnswer() {
             let correctCount = 0;
             const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
-
-            placedSentences.forEach((item, index) => {
+            
+            placedSentences.forEach((item) => {
                 const position = parseInt(item.dataset.position);
                 const sentence = item.dataset.sentence;
                 const isCorrect = correctOrder[position] === sentence;
