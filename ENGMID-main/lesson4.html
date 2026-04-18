@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
+<html lang="ko"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2과: Smart Economic Decisions for All - 문장 순서 배열 연습</title>
@@ -99,25 +97,26 @@
       <p>1. 아래에서 연습할 문단을 선택하세요<br>
          2. 왼쪽 문장을 클릭해 선택 후 오른쪽 원하는 위치를 클릭하세요<br>
          3. 잘못 배치한 문장은 클릭해 다시 왼쪽으로 돌려보낼 수 있습니다<br>
-         4. ‘정답 확인’ 버튼을 눌러 결과를 확인하세요</p>
+         4. '정답 확인' 버튼을 눌러 결과를 확인하세요</p>
     </div>
 
     <div class="exercise-select">
       <select id="exerciseSelect">
         <option value="">연습할 문단을 선택하세요</option>
-        <option value="intro">Intro: The World of Finance - 9문장</option>
-        <option value="concept">The Concept of a Stock - 7문장</option>
-        <option value="market">The Stock Market and Companies - 8문장</option>
-        <option value="prices">The Prices of Stocks - 6문장</option>
-        <option value="factors">Factors Affecting the Price - 8문장</option>
-        <option value="investing">How to Invest Wisely - 8문장</option>
+        <option value="intro">본문 ❶: Intro (Neil &amp; Beth) - 9문장</option>
+        <option value="intro2">본문 ❷: Finance &amp; Overview (Beth &amp; Neil) - 8문장</option>
+        <option value="concept">본문 ❸: The Concept of a Stock - 8문장</option>
+        <option value="market">본문 ❹: The Stock Market and Companies - 11문장</option>
+        <option value="prices">본문 ❺: The Prices of Stocks - 8문장</option>
+        <option value="factors">본문 ❻: Factors Affecting the Price - 8문장</option>
+        <option value="investing">본문 ❼: How to Invest in the Stock Market - 11문장</option>
       </select>
     </div>
 
     <div class="controls">
-      <button class="btn" id="shuffleBtn" disabled>다시 섞기</button>
-      <button class="btn" id="checkBtn" disabled>정답 확인</button>
-      <button class="btn" id="resetBtn" disabled>초기화</button>
+      <button class="btn" id="shuffleBtn" disabled="">다시 섞기</button>
+      <button class="btn" id="checkBtn" disabled="">정답 확인</button>
+      <button class="btn" id="resetBtn" disabled="">초기화</button>
     </div>
 
     <div class="score-display" id="scoreDisplay" style="display:none;">
@@ -140,63 +139,89 @@
 
 <script>
 const exercises = {
+  // 본문 ❶: Neil 1~14 (Neil의 소개 파트)
   intro: [
     "Welcome to the 10-Minute Economics 101 podcast for teenagers!",
-    "I’m your host, Neil. Thank you for tuning in.",
+    "I'm your host, Neil.",
+    "Thank you for tuning in.",
     "We have a very special guest with us, the renowned economist Beth Friedman.",
-    "We’ve been exploring the basics of economics.",
-    "In this 35th episode, we’ll be talking about the world of stocks.",
+    "Please give her a warm welcome!",
+    "Hello, everyone.",
+    "It's truly an honor to be here with all of you.",
+    "We've been exploring the basics of economics.",
+    "In this 35th episode, we'll be talking about the world of stocks."
+  ],
+  // 본문 ❷: Beth & Neil (finance ~ overview)
+  intro2: [
     "Before we begin, Neil, I have a question for you.",
     "Have you ever wondered what to do with your extra money?",
-    "It’s a question that often arises, especially among young people who are beginning to explore the world of finance.",
-    "Today, we’re going to provide you with an overview of stocks and stock markets, enabling you to gain insight into the economy."
+    "Absolutely, Beth.",
+    "I bet all our listeners have asked themselves the same question.",
+    "Indeed.",
+    "It's a question that often arises, especially among young people who are beginning to explore the world of finance.",
+    "As you go about your daily lives, you find yourself engaged in financial activities such as purchasing goods and paying bus fares.",
+    "After that, you might have some extra money."
   ],
+  // 본문 ❸: The Concept of a Stock
   concept: [
-    "Okay, let’s start with the concept of a stock.",
+    "Okay, let's start with the concept of a stock.",
     "A stock is a partial share of ownership in a company.",
-    "When you buy a stock, you get a portion of the company’s ownership.",
-    "To put it simply, owning one stock is like having a slice of the company’s pie.",
+    "When you buy a stock, you get a portion of the company's ownership.",
+    "To put it simply, owning one stock is like having a slice of the company's pie.",
     "Does that mean stockholders themselves can actively participate in the management of the company?",
-    "Not exactly, Neil. Management is generally carried out by professional managers.",
+    "Not exactly, Neil.",
+    "Management is generally carried out by professional managers.",
     "However, companies hold stockholder meetings to seek the opinions of major stockholders when they make important decisions."
   ],
+  // 본문 ❹: The Stock Market and Companies
   market: [
-    "I see. Then how do companies use the stock market?",
+    "I see.",
+    "Then how do companies use the stock market?",
     "The stock market is very important for companies because it can provide them with the money they need to grow and expand.",
-    "Let’s imagine that a small group of people start a footwear company producing innovative sneakers.",
-    "The founders are confident that their products will be popular, but they do not have enough funds to grow the business.",
+    "How does that work?",
+    "Let's imagine that a small group of people start a footwear company producing innovative sneakers.",
+    "The founders are confident that their products will be popular with consumers, but they do not have enough funds to grow the business.",
     "So they decide to put the newly formed company on the stock market.",
-    "When a company is listed on the stock market, individuals or organizations that believe in its future can buy shares.",
+    "What happens then?",
+    "When a company is listed on the stock market, individuals or organizations that believe in the company's bright future can buy shares and become partial owners of the company.",
     "This process makes it easy for the footwear company to raise the funds it needs to grow its business.",
-    "As the business grows, the stock value rises, and the stockholders’ profits increase."
+    "As the business grows, the stock value rises, and the stockholders' profits increase."
   ],
+  // 본문 ❺: The Prices of Stocks
   prices: [
     "Then what factors affect the prices of stocks?",
     "Just like other transactions, the prices of stocks are decided by the law of supply and demand.",
-    "In other words, the more successful a business is, the more people will start buying its stocks.",
+    "In other words, the more successful a business is, the more people will see the potential value of the company and start buying its stocks.",
     "As demand for the stocks increases, so does the stock price.",
     "In contrast, if a company performs disappointingly, its stock price will fall.",
-    "Understood. Are there any other factors affecting the price?"
+    "Understood.",
+    "Are there any other factors affecting the price?",
+    "Yes, companies are constantly under the influence of market factors such as raw material prices, advances in production technology, and labor costs."
   ],
+  // 본문 ❻: Factors Affecting the Price (continued)
   factors: [
-    "Yes, companies are constantly under the influence of market factors such as raw material prices.",
-    "For example, if the price of rubber rises, a shoe company may have to pay more to import the rubber it needs.",
+    "For example, in terms of raw material prices, if the price of rubber rises, a shoe company may have to pay more to import the rubber it needs from abroad to manufacture sneakers.",
     "This, in turn, affects production costs and leads to higher prices in the consumer market.",
-    "As consumers hesitate to purchase the sneakers, the company may suffer from poor performance.",
-    "Additionally, investors may be concerned about a company’s leadership or reputation.",
-    "Nowadays, more and more people support companies that prioritize public values such as business transparency.",
-    "In purchasing such stocks, they contribute to building a more sustainable economic system.",
+    "As consumers hesitate to purchase the company's sneakers, the company may suffer from poor performance, leading to a decline in the stock price.",
+    "There are so many things to consider!",
+    "Additionally, investors may be concerned about a company's leadership or reputation.",
+    "Nowadays, more and more people are starting to support companies that prioritize public values such as business transparency, environmental friendliness, and social justice.",
+    "In purchasing such stocks, they not only pursue their financial goals but also contribute to building a more sustainable economic system that benefits the entire society.",
     "All these variables can cause daily changes in stock prices in the stock market."
   ],
+  // 본문 ❼: How to Invest in the Stock Market
   investing: [
+    "It seems to get more difficult as we learn more about stocks.",
     "So how do we invest in the stock market?",
-    "You can buy stocks through an official place called a stock exchange.",
+    "You can buy stocks through an official place called a stock exchange, or stock market, where you can easily buy or sell stocks in a company.",
     "You might think investing in stocks is an easy way to make a profit.",
     "But if you are investing, you must be prepared to lose money.",
     "Since the market constantly fluctuates, there is a risk of loss and debt.",
-    "Generally, it would be smart to invest in something that interests you.",
-    "Always remember to do your research and stay informed about the companies you invest in.",
-    "Investing can be a powerful tool for building wealth, but it’s essential to approach it with knowledge and caution."
+    "Investing in stocks is challenging!",
+    "I bet our listeners are curious about the best investment options though.",
+    "That depends on individual circumstances.",
+    "Generally, it would be smart to invest in something that interests you, such as a company behind some products you are into.",
+    "Always remember to do your research, stay informed about the companies you invest in, and be mindful of your risk tolerance."
   ]
 };
 
@@ -383,5 +408,6 @@ function hideFeedback() {
     feedback.className = 'feedback';
 }
 </script>
-</body>
-</html>
+
+
+</body></html>
