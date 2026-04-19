@@ -1,0 +1,189 @@
+
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <title>오답 모의고사 대시보드</title>
+        <style>
+            * { box-sizing: border-box; }
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; background-color: #f5f5f5; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+            .header { background: #fff; border-bottom: 1px solid #f0f0f0; padding: 0 24px; height: 64px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); z-index: 10; }
+            .header-title { font-size: 20px; font-weight: 600; color: #1f1f1f; display: flex; align-items: center; gap: 10px; }
+            .ant-btn { cursor: pointer; height: 36px; padding: 4px 20px; font-size: 14px; font-weight: 500; border-radius: 6px; border: 1px solid transparent; transition: all 0.2s; }
+            .ant-btn-primary { color: #fff; background: #1677ff; }
+            .ant-btn-primary:hover { background: #4096ff; transform: translateY(-1px); }
+            .ant-btn-danger { color: #ff4d4f; background: #fff; border-color: #ff4d4f; height: 30px; font-size: 13px; }
+            .ant-btn-danger:hover { background: #fff2f0; }
+            .layout-content { display: flex; flex: 1; overflow: hidden; }
+            .main-viewer { flex: 1; background: #ebedf0; display: flex; flex-direction: column; overflow: hidden; }
+            .viewer-toolbar { padding: 12px 24px; background: #fff; border-bottom: 1px solid #d9d9d9; display: flex; align-items: center; justify-content: space-between; }
+            .scroll-area { flex: 1; overflow-y: auto; padding: 24px; }
+            .problem-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px; align-items: start; }
+            .grid-item { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); cursor: pointer; transition: 0.2s; border: 2px solid transparent; position: relative; display: flex; flex-direction: column; align-items: center; }
+            .grid-item:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: #91caff; }
+            .grid-item.selected { border-color: #1677ff; background: #e6f4ff; box-shadow: 0 4px 12px rgba(22, 119, 255, 0.2); }
+            .grid-item img { max-width: 100%; object-fit: contain; margin-top: 15px; border-radius: 4px; }
+            .page-badge { background: #f0f0f0; color: #595959; font-size: 13px; padding: 6px 10px; border-radius: 6px; font-weight: bold; align-self: flex-start; }
+            .sidebar-right { width: 400px; background: #fff; border-left: 1px solid #f0f0f0; display: flex; flex-direction: column; }
+            .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; background: #fafafa; }
+            .problem-cart { flex: 1; overflow-y: auto; padding: 20px; background: #fbfbfb; }
+            .cart-item { background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 15px; margin-bottom: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+            .cart-item img { width: 100%; display: block; border-radius: 4px; }
+            .empty-state { text-align: center; padding: 60px 20px; color: #bfbfbf; line-height: 1.6; }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-title">📝 오답 모의고사 대시보드 (문제 꽉 채움 버전)</div>
+            <button class="ant-btn ant-btn-primary" onclick="generatePDF()">🖨️ 시험지로 크게 출력하기 ▶</button>
+        </div>
+        <div class="layout-content">
+            <div class="main-viewer">
+                <div class="viewer-toolbar">
+                    <span style="font-weight: 600; font-size: 16px;">📚 전체 문제 갤러리</span>
+                </div>
+                <div class="scroll-area"><div class="problem-grid" id="problem-grid"></div></div>
+            </div>
+            <div class="sidebar-right">
+                <div class="cart-header">
+                    <span style="font-weight: bold; font-size: 16px;">내 시험지 장바구니</span>
+                    <span style="color: #1677ff; font-weight: 800; font-size: 18px;" id="count-label">0 개</span>
+                </div>
+                <div class="problem-cart" id="cart">
+                    <div class="empty-state" id="empty-state">장바구니가 비어있습니다.</div>
+                </div>
+            </div>
+        </div>
+        <script>
+            const problems = [{"page": 1, "file": "prob_p001_1.png"}, {"page": 1, "file": "prob_p001_2.png"}, {"page": 1, "file": "prob_p001_3.png"}, {"page": 1, "file": "prob_p001_4.png"}, {"page": 1, "file": "prob_p001_5.png"}, {"page": 2, "file": "prob_p002_1.png"}, {"page": 2, "file": "prob_p002_2.png"}, {"page": 2, "file": "prob_p002_3.png"}, {"page": 2, "file": "prob_p002_4.png"}, {"page": 2, "file": "prob_p002_5.png"}, {"page": 2, "file": "prob_p002_6.png"}, {"page": 3, "file": "prob_p003_1.png"}, {"page": 3, "file": "prob_p003_2.png"}, {"page": 3, "file": "prob_p003_3.png"}, {"page": 3, "file": "prob_p003_4.png"}, {"page": 3, "file": "prob_p003_5.png"}, {"page": 4, "file": "prob_p004_1.png"}, {"page": 4, "file": "prob_p004_2.png"}, {"page": 4, "file": "prob_p004_3.png"}, {"page": 4, "file": "prob_p004_4.png"}, {"page": 4, "file": "prob_p004_5.png"}, {"page": 5, "file": "prob_p005_1.png"}, {"page": 5, "file": "prob_p005_2.png"}, {"page": 5, "file": "prob_p005_3.png"}, {"page": 5, "file": "prob_p005_4.png"}, {"page": 5, "file": "prob_p005_5.png"}, {"page": 6, "file": "prob_p006_1.png"}, {"page": 6, "file": "prob_p006_2.png"}, {"page": 6, "file": "prob_p006_3.png"}, {"page": 6, "file": "prob_p006_4.png"}, {"page": 6, "file": "prob_p006_5.png"}, {"page": 7, "file": "prob_p007_1.png"}, {"page": 7, "file": "prob_p007_2.png"}, {"page": 7, "file": "prob_p007_3.png"}, {"page": 7, "file": "prob_p007_4.png"}, {"page": 7, "file": "prob_p007_5.png"}, {"page": 7, "file": "prob_p007_6.png"}, {"page": 7, "file": "prob_p007_7.png"}, {"page": 10, "file": "prob_p010_1.png"}, {"page": 10, "file": "prob_p010_2.png"}, {"page": 10, "file": "prob_p010_3.png"}, {"page": 10, "file": "prob_p010_4.png"}, {"page": 10, "file": "prob_p010_5.png"}, {"page": 10, "file": "prob_p010_6.png"}, {"page": 10, "file": "prob_p010_7.png"}, {"page": 11, "file": "prob_p011_1.png"}, {"page": 11, "file": "prob_p011_2.png"}, {"page": 11, "file": "prob_p011_3.png"}, {"page": 11, "file": "prob_p011_4.png"}, {"page": 11, "file": "prob_p011_5.png"}, {"page": 12, "file": "prob_p012_1.png"}, {"page": 12, "file": "prob_p012_2.png"}, {"page": 12, "file": "prob_p012_3.png"}, {"page": 12, "file": "prob_p012_4.png"}, {"page": 13, "file": "prob_p013_1.png"}, {"page": 13, "file": "prob_p013_2.png"}, {"page": 13, "file": "prob_p013_3.png"}, {"page": 13, "file": "prob_p013_4.png"}, {"page": 14, "file": "prob_p014_1.png"}, {"page": 14, "file": "prob_p014_2.png"}, {"page": 14, "file": "prob_p014_3.png"}, {"page": 14, "file": "prob_p014_4.png"}, {"page": 15, "file": "prob_p015_1.png"}, {"page": 15, "file": "prob_p015_2.png"}, {"page": 15, "file": "prob_p015_3.png"}, {"page": 15, "file": "prob_p015_4.png"}, {"page": 16, "file": "prob_p016_1.png"}, {"page": 16, "file": "prob_p016_2.png"}, {"page": 16, "file": "prob_p016_3.png"}, {"page": 16, "file": "prob_p016_4.png"}, {"page": 19, "file": "prob_p019_1.png"}, {"page": 19, "file": "prob_p019_2.png"}, {"page": 19, "file": "prob_p019_3.png"}, {"page": 19, "file": "prob_p019_4.png"}, {"page": 19, "file": "prob_p019_5.png"}, {"page": 19, "file": "prob_p019_6.png"}, {"page": 20, "file": "prob_p020_1.png"}, {"page": 20, "file": "prob_p020_2.png"}, {"page": 20, "file": "prob_p020_3.png"}, {"page": 20, "file": "prob_p020_4.png"}, {"page": 20, "file": "prob_p020_5.png"}, {"page": 21, "file": "prob_p021_1.png"}, {"page": 21, "file": "prob_p021_2.png"}, {"page": 21, "file": "prob_p021_3.png"}, {"page": 21, "file": "prob_p021_4.png"}, {"page": 22, "file": "prob_p022_1.png"}, {"page": 22, "file": "prob_p022_2.png"}, {"page": 22, "file": "prob_p022_3.png"}, {"page": 22, "file": "prob_p022_4.png"}, {"page": 23, "file": "prob_p023_1.png"}, {"page": 23, "file": "prob_p023_2.png"}, {"page": 23, "file": "prob_p023_3.png"}, {"page": 24, "file": "prob_p024_1.png"}, {"page": 24, "file": "prob_p024_2.png"}, {"page": 24, "file": "prob_p024_3.png"}, {"page": 24, "file": "prob_p024_4.png"}, {"page": 25, "file": "prob_p025_1.png"}, {"page": 25, "file": "prob_p025_2.png"}, {"page": 25, "file": "prob_p025_3.png"}, {"page": 25, "file": "prob_p025_4.png"}, {"page": 25, "file": "prob_p025_5.png"}, {"page": 25, "file": "prob_p025_6.png"}, {"page": 26, "file": "prob_p026_1.png"}, {"page": 26, "file": "prob_p026_2.png"}, {"page": 26, "file": "prob_p026_3.png"}, {"page": 26, "file": "prob_p026_4.png"}, {"page": 26, "file": "prob_p026_5.png"}, {"page": 26, "file": "prob_p026_6.png"}, {"page": 27, "file": "prob_p027_1.png"}, {"page": 27, "file": "prob_p027_2.png"}, {"page": 27, "file": "prob_p027_3.png"}, {"page": 27, "file": "prob_p027_4.png"}, {"page": 27, "file": "prob_p027_5.png"}, {"page": 27, "file": "prob_p027_6.png"}, {"page": 28, "file": "prob_p028_1.png"}, {"page": 28, "file": "prob_p028_2.png"}, {"page": 28, "file": "prob_p028_3.png"}, {"page": 28, "file": "prob_p028_4.png"}, {"page": 28, "file": "prob_p028_5.png"}, {"page": 28, "file": "prob_p028_6.png"}, {"page": 29, "file": "prob_p029_1.png"}, {"page": 29, "file": "prob_p029_2.png"}, {"page": 29, "file": "prob_p029_3.png"}, {"page": 29, "file": "prob_p029_4.png"}, {"page": 29, "file": "prob_p029_5.png"}, {"page": 30, "file": "prob_p030_1.png"}, {"page": 30, "file": "prob_p030_2.png"}, {"page": 30, "file": "prob_p030_3.png"}, {"page": 30, "file": "prob_p030_4.png"}, {"page": 31, "file": "prob_p031_1.png"}, {"page": 31, "file": "prob_p031_2.png"}, {"page": 31, "file": "prob_p031_3.png"}, {"page": 31, "file": "prob_p031_4.png"}, {"page": 32, "file": "prob_p032_1.png"}, {"page": 32, "file": "prob_p032_2.png"}, {"page": 32, "file": "prob_p032_3.png"}, {"page": 34, "file": "prob_p034_1.png"}, {"page": 34, "file": "prob_p034_2.png"}, {"page": 34, "file": "prob_p034_3.png"}, {"page": 34, "file": "prob_p034_4.png"}, {"page": 34, "file": "prob_p034_5.png"}, {"page": 35, "file": "prob_p035_1.png"}, {"page": 35, "file": "prob_p035_2.png"}, {"page": 35, "file": "prob_p035_3.png"}, {"page": 35, "file": "prob_p035_4.png"}, {"page": 35, "file": "prob_p035_5.png"}, {"page": 36, "file": "prob_p036_1.png"}, {"page": 36, "file": "prob_p036_2.png"}, {"page": 36, "file": "prob_p036_3.png"}, {"page": 36, "file": "prob_p036_4.png"}, {"page": 36, "file": "prob_p036_5.png"}, {"page": 36, "file": "prob_p036_6.png"}, {"page": 39, "file": "prob_p039_1.png"}, {"page": 39, "file": "prob_p039_2.png"}, {"page": 39, "file": "prob_p039_3.png"}, {"page": 39, "file": "prob_p039_4.png"}, {"page": 39, "file": "prob_p039_5.png"}, {"page": 39, "file": "prob_p039_6.png"}, {"page": 40, "file": "prob_p040_1.png"}, {"page": 40, "file": "prob_p040_2.png"}, {"page": 40, "file": "prob_p040_3.png"}, {"page": 40, "file": "prob_p040_4.png"}, {"page": 40, "file": "prob_p040_5.png"}, {"page": 40, "file": "prob_p040_6.png"}, {"page": 41, "file": "prob_p041_1.png"}, {"page": 41, "file": "prob_p041_2.png"}, {"page": 41, "file": "prob_p041_3.png"}, {"page": 41, "file": "prob_p041_4.png"}, {"page": 41, "file": "prob_p041_5.png"}, {"page": 42, "file": "prob_p042_1.png"}, {"page": 42, "file": "prob_p042_2.png"}, {"page": 42, "file": "prob_p042_3.png"}, {"page": 42, "file": "prob_p042_4.png"}, {"page": 43, "file": "prob_p043_1.png"}, {"page": 43, "file": "prob_p043_2.png"}, {"page": 43, "file": "prob_p043_3.png"}, {"page": 43, "file": "prob_p043_4.png"}, {"page": 45, "file": "prob_p045_1.png"}, {"page": 45, "file": "prob_p045_2.png"}, {"page": 45, "file": "prob_p045_3.png"}, {"page": 45, "file": "prob_p045_4.png"}, {"page": 45, "file": "prob_p045_5.png"}, {"page": 46, "file": "prob_p046_1.png"}, {"page": 46, "file": "prob_p046_2.png"}, {"page": 46, "file": "prob_p046_3.png"}, {"page": 46, "file": "prob_p046_4.png"}, {"page": 46, "file": "prob_p046_5.png"}, {"page": 47, "file": "prob_p047_1.png"}, {"page": 47, "file": "prob_p047_2.png"}, {"page": 47, "file": "prob_p047_3.png"}, {"page": 47, "file": "prob_p047_4.png"}, {"page": 48, "file": "prob_p048_1.png"}, {"page": 48, "file": "prob_p048_2.png"}, {"page": 48, "file": "prob_p048_3.png"}, {"page": 48, "file": "prob_p048_4.png"}, {"page": 48, "file": "prob_p048_5.png"}, {"page": 49, "file": "prob_p049_1.png"}, {"page": 49, "file": "prob_p049_2.png"}, {"page": 49, "file": "prob_p049_3.png"}, {"page": 49, "file": "prob_p049_4.png"}, {"page": 50, "file": "prob_p050_1.png"}, {"page": 50, "file": "prob_p050_2.png"}, {"page": 50, "file": "prob_p050_3.png"}, {"page": 50, "file": "prob_p050_4.png"}, {"page": 51, "file": "prob_p051_1.png"}, {"page": 51, "file": "prob_p051_2.png"}, {"page": 51, "file": "prob_p051_3.png"}, {"page": 51, "file": "prob_p051_4.png"}, {"page": 52, "file": "prob_p052_1.png"}, {"page": 52, "file": "prob_p052_2.png"}, {"page": 52, "file": "prob_p052_3.png"}, {"page": 55, "file": "prob_p055_1.png"}, {"page": 55, "file": "prob_p055_2.png"}, {"page": 55, "file": "prob_p055_3.png"}, {"page": 55, "file": "prob_p055_4.png"}, {"page": 55, "file": "prob_p055_5.png"}, {"page": 56, "file": "prob_p056_1.png"}, {"page": 56, "file": "prob_p056_2.png"}, {"page": 56, "file": "prob_p056_3.png"}, {"page": 56, "file": "prob_p056_4.png"}, {"page": 56, "file": "prob_p056_5.png"}, {"page": 57, "file": "prob_p057_1.png"}, {"page": 57, "file": "prob_p057_2.png"}, {"page": 57, "file": "prob_p057_3.png"}, {"page": 57, "file": "prob_p057_4.png"}, {"page": 57, "file": "prob_p057_5.png"}, {"page": 58, "file": "prob_p058_1.png"}, {"page": 58, "file": "prob_p058_2.png"}, {"page": 58, "file": "prob_p058_3.png"}, {"page": 58, "file": "prob_p058_4.png"}, {"page": 58, "file": "prob_p058_5.png"}, {"page": 58, "file": "prob_p058_6.png"}, {"page": 59, "file": "prob_p059_1.png"}, {"page": 59, "file": "prob_p059_2.png"}, {"page": 59, "file": "prob_p059_3.png"}, {"page": 59, "file": "prob_p059_4.png"}, {"page": 60, "file": "prob_p060_1.png"}, {"page": 60, "file": "prob_p060_2.png"}, {"page": 60, "file": "prob_p060_3.png"}, {"page": 64, "file": "prob_p064_1.png"}, {"page": 64, "file": "prob_p064_2.png"}, {"page": 64, "file": "prob_p064_3.png"}, {"page": 64, "file": "prob_p064_4.png"}, {"page": 64, "file": "prob_p064_5.png"}, {"page": 65, "file": "prob_p065_1.png"}, {"page": 65, "file": "prob_p065_2.png"}, {"page": 65, "file": "prob_p065_3.png"}, {"page": 66, "file": "prob_p066_1.png"}, {"page": 66, "file": "prob_p066_2.png"}, {"page": 66, "file": "prob_p066_3.png"}, {"page": 66, "file": "prob_p066_4.png"}, {"page": 67, "file": "prob_p067_1.png"}, {"page": 67, "file": "prob_p067_2.png"}, {"page": 67, "file": "prob_p067_3.png"}, {"page": 67, "file": "prob_p067_4.png"}, {"page": 68, "file": "prob_p068_1.png"}, {"page": 68, "file": "prob_p068_2.png"}, {"page": 68, "file": "prob_p068_3.png"}, {"page": 68, "file": "prob_p068_4.png"}, {"page": 69, "file": "prob_p069_1.png"}, {"page": 69, "file": "prob_p069_2.png"}, {"page": 69, "file": "prob_p069_3.png"}, {"page": 69, "file": "prob_p069_4.png"}, {"page": 70, "file": "prob_p070_1.png"}, {"page": 70, "file": "prob_p070_2.png"}, {"page": 70, "file": "prob_p070_3.png"}, {"page": 70, "file": "prob_p070_4.png"}, {"page": 71, "file": "prob_p071_1.png"}, {"page": 71, "file": "prob_p071_2.png"}, {"page": 71, "file": "prob_p071_3.png"}, {"page": 71, "file": "prob_p071_4.png"}, {"page": 72, "file": "prob_p072_1.png"}, {"page": 72, "file": "prob_p072_2.png"}, {"page": 72, "file": "prob_p072_3.png"}, {"page": 72, "file": "prob_p072_4.png"}, {"page": 72, "file": "prob_p072_5.png"}, {"page": 73, "file": "prob_p073_1.png"}, {"page": 73, "file": "prob_p073_2.png"}, {"page": 73, "file": "prob_p073_3.png"}, {"page": 73, "file": "prob_p073_4.png"}, {"page": 74, "file": "prob_p074_1.png"}, {"page": 74, "file": "prob_p074_2.png"}, {"page": 74, "file": "prob_p074_3.png"}, {"page": 74, "file": "prob_p074_4.png"}];
+            const selectedProblems = new Set();
+            const gridEl = document.getElementById('problem-grid');
+            const cartEl = document.getElementById('cart');
+            const emptyState = document.getElementById('empty-state');
+            const countLabel = document.getElementById('count-label');
+
+            function init() {
+                problems.forEach((prob, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'grid-item';
+                    div.id = `item-${index}`;
+                    div.innerHTML = `<div class="page-badge">Page ${prob.page}</div><img src="${prob.file}" loading="lazy">`;
+                    div.onclick = () => toggleProblem(index, prob);
+                    gridEl.appendChild(div);
+                });
+            }
+
+            function toggleProblem(index, prob) {
+                const itemEl = document.getElementById(`item-${index}`);
+                if (selectedProblems.has(index)) {
+                    selectedProblems.delete(index);
+                    itemEl.classList.remove('selected');
+                    const cartItem = document.getElementById(`cart-${index}`);
+                    if(cartItem) cartItem.remove();
+                } else {
+                    selectedProblems.add(index);
+                    itemEl.classList.add('selected');
+                    emptyState.style.display = 'none';
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.id = `cart-${index}`;
+                    cartItem.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; align-items: center;">
+                            <div class="page-badge" style="background:#e6f4ff; color:#1677ff;">Page ${prob.page}</div>
+                            <button class="ant-btn-danger" onclick="event.stopPropagation(); toggleProblem(${index}, problems[${index}])">삭제</button>
+                        </div>
+                        <img src="${prob.file}">
+                    `;
+                    cartEl.appendChild(cartItem);
+                    cartEl.scrollTop = cartEl.scrollHeight;
+                }
+                updateCount();
+            }
+
+            function updateCount() {
+                countLabel.innerText = `${selectedProblems.size} 개`;
+                if (selectedProblems.size === 0) emptyState.style.display = 'block';
+            }
+
+            // 🌟 꽉 채운 2x2 모의고사 인쇄 로직 (크기 대폭 확대)
+            function generatePDF() {
+                if (selectedProblems.size === 0) { alert('장바구니에 문제가 없습니다!'); return; }
+                const selectedImages = Array.from(cartEl.querySelectorAll('.cart-item img')).map(img => img.src);
+                
+                const win = window.open('', '_blank');
+                let html = `
+                    <html><head><title>나만의 오답 모의고사</title>
+                    <style>
+                        @page { size: A4; margin: 8mm; } /* 종이 가장자리 여백 최소화 */
+                        body { font-family: 'Malgun Gothic', sans-serif; margin: 0; background: #525659; }
+                        .page { 
+                            width: 210mm; height: 297mm; background: white; margin: 20px auto; 
+                            padding: 10mm 12mm; box-sizing: border-box; position: relative;
+                            page-break-after: always; display: flex; flex-direction: column;
+                            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                        }
+                        @media print {
+                            body { background: white; }
+                            .page { margin: 0; box-shadow: none; width: 100%; height: 100vh; border: none; padding: 8mm 10mm; }
+                        }
+                        .header { 
+                            display: flex; justify-content: space-between; align-items: flex-end; 
+                            border-bottom: 2px solid #2b6cb0; padding-bottom: 8px; margin-bottom: 15px; 
+                        }
+                        .title { font-size: 22px; font-weight: 900; color: #333; letter-spacing: -1px; }
+                        .name-sec { font-size: 16px; font-weight: bold; }
+                        
+                        /* 그리드 여백(gap) 줄여서 이미지 공간 100% 확보 */
+                        .grid { 
+                            flex: 1; display: grid; 
+                            grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; 
+                            gap: 15px 25px; position: relative; 
+                        }
+                        .grid::after { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; border-left: 1px dashed #bbb; transform: translateX(-50%); }
+                        .grid::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; border-top: 1px dashed #bbb; transform: translateY(-50%); }
+                        
+                        .cell { display: flex; flex-direction: column; position: relative; z-index: 10; background: white; padding: 5px; overflow: hidden; height: 100%; }
+                        .cell-num { font-size: 18px; font-weight: 900; margin-bottom: 5px; color: #1677ff; flex-shrink: 0; }
+                        
+                        /* 이미지 높이 제한 해제 (60% -> 100%로 변경) */
+                        .img-wrapper { flex: 1; display: flex; align-items: flex-start; overflow: hidden; }
+                        .img-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; object-position: top left; }
+                    </style></head><body>
+                `;
+                
+                for(let i = 0; i < selectedImages.length; i += 4) {
+                    html += `
+                        <div class="page">
+                            <div class="header">
+                                <div class="title">[오답 모의고사] 완자 화학</div>
+                                <div class="name-sec">이름 : ____________________</div>
+                            </div>
+                            <div class="grid">
+                    `;
+                    
+                    for(let j = 0; j < 4; j++) {
+                        if(i + j < selectedImages.length) {
+                            html += `
+                                <div class="cell">
+                                    <div class="cell-num">${i + j + 1}번</div>
+                                    <div class="img-wrapper"><img src="${selectedImages[i + j]}"></div>
+                                </div>
+                            `;
+                        } else {
+                            html += `<div class="cell"></div>`;
+                        }
+                    }
+                    html += `</div></div>`;
+                }
+                
+                html += `</body></html>`;
+                win.document.write(html);
+                win.document.close(); win.focus();
+                
+                setTimeout(() => { win.print(); }, 800);
+            }
+            window.onload = init;
+        </script>
+    </body>
+    </html>
+    
