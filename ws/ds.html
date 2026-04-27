@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>나만의 오답 노트 생성기</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; background-color: #f0f2f5; height: 100vh; display: flex; flex-direction: column; }
+        
+        /* 헤더 UI */
+        .header { background: #fff; padding: 15px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); z-index: 10; }
+        .header-title { font-size: 22px; font-weight: 800; color: #1f1f1f; display: flex; align-items: center; gap: 10px; }
+        .header-subtitle { font-size: 15px; color: #1677ff; font-weight: bold; margin-left: 10px; background: #e6f4ff; padding: 4px 12px; border-radius: 20px;}
+        
+        /* 버튼 UI */
+        .ant-btn { cursor: pointer; padding: 10px 24px; font-size: 15px; font-weight: bold; border-radius: 6px; border: 1px solid transparent; transition: all 0.2s; }
+        .ant-btn-primary { color: #fff; background: #1677ff; box-shadow: 0 2px 4px rgba(22,119,255,0.2); }
+        .ant-btn-primary:hover { background: #4096ff; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(22,119,255,0.3); }
+        .ant-btn-primary:active { transform: translateY(0); }
+
+        /* 컨텐츠 영역 및 그리드 */
+        .content-area { flex: 1; overflow-y: auto; padding: 30px; }
+        .problem-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        
+        /* 개별 문제 카드 UI */
+        .grid-item { 
+            background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); 
+            display: flex; flex-direction: column; align-items: center; 
+            cursor: pointer; border: 3px solid transparent; transition: all 0.2s; position: relative;
+        }
+        .grid-item:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .grid-item img { max-width: 100%; object-fit: contain; margin-top: 15px; border-radius: 4px; pointer-events: none; }
+        
+        /* 선택된 상태 UI */
+        .grid-item.selected { border-color: #1677ff; background-color: #f0f7ff; }
+        .grid-item.selected::after {
+            content: '✔️'; position: absolute; top: 15px; right: 15px; 
+            background: #1677ff; color: white; width: 28px; height: 28px; 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: 50%; font-size: 14px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .badge-wrap { width: 100%; display: flex; justify-content: space-between; align-items: center; pointer-events: none; }
+        .num-badge { background: #595959; color: white; font-size: 14px; padding: 4px 10px; border-radius: 20px; font-weight: bold; transition: 0.2s; }
+        .grid-item.selected .num-badge { background: #1677ff; }
+        .page-info { font-size: 13px; color: #888; font-weight: bold; }
+        
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-title">
+            📝 나만의 오답 노트 생성기 
+            <span class="header-subtitle" id="selected-count-display">0문제 선택됨</span>
+        </div>
+        <button class="ant-btn ant-btn-primary" onclick="printSelectedProblems()">🖨️ 선택한 문제 오답노트 인쇄하기</button>
+    </div>
+    
+    <div class="content-area">
+        <div class="problem-grid" id="problem-grid"></div>
+    </div>
+
+    <script>
+        // 전체 문제 리스트
+        let allProblems = [{"page": 1, "file": "prob_p001_1.png"}, {"page": 1, "file": "prob_p001_2.png"}, {"page": 1, "file": "prob_p001_3.png"}, {"page": 1, "file": "prob_p001_4.png"}, {"page": 2, "file": "prob_p002_1.png"}, {"page": 2, "file": "prob_p002_2.png"}, {"page": 2, "file": "prob_p002_3.png"}, {"page": 2, "file": "prob_p002_4.png"}, {"page": 2, "file": "prob_p002_5.png"}, {"page": 2, "file": "prob_p002_6.png"}, {"page": 3, "file": "prob_p003_1.png"}, {"page": 3, "file": "prob_p003_2.png"}, {"page": 3, "file": "prob_p003_3.png"}, {"page": 3, "file": "prob_p003_4.png"}, {"page": 3, "file": "prob_p003_5.png"}, {"page": 4, "file": "prob_p004_1.png"}, {"page": 4, "file": "prob_p004_2.png"}, {"page": 4, "file": "prob_p004_3.png"}, {"page": 4, "file": "prob_p004_4.png"}, {"page": 5, "file": "prob_p005_1.png"}, {"page": 5, "file": "prob_p005_2.png"}, {"page": 5, "file": "prob_p005_3.png"}, {"page": 5, "file": "prob_p005_4.png"}, {"page": 5, "file": "prob_p005_5.png"}, {"page": 5, "file": "prob_p005_6.png"}, {"page": 6, "file": "prob_p006_1.png"}, {"page": 6, "file": "prob_p006_2.png"}, {"page": 6, "file": "prob_p006_3.png"}, {"page": 6, "file": "prob_p006_4.png"}, {"page": 6, "file": "prob_p006_5.png"}, {"page": 6, "file": "prob_p006_6.png"}, {"page": 7, "file": "prob_p007_1.png"}, {"page": 7, "file": "prob_p007_2.png"}, {"page": 7, "file": "prob_p007_3.png"}, {"page": 7, "file": "prob_p007_4.png"}, {"page": 8, "file": "prob_p008_1.png"}, {"page": 8, "file": "prob_p008_2.png"}, {"page": 9, "file": "prob_p009_1.png"}, {"page": 9, "file": "prob_p009_2.png"}, {"page": 9, "file": "prob_p009_3.png"}, {"page": 9, "file": "prob_p009_4.png"}, {"page": 9, "file": "prob_p009_5.png"}, {"page": 10, "file": "prob_p010_1.png"}, {"page": 10, "file": "prob_p010_2.png"}, {"page": 10, "file": "prob_p010_3.png"}, {"page": 10, "file": "prob_p010_4.png"}, {"page": 10, "file": "prob_p010_5.png"}, {"page": 10, "file": "prob_p010_6.png"}, {"page": 11, "file": "prob_p011_1.png"}, {"page": 11, "file": "prob_p011_2.png"}, {"page": 11, "file": "prob_p011_3.png"}, {"page": 11, "file": "prob_p011_4.png"}, {"page": 12, "file": "prob_p012_1.png"}, {"page": 12, "file": "prob_p012_2.png"}, {"page": 12, "file": "prob_p012_3.png"}, {"page": 12, "file": "prob_p012_4.png"}, {"page": 13, "file": "prob_p013_1.png"}, {"page": 13, "file": "prob_p013_2.png"}, {"page": 13, "file": "prob_p013_3.png"}, {"page": 14, "file": "prob_p014_1.png"}, {"page": 14, "file": "prob_p014_2.png"}, {"page": 14, "file": "prob_p014_3.png"}, {"page": 14, "file": "prob_p014_4.png"}, {"page": 15, "file": "prob_p015_1.png"}, {"page": 15, "file": "prob_p015_2.png"}, {"page": 15, "file": "prob_p015_3.png"}, {"page": 15, "file": "prob_p015_4.png"}, {"page": 16, "file": "prob_p016_1.png"}, {"page": 16, "file": "prob_p016_2.png"}, {"page": 17, "file": "prob_p017_1.png"}, {"page": 17, "file": "prob_p017_2.png"}, {"page": 17, "file": "prob_p017_3.png"}, {"page": 17, "file": "prob_p017_4.png"}, {"page": 18, "file": "prob_p018_1.png"}, {"page": 18, "file": "prob_p018_2.png"}, {"page": 18, "file": "prob_p018_3.png"}, {"page": 18, "file": "prob_p018_4.png"}, {"page": 18, "file": "prob_p018_5.png"}, {"page": 18, "file": "prob_p018_6.png"}, {"page": 19, "file": "prob_p019_1.png"}, {"page": 19, "file": "prob_p019_2.png"}, {"page": 19, "file": "prob_p019_3.png"}, {"page": 19, "file": "prob_p019_4.png"}, {"page": 19, "file": "prob_p019_5.png"}, {"page": 19, "file": "prob_p019_6.png"}, {"page": 20, "file": "prob_p020_1.png"}, {"page": 20, "file": "prob_p020_2.png"}, {"page": 20, "file": "prob_p020_3.png"}, {"page": 20, "file": "prob_p020_4.png"}, {"page": 20, "file": "prob_p020_5.png"}, {"page": 20, "file": "prob_p020_6.png"}, {"page": 21, "file": "prob_p021_1.png"}, {"page": 21, "file": "prob_p021_2.png"}, {"page": 21, "file": "prob_p021_3.png"}, {"page": 21, "file": "prob_p021_4.png"}, {"page": 21, "file": "prob_p021_5.png"}, {"page": 22, "file": "prob_p022_1.png"}, {"page": 22, "file": "prob_p022_2.png"}, {"page": 22, "file": "prob_p022_3.png"}, {"page": 23, "file": "prob_p023_1.png"}, {"page": 23, "file": "prob_p023_2.png"}, {"page": 23, "file": "prob_p023_3.png"}, {"page": 23, "file": "prob_p023_4.png"}, {"page": 23, "file": "prob_p023_5.png"}, {"page": 24, "file": "prob_p024_1.png"}, {"page": 24, "file": "prob_p024_2.png"}, {"page": 24, "file": "prob_p024_3.png"}, {"page": 24, "file": "prob_p024_4.png"}, {"page": 24, "file": "prob_p024_5.png"}, {"page": 25, "file": "prob_p025_1.png"}, {"page": 25, "file": "prob_p025_2.png"}, {"page": 25, "file": "prob_p025_3.png"}, {"page": 25, "file": "prob_p025_4.png"}, {"page": 26, "file": "prob_p026_1.png"}, {"page": 26, "file": "prob_p026_2.png"}, {"page": 26, "file": "prob_p026_3.png"}, {"page": 26, "file": "prob_p026_4.png"}, {"page": 27, "file": "prob_p027_1.png"}, {"page": 27, "file": "prob_p027_2.png"}, {"page": 28, "file": "prob_p028_1.png"}, {"page": 28, "file": "prob_p028_2.png"}, {"page": 29, "file": "prob_p029_1.png"}, {"page": 29, "file": "prob_p029_2.png"}, {"page": 29, "file": "prob_p029_3.png"}, {"page": 29, "file": "prob_p029_4.png"}, {"page": 30, "file": "prob_p030_1.png"}, {"page": 30, "file": "prob_p030_2.png"}, {"page": 30, "file": "prob_p030_3.png"}, {"page": 30, "file": "prob_p030_4.png"}, {"page": 31, "file": "prob_p031_1.png"}, {"page": 31, "file": "prob_p031_2.png"}, {"page": 31, "file": "prob_p031_3.png"}, {"page": 31, "file": "prob_p031_4.png"}, {"page": 32, "file": "prob_p032_1.png"}, {"page": 32, "file": "prob_p032_2.png"}, {"page": 32, "file": "prob_p032_3.png"}, {"page": 32, "file": "prob_p032_4.png"}, {"page": 33, "file": "prob_p033_1.png"}, {"page": 33, "file": "prob_p033_2.png"}, {"page": 33, "file": "prob_p033_3.png"}, {"page": 33, "file": "prob_p033_4.png"}, {"page": 34, "file": "prob_p034_1.png"}, {"page": 34, "file": "prob_p034_2.png"}, {"page": 35, "file": "prob_p035_1.png"}];
+        
+        // 선택된 문제들의 인덱스를 저장할 Set
+        let selectedIndices = new Set();
+
+        function init() {
+            renderAllProblems();
+        }
+
+        // 전체 문제를 화면에 렌더링
+        function renderAllProblems() {
+            const gridEl = document.getElementById('problem-grid');
+            gridEl.innerHTML = '';
+            
+            allProblems.forEach((prob, index) => {
+                const div = document.createElement('div');
+                div.className = 'grid-item';
+                // 클릭 시 해당 문제를 선택/해제하는 함수 호출
+                div.onclick = () => toggleSelect(index, div);
+                
+                div.innerHTML = `
+                    <div class="badge-wrap">
+                        <span class="num-badge">No. ${index + 1}</span>
+                        <span class="page-info">원본: ${prob.page}p</span>
+                    </div>
+                    <img src="${prob.file}" loading="lazy" alt="문제 이미지">
+                `;
+                gridEl.appendChild(div);
+            });
+        }
+
+        // 문제 클릭 시 선택 상태 토글
+        function toggleSelect(index, element) {
+            if (selectedIndices.has(index)) {
+                selectedIndices.delete(index);
+                element.classList.remove('selected');
+            } else {
+                selectedIndices.add(index);
+                element.classList.add('selected');
+            }
+            updateSelectedCount();
+        }
+
+        // 헤더에 선택된 문제 수 업데이트
+        function updateSelectedCount() {
+            const displayEl = document.getElementById('selected-count-display');
+            displayEl.innerText = `${selectedIndices.size}문제 선택됨`;
+            
+            if (selectedIndices.size > 0) {
+                displayEl.style.backgroundColor = '#e6f4ff';
+                displayEl.style.color = '#1677ff';
+            } else {
+                displayEl.style.backgroundColor = '#f0f0f0';
+                displayEl.style.color = '#888';
+            }
+        }
+
+        // 🌟 선택된 문제만 2x2 규격으로 인쇄하기
+        function printSelectedProblems() {
+            if (selectedIndices.size === 0) { 
+                alert('인쇄할 오답을 1개 이상 선택해주세요.'); 
+                return; 
+            }
+            
+            // Set을 배열로 변환하고 오름차순 정렬하여 순서대로 인쇄되게 함
+            const sortedIndices = Array.from(selectedIndices).sort((a, b) => a - b);
+            const probsToPrint = sortedIndices.map(index => allProblems[index]);
+            
+            const win = window.open('', '_blank');
+            
+            // 날짜 포맷 (예: 2024. 05. 24)
+            const today = new Date();
+            const dateString = `${today.getFullYear()}. ${String(today.getMonth() + 1).padStart(2, '0')}. ${String(today.getDate()).padStart(2, '0')}`;
+
+            let html = `
+                <html><head><title>오답 노트 인쇄</title>
+                <style>
+                    @page { size: A4; margin: 8mm; }
+                    body { font-family: 'Malgun Gothic', sans-serif; margin: 0; background: #525659; }
+                    .page { 
+                        width: 210mm; height: 297mm; background: white; margin: 20px auto; 
+                        padding: 10mm 12mm; box-sizing: border-box; position: relative;
+                        page-break-after: always; display: flex; flex-direction: column;
+                    }
+                    @media print {
+                        body { background: white; }
+                        .page { margin: 0; box-shadow: none; width: 100%; height: 100vh; border: none; padding: 8mm 10mm; }
+                    }
+                    .header { 
+                        display: flex; justify-content: space-between; align-items: flex-end; 
+                        border-bottom: 2px solid #2b6cb0; padding-bottom: 8px; margin-bottom: 15px; 
+                    }
+                    .title { font-size: 22px; font-weight: 900; color: #333; }
+                    .name-sec { font-size: 16px; font-weight: bold; color: #555; }
+                    
+                    .grid { 
+                        flex: 1; display: grid; 
+                        grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; 
+                        gap: 15px 25px; position: relative; 
+                    }
+                    .grid::after { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; border-left: 1px dashed #bbb; transform: translateX(-50%); }
+                    .grid::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; border-top: 1px dashed #bbb; transform: translateY(-50%); }
+                    
+                    .cell { display: flex; flex-direction: column; padding: 5px; overflow: hidden; height: 100%; }
+                    .cell-header { display: flex; justify-content: space-between; margin-bottom: 5px; flex-shrink: 0; border-bottom: 1px solid #eee; padding-bottom: 3px; }
+                    .cell-num { font-size: 18px; font-weight: 900; color: #1677ff; }
+                    .cell-note { font-size: 12px; color: #aaa; font-weight: normal; }
+                    .img-wrapper { flex: 1; display: flex; align-items: flex-start; overflow: hidden; justify-content: center; }
+                    .img-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; object-position: top center; }
+                </style></head><body>
+            `;
+            
+            for(let i = 0; i < probsToPrint.length; i += 4) {
+                html += `
+                    <div class="page">
+                        <div class="header">
+                            <div class="title">📘 나만의 오답 노트</div>
+                            <div class="name-sec">일자 : ${dateString} &nbsp;&nbsp;|&nbsp;&nbsp; 이름 : ____________</div>
+                        </div>
+                        <div class="grid">
+                `;
+                
+                for(let j = 0; j < 4; j++) {
+                    if(i + j < probsToPrint.length) {
+                        html += `
+                            <div class="cell">
+                                <div class="cell-header">
+                                    <div class="cell-num">오답 ${i + j + 1}</div>
+                                    <div class="cell-note">틀린 이유 : __________________</div>
+                                </div>
+                                <div class="img-wrapper"><img src="${probsToPrint[i + j].file}"></div>
+                            </div>
+                        `;
+                    } else {
+                        // 남는 칸 빈자리 처리
+                        html += `<div class="cell"></div>`;
+                    }
+                }
+                html += `</div></div>`;
+            }
+            
+            html += `</body></html>`;
+            win.document.write(html);
+            win.document.close(); 
+            win.focus();
+            
+            // 이미지 로딩을 위해 잠시 대기 후 인쇄 창 띄우기
+            setTimeout(() => { win.print(); }, 800);
+        }
+        
+        window.onload = init;
+    </script>
+</body>
+</html>
