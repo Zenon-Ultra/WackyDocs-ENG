@@ -5,19 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EBS 수능특강 Light 영어독해연습 - 문장 순서 배열 연습</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Malgun Gothic', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -26,7 +20,6 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             overflow: hidden;
         }
-
         .header {
             background: linear-gradient(45deg, #6f42c1, #e83e8c);
             color: white;
@@ -34,7 +27,6 @@
             text-align: center;
             position: relative;
         }
-
         .back-btn {
             position: absolute;
             left: 30px;
@@ -48,27 +40,13 @@
             text-decoration: none;
             transition: all 0.3s ease;
         }
-
         .back-btn:hover {
             background: rgba(255,255,255,0.3);
             border-color: rgba(255,255,255,0.5);
         }
-
-        .header h1 {
-            font-size: 2.2em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
-        .exercise-container {
-            padding: 30px 20px;
-        }
-
+        .header h1 { font-size: 2.2em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .exercise-container { padding: 30px 20px; }
         .exercise-info {
             background: #f8f9fa;
             border-left: 5px solid #6f42c1;
@@ -76,12 +54,7 @@
             margin-bottom: 30px;
             border-radius: 5px;
         }
-
-        .exercise-select {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
+        .exercise-select { margin-bottom: 30px; text-align: center; }
         .exercise-select select {
             padding: 12px 20px;
             font-size: 16px;
@@ -92,12 +65,7 @@
             min-width: 300px;
             max-width: 100%;
         }
-
-        .controls {
-            text-align: center;
-            margin: 20px 0;
-        }
-
+        .controls { text-align: center; margin: 20px 0; }
         .btn {
             background: linear-gradient(45deg, #6f42c1, #e83e8c);
             color: white;
@@ -110,123 +78,42 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
         }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(111, 66, 193, 0.4);
-        }
-
-        .btn:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(111, 66, 193, 0.4); }
+        .btn:disabled { background: #6c757d; cursor: not-allowed; transform: none; box-shadow: none; }
         .exercise-area {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
             margin-top: 30px;
         }
-
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .back-btn {
-                left: 15px;
-                padding: 8px 15px;
-                font-size: 14px;
-            }
-
-            .header {
-                padding: 25px 15px;
-            }
-
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .header p {
-                font-size: 1em;
-            }
-
-            .exercise-container {
-                padding: 20px 15px;
-            }
-
-            .exercise-select select {
-                min-width: 250px;
-                font-size: 14px;
-                padding: 10px 15px;
-            }
-
-            .btn {
-                padding: 10px 20px;
-                font-size: 14px;
-                margin: 5px;
-            }
-
-            .sentence-item {
-                padding: 12px;
-                font-size: 14px;
-            }
-
-            .drop-zone {
-                padding: 15px;
-                min-height: 60px;
-                font-size: 14px;
-            }
-
-            .exercise-area {
-                grid-template-columns: 1fr;
-            }
+            body { padding: 10px; }
+            .back-btn { left: 15px; padding: 8px 15px; font-size: 14px; }
+            .header { padding: 25px 15px; }
+            .header h1 { font-size: 1.8em; }
+            .header p { font-size: 1em; }
+            .exercise-container { padding: 20px 15px; }
+            .exercise-select select { min-width: 250px; font-size: 14px; padding: 10px 15px; }
+            .btn { padding: 10px 20px; font-size: 14px; margin: 5px; }
+            .sentence-item { padding: 12px; font-size: 14px; }
+            .drop-zone { padding: 15px; min-height: 60px; font-size: 14px; }
+            .exercise-area { grid-template-columns: 1fr; }
         }
-
         @media (max-width: 480px) {
-            .back-btn {
-                left: 10px;
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .header {
-                padding: 20px 10px;
-            }
-
-            .header h1 {
-                font-size: 1.6em;
-            }
-
-            .exercise-container {
-                padding: 15px 10px;
-            }
-
-            .exercise-select select {
-                min-width: 200px;
-                font-size: 13px;
-            }
-
-            .btn {
-                padding: 8px 15px;
-                font-size: 13px;
-            }
-
-            .sentence-item {
-                padding: 10px;
-                font-size: 13px;
-            }
+            .back-btn { left: 10px; padding: 6px 12px; font-size: 12px; }
+            .header { padding: 20px 10px; }
+            .header h1 { font-size: 1.6em; }
+            .exercise-container { padding: 15px 10px; }
+            .exercise-select select { min-width: 200px; font-size: 13px; }
+            .btn { padding: 8px 15px; font-size: 13px; }
+            .sentence-item { padding: 10px; font-size: 13px; }
         }
-
         .scrambled-sentences, .ordered-sentences {
             background: #f8f9fa;
             border-radius: 10px;
             padding: 20px;
             min-height: 400px;
         }
-
         .scrambled-sentences h3, .ordered-sentences h3 {
             color: #6f42c1;
             margin-bottom: 15px;
@@ -234,7 +121,6 @@
             border-bottom: 2px solid #6f42c1;
             padding-bottom: 5px;
         }
-
         .sentence-item {
             background: white;
             border: 2px solid #e9ecef;
@@ -248,23 +134,17 @@
             line-height: 1.5;
             font-family: 'Times New Roman', serif;
         }
-
         .sentence-item:hover {
             border-color: #6f42c1;
             box-shadow: 0 4px 12px rgba(111, 66, 193, 0.2);
             transform: translateY(-2px);
         }
-
-        .sentence-item:active {
-            transform: scale(0.98);
-        }
-
+        .sentence-item:active { transform: scale(0.98); }
         .sentence-item.selected {
             border-color: #007bff;
             background-color: rgba(0, 123, 255, 0.1);
             box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
         }
-
         .drop-zone {
             border: 2px dashed #ddd;
             border-radius: 8px;
@@ -279,26 +159,22 @@
             font-style: italic;
             cursor: pointer;
         }
-
         .drop-zone:hover {
             border-color: #6f42c1;
             background-color: rgba(111, 66, 193, 0.1);
             color: #6f42c1;
         }
-
         .drop-zone.highlight {
             border-color: #007bff;
             background-color: rgba(0, 123, 255, 0.1);
             color: #007bff;
             animation: pulse 1s infinite;
         }
-
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4); }
             70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
             100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
         }
-
         .score-display {
             text-align: center;
             margin: 20px 0;
@@ -309,7 +185,6 @@
             font-weight: bold;
             color: #333;
         }
-
         .feedback {
             text-align: center;
             margin: 20px 0;
@@ -319,28 +194,10 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-
-        .feedback.correct {
-            background: linear-gradient(45deg, #28a745, #20c997);
-            color: white;
-            opacity: 1;
-        }
-
-        .feedback.incorrect {
-            background: linear-gradient(45deg, #dc3545, #fd7e14);
-            color: white;
-            opacity: 1;
-        }
-
-        .correct-sentence {
-            border-color: #28a745 !important;
-            background-color: rgba(40, 167, 69, 0.1);
-        }
-
-        .incorrect-sentence {
-            border-color: #dc3545 !important;
-            background-color: rgba(220, 53, 69, 0.1);
-        }
+        .feedback.correct { background: linear-gradient(45deg, #28a745, #20c997); color: white; opacity: 1; }
+        .feedback.incorrect { background: linear-gradient(45deg, #dc3545, #fd7e14); color: white; opacity: 1; }
+        .correct-sentence { border-color: #28a745 !important; background-color: rgba(40, 167, 69, 0.1); }
+        .incorrect-sentence { border-color: #dc3545 !important; background-color: rgba(220, 53, 69, 0.1); }
     </style>
 </head>
 <body>
@@ -348,7 +205,7 @@
         <div class="header">
             <a href="main.html" class="back-btn">← 과 선택</a>
             <h1>📚 EBS 수능특강 Light 영어독해연습</h1>
-            <p>1강 & 2강 - 영어 문장들을 올바른 순서로 배열해보세요!</p>
+            <p>3강 &amp; 5강 - 영어 문장들을 올바른 순서로 배열해보세요!</p>
         </div>
 
         <div class="exercise-container">
@@ -363,18 +220,17 @@
             <div class="exercise-select">
                 <select id="exerciseSelect">
                     <option value="">연습할 지문을 선택하세요</option>
-                    <option value="ch01_ex01">1강 - Exercise 01 (7문장)</option>
-                    <option value="ch01_ex02">1강 - Exercise 02 (5문장)</option>
-                    <option value="ch01_ex03">1강 - Exercise 03 (4문장)</option>
-                    <option value="ch01_ex04">1강 - Exercise 04 (8문장)</option>
-                    <option value="ch01_ex05">1강 - Exercise 05 (9문장)</option>
-                    <option value="ch01_ex06">1강 - Exercise 06 (10문장)</option>
-                    <option value="ch02_ex01">2강 - Exercise 01 (9문장)</option>
-                    <option value="ch02_ex02">2강 - Exercise 02 (10문장)</option>
-                    <option value="ch02_ex03">2강 - Exercise 03 (7문장)</option>
-                    <option value="ch02_ex04">2강 - Exercise 04 (6문장)</option>
-                    <option value="ch02_ex05">2강 - Exercise 05 (9문장)</option>
-                    <option value="ch02_ex06">2강 - Exercise 06 (7문장)</option>
+                    <option value="ch03_ex01">3강 - Exercise 01 (6문장)</option>
+                    <option value="ch03_ex02">3강 - Exercise 02 (6문장)</option>
+                    <option value="ch03_ex03">3강 - Exercise 03 (8문장)</option>
+                    <option value="ch03_ex04">3강 - Exercise 04 (7문장)</option>
+                    <option value="ch03_ex05">3강 - Exercise 05 (7문장)</option>
+                    <option value="ch03_ex06">3강 - Exercise 06 (5문장)</option>
+                    <option value="ch05_ex01">5강 - Exercise 01 (8문장)</option>
+                    <option value="ch05_ex02">5강 - Exercise 02 (5문장)</option>
+                    <option value="ch05_ex03">5강 - Exercise 03 (5문장)</option>
+                    <option value="ch05_ex04">5강 - Exercise 04 (10문장)</option>
+                    <option value="ch05_ex05">5강 - Exercise 05 (8문장)</option>
                 </select>
             </div>
 
@@ -395,7 +251,6 @@
                     <h3>🔀 Scrambled Sentences</h3>
                     <div id="scrambledContainer"></div>
                 </div>
-
                 <div class="ordered-sentences">
                     <h3>✅ Correct Order</h3>
                     <div id="orderedContainer"></div>
@@ -406,120 +261,102 @@
 
     <script>
         const exercises = {
-            ch01_ex01: [
-                "Professor Kaivan Munshi observed that, regardless of the opportunities in the United States, natural disasters such as heavy rain pushed people out of Mexico.",
-                "When the rains failed in a particular village, a group of people left to seek other opportunities.",
-                "Many of them ended up in the United States, with the result that a subsequent migrant from the same village would have connections in the US who were securely employed and able to help him or her find a job.",
-                "Kaivan predicted that if one compared two villages in Mexico with the same weather in a given year, but one of them had had a drought in previous years (causing some villagers to emigrate) while the other had not, it would be easier for a resident of the village with drought to find a job (and also to find a better job) than for the resident of the village without a drought.",
-                "He expected to see more migrants, more employed migrants, and better-paid migrants.",
-                "This is exactly what the data showed.",
-                "Network connections matter."
+            ch03_ex01: [
+                "The million-dollar question where courage is concerned is whether or not courage can be learned.",
+                "If fear and courage are to be found at least in part in the hard-wiring of our brains, then it certainly makes sense to assume that there is a genetic component to bravery.",
+                "If bravery is simply a personality trait, then there isn't much point in trying to learn how to do it better.",
+                "Fortunately, the research suggests there is hope for people who want to boost their courage quotient.",
+                "Studies show that people ─ as many as 82 percent of those studied ─ overwhelmingly opt to try courage-enhancing strategies to help them face difficult circumstances.",
+                "Actors who are nervous before opening night spend time on the stage, familiarizing themselves with the auditorium; boxers strut and look angry to overcome the butterflies in their stomachs; people pray or knock on wood or wear favorite pieces of clothing, all because they think this will help to give them a more favorable outcome and allow them to face an uncertain, even risky future."
             ],
-            ch01_ex02: [
-                "Once scientists are able to control the value of variables in the laboratory through experimentation, control of variables outside the laboratory becomes possible.",
-                "For scientific psychologists, this means that they are able to apply what they have learned in the laboratory to try to correct problem behaviors in the real world.",
-                "Science has practical value when scientists can isolate independent variables and then manipulate them to change important parts of the world (i.e., dependent variables) in a manner that benefits humans or the world in which they live.",
-                "For example, scientific psychologists have successfully applied the Law of Effect to the treatment of children with autism.",
-                "Intensive interventions, begun at an early age, and based in large part on manipulating the consequences of their behavior, enable many such children to live relatively normal and happy lives."
+            ch03_ex02: [
+                "Patients with damage to the back of the brain, where the visual cortex lies, often have visual memory problems and do not benefit from visual imagery when trying to memorize words.",
+                "This suggests that the visual brain regions (temporo-occipital cortex) are necessary for forming visual images.",
+                "A study of brain-damaged patients has revealed separate verbal and nonverbal systems in the brain.",
+                "Some patients whose visual brain areas are intact but who have suffered damage to the brain's language areas have no problems identifying an object by sight but have great difficulty identifying the same object from its name alone.",
+                "Such patients still have access to their nonverbal (visual imagery) system, but have problems accessing the verbal identity system.",
+                "In most people these two systems do not work independently, but are continually interacting to enable skills such as object recognition and imagery-based memory."
             ],
-            ch01_ex03: [
-                "If we take literally the assumption in the American legal system that one is innocent until proven guilty, then the prior probability of a suspect being guilty is zero, and any evidence, no matter how damning, won't yield a posterior probability above zero, because you'll always be multiplying by zero.",
-                "A more reasonable way to establish the prior probability of a suspect's innocence is to consider anyone in the population equally likely.",
-                "Thus, if the suspect was apprehended in a city of 100,000 people, and investigators have reason to believe that the perpetrator was a resident of the city, the prior odds of the suspect being guilty are 1 in 100,000.",
-                "Of course, evidence can narrow the population ─ we may know, for example, that there were no signs of forced entry, and so the suspect had to be one of fifty people who had access to the facility."
+            ch03_ex03: [
+                "Various factors are behind the cognitive bias towards coherence.",
+                "One is the extrapolation of past experience that influences our perceptions through expectations about what we are going to perceive.",
+                "A case in point here is the well-known playing-card experiment involving impossible cards.",
+                "A subject is briefly shown a variety of playing cards, some of which are doctored (such as a black king of hearts) and is asked to identify them.",
+                "In the majority of cases, the subjects did not note the unusual features of the doctored cards, but rather perceived them as regular cards.",
+                "The black king of hearts would thus be identified as a king of spades ─ not because the subject cannot differentiate heart-shapes from spade-shapes, but because he sees what he is expecting to see, namely a regular playing card.",
+                "Our expectations about what we are going to perceive can strongly influence what we do in fact perceive.",
+                "In this way, having perceived various coherent phenomena in the past, we can expect that future perceived phenomena are similarly coherent, and this expectation may make it more likely that we in fact experience them as coherent, whether they are coherent or not."
             ],
-            ch01_ex04: [
-                "Compared to other animals, human beings have an unusually long pre-adult existence, and it would be absurd to claim that this is simply to extend a period of suffering.",
-                "Instead, much of the evidence suggests that evolution has given us our teenage years for a very good reason ─ in the long run they help us to succeed as individuals (that is what evolution tends to do).",
-                "It is a time when we can play a little, live a little, and grow up a little.",
-                "Sometimes we are given the impression that adolescence is a time filled with extreme danger and stress.",
-                "Obviously, nothing comes without risk , but we should never lose sight of the fact that being a teenager is a unique opportunity to experiment with the world, ourselves, and other people.",
-                "Things may seem very serious at the time, but few of our teenage actions have long-term consequences for when we are older.",
-                "I sometimes worry that we make teenagers too frightened to try new things ─ after all, life is for living.",
-                "Everyone should have been just a little bit irresponsible before they get to twenty."
+            ch03_ex04: [
+                "Reciprocal altruism is when we help others we are not related to.",
+                "At first, reciprocal altruism seems more difficult to understand as there is no obvious genetic benefit.",
+                "One strange example of reciprocal altruism comes from the blood-sucking vampire bat of South America.",
+                "If, after a night's hunting, a particular bat has been unsuccessful, other bats will regurgitate some of the blood they have swallowed to feed their hungry nestmate ─ but only if they can be trusted to return the favour.",
+                "Bats who have broken such blood deals in the past gain a reputation for being selfish and are ignored in the future, should they go hungry.",
+                "Given the unpredictability of meals, reciprocal altruism is a strategy to get individuals through lean times.",
+                "If you have a particularly good day hunting, then sharing with others less successful creates a debt to be paid back when you are not so fortunate."
             ],
-            ch01_ex05: [
-                "In general industry, there are indeed neutral industries, that is, industries without ideological tendencies.",
-                "For example, the brick-and-tile industry only produces bricks and tiles based on supply and demand.",
-                "What kind of bricks and tiles do customers want?",
-                "What kind of bricks are we producing?",
-                "Regardless of whether these bricks are for the construction of urban houses or rural houses, if the quality is acceptable, then the buyer (the house owner or a construction company) will accept the price.",
-                "Another example is the down jacket industry, which is to keep people warm.",
-                "If the quality, styles, and colours are what customers want, then it does not matter what their occupation is and whether their income is high or low or whether they are old or young.",
-                "All that matters for them is that the quality, styles, and colours are good.",
-                "Therefore, we can call the general industry a neutral industry because the products themselves have no ideological bias."
+            ch03_ex05: [
+                "It is common for managers to make decisions while paying attention to what accountants call the \"bottom line\" ─ that is, considering how the decision will affect the profitability of the firm.",
+                "But more and more today, we talk about the triple bottom line ─ a concept that focuses on a firm's economic, social, and environmental performance.",
+                "Some call this triple bottom line the concern for the \"3 P's\" ─ profit, people, and planet.",
+                "You might think of it more generally as acting with a sense of corporate social responsibility.",
+                "And, by the way, that's most likely how you'd like your future employers to behave.",
+                "\"Students nowadays want to work for companies that help enhance the quality of life in their surrounding community,\" says one observer.",
+                "And in one survey, 70% of students report that \"a company's reputation and ethics\" was \"very important\" when deciding whether or not to accept a job offer; in another survey, 79% of 13-25 year olds say they \"want to work for a company that cares about how it affects or contributes to society.\""
             ],
-            ch01_ex06: [
-                "Let's face it, the working, spending, and consuming life can really drain a person's energy.",
-                "And for what?",
-                "As Lily Tomlin points out, \"Even if you win the rat race, you're still a rat.\"",
-                "The thought of being just one more ratlike species is not very exciting, is it?",
-                "We buy a plastic wastebasket at a discount store and take it home in a plastic bag.",
-                "Then we take the wastebasket out of the plastic bag and put the bag in the plastic wastebasket ─ over and over again.",
-                "That's why I believe we need to create a new, better-fitting lifestyle as quickly as possible.",
-                "All the baggage we carry (physical, emotional, and psychological) is getting very heavy; it's time for us to reinvent a more moderate economy based on how nature actually works and what humans actually need.",
-                "I have to admit, however, that there are still many, many people who aren't willing to listen to mounting evidence about environmental dysfunction.",
-                "Their mantra is, \"If it's not broken, don't fix it,\" but mine is, \"If it's not fixable, don't break it.\""
+            ch03_ex06: [
+                "For those who perceive progress (in some manner or form) within evolution, an optimistic view of the future is not merely wishful thinking; the evidence seems to indicate widespread long-term progress in the past (perhaps the biggest trend in history).",
+                "In predicting or anticipating the future, our major source of information and point of departure is the past; it is from the past and the patterns of change observed that we learn to anticipate the future.",
+                "Kurzweil, a futurist, for one, clearly believes that based on his quantitative assessment of the historical exponential growth of information processing, he can reliably predict at least certain aspects of the future, which include increasing intelligence and information processing, in the shape of things to come.",
+                "The progressive vision of evolution is the cognitive foundation and motivational inspiration behind \"evolutionary optimism,\" which diametrically opposes the ancient view that time is a fall from perfection; to reverse metaphors, time becomes a progression from the most primitive and primordial.",
+                "As Desmond Morris, a zoologist, has noted, although we may prefer to think of ourselves as \"fallen angels,\" in reality, we are \"risen apes.\""
             ],
-            ch02_ex01: [
-                "Where is all the tourist money going?",
-                "It is apparent from reviewing worldwide travel patterns that tourism remains an economic activity that primarily benefits developed countries.",
-                "Travel today from Europe to North America and vice versa accounts for approximately 79% of all travellers and 78% of all tourism receipts.",
-                "A few countries in Asia, in particular Japan, have entered the picture as major recipients and generators of tourists.",
-                "In most cases, tourism growth is tied to level of development.",
-                "Those countries that show economic growth are most likely to be the ones to generate and benefit from tourism.",
-                "Countries in Africa and South America, with few exceptions, are not yet major tourism generators or receivers.",
-                "For example, Africa, which has great resource wealth, especially in primary commodities such as timber, gold, and tropical agricultural products, attracts only 4% of all world travellers.",
-                "Given Africa's growing population, its tourism adds very little to the Gross National Product (GNP) of many countries."
+            ch05_ex01: [
+                "In the complex tapestry of life, challenges and problems are inevitable; suffering due to them is, however, optional.",
+                "It is crucial to grasp the wisdom in John Milton's Paradise Lost, where Satan observes, \"The mind is its own place, and in itself can make a Heaven of Hell, a Hell of Heaven.\"",
+                "My father used to often quote William Shakespeare's insight in Hamlet: \"There is nothing either good or bad, but thinking makes it so.\"",
+                "These timeless quotes underscore the transformative power of our perception.",
+                "Problems become opportunities for growth when viewed through a positive lens.",
+                "By aligning our thoughts with this perspective, we not only navigate challenges with resilience but also unlock our creative potential, evolving into empowered individuals both personally and professionally.",
+                "By adopting this approach, you will not only progress towards your goals, but also attain a level of world-class excellence.",
+                "Stay committed to the journey, solve the puzzles that come your way, and watch as your purpose unfolds into a meaningful, impactful life."
             ],
-            ch02_ex02: [
-                "Culture is reflected not only in the historic buildings and other attractions of a country, but also in the diversity of its lifestyles, customs, languages, and other traditions.",
-                "Cultural diversity and cultural heritage are important sources of creativity, and must therefore be preserved.",
-                "However, culture is ever-changing and therefore, subject to the tensions between tradition and modernity.",
-                "Historic buildings are an integral part of our cultural heritage.",
-                "However, they are energy eaters and must be changed and adapted to retain their value and usefulness to people.",
-                "Heritage preservation and energy efficiency need not be conflicting aims.",
-                "Many energy efficiency measures even support the preservation of historic substances.",
-                "Moisture-related structural damage and mold growth are a frequent problem in historic buildings that are subject to modern usage conditions.",
-                "Energy efficiency measures such as thermal insulation, improved airtightness, and heat recovery ventilation can stop moisture accumulation that causes structural damage.",
-                "This is a good basis for ensuring that the building will be used and maintained in the future."
+            ch05_ex02: [
+                "In couple's work, practicing mindfulness includes helping each partner to become more aware of the words they are using with each other and choosing better ones that, rather than push the partner away, restore closeness.",
+                "They learn to watch their own body language, being mindful of what they're projecting to their partner through how they're sitting or standing, the tone of their voice, the volume at which they're speaking, and the expressions on their face.",
+                "It's being aware of the predictable unhealthy patterns that they continue to repeat in their arguments, and replacing them with the paths that actually lead to resolution.",
+                "It's taking the time to self-soothe, calming themselves back down when they're getting upset, and also knowing how to soothe their partner when it's the partner's upset that is escalating too far.",
+                "So, mindfulness is not just self-awareness but also other-awareness."
             ],
-            ch02_ex03: [
-                "Retrieval practice is a strategy of bringing information to mind by deliberately trying to recall it.",
-                "Recent research in classrooms has shown that repeated testing that includes retrieval practice strengthens memory better than spending the same amount of time reviewing information you have already read does.",
-                "In a recent study, one group of students read a 276-word passage on sea otters and then practiced recalling the information, a second group studied the information in four repeated 5-minute study periods, and a third group made concept maps to organize the information by linking together different ideas.",
-                "The time spent studying was the same for each group.",
-                "One week later, the students took a final test.",
-                "Those who practiced retrieving the information had the best score on the final test.",
-                "It has been proposed that trying to recall the information, as opposed to just rehearsing the information, results in the type of retrieval that is more likely to trigger reconsolidation, and this additional reconsolidation strengthens the memory."
+            ch05_ex03: [
+                "A hunter/forager's relationship to animals differs from that of a domesticator.",
+                "For the forager, there can be a deep mutual interaction with other species, with humans shaping much of their activity to those of the animals and the other species responding to the pressures emanating from human predation.",
+                "For example, across millennia human groups in northern parts of the world structured their lives around the migrations of herds of caribou or reindeer or buffalo, who in turn shaped their ranging and feeding behaviors based on human predation.",
+                "But with domestication, relationships move beyond predator-prey interactions to a much more direct and intensive mutual reshaping of bodies and lifeways.",
+                "The investment in one another and the processes of relationships become more integrated and interreliant."
             ],
-            ch02_ex04: [
-                "A simplifying technique which might be used in decision making has been described by Herbert A. Simon.",
-                "The fundamental idea is that rather than expend time and effort in a bid to maximize utility, people are generally content to set a minimum acceptable level which will satisfy them but be short of the maximum.",
-                "This may apply especially in the case of sequential decisions.",
-                "For example, in buying a house, houses come onto the market continually and it would be difficult to establish that a given house was actually the optimum choice, since a better one might appear the next day.",
-                "Thus, buyers may set acceptable levels, either for a total utility or on key aspects of the properties, and choose the first property that meets all their minimum requirements.",
-                "Should the initial minimum requirements prove too ambitious, Simon suggests that the level is gradually adjusted in the light of the average values present in the market, so that the decision maker may become more realistic about his or her criteria in the light of experience."
+            ch05_ex04: [
+                "Most habitually four-footed creatures have a centre of mass in the chest region.",
+                "It takes a lot of energy for them to lever themselves upwards onto their hindlimbs.",
+                "This makes it hard for them to stand comfortably upright for any length of time.",
+                "In dinosaurs, by contrast, the centre of mass was over the hips.",
+                "A relatively short body forward of the hips was counterbalanced by a long, stiff tail behind.",
+                "With the hips as a fulcrum, dinosaurs could stand on their hindlimbs without effort.",
+                "Rather than the short, thick limbs of most amniotes, dinosaurs could grow their hindlimbs long and thin.",
+                "Legs are easier to move if they are more slender towards the ends.",
+                "The easier the legs are to move, the easier it is to run fast.",
+                "The arms, no longer required for running, were reduced, the hands left free for other activities, such as grasping prey items or climbing."
             ],
-            ch02_ex05: [
-                "Within the garment design field, prioritizing the environmental impact of a product is commonly known as eco-fashion.",
-                "Eco-fashion argues for a more environmentally sustainable production and consumption of garments.",
-                "Negative environmental impacts can occur at every point along the life of a product, from production to consumption to disposal.",
-                "While these negative impacts are present in many aspects of the textile industry, they are particularly prevalent within the fashion industry.",
-                "There is a seemingly inherent contradiction between fashion and environmental sustainability.",
-                "The fashion industry is concerned with novelty and must be constantly in flux.",
-                "The industry can be characterized by the fast rate at which something becomes outdated.",
-                "In contrast, sustainability is primarily understood as the capacity to continue for an extended period of time.",
-                "Whether the sustainability in question refers to the consumption of natural resources, relevance of a particular style, or durability of a particular garment, the current state of the fashion industry is not sustainable."
-            ],
-            ch02_ex06: [
-                "More and more people are taking delight in nature and not only want to see the forest but also to experience it as intensely as they can ─ and I am one of them.",
-                "We often envy animals for the immediate, clear feedback their senses give them, but how aware are we of our own senses?",
-                "After living for centuries in a human-oriented world that robs us of the daily necessity of keeping a cautious eye on nature, what skills do we still possess?",
-                "If we are to believe the multitude of reports that compare the amazing skills of animals with our own, as a species we don't have much to offer other than brain power.",
-                "In matters of the senses, we fall short when measured against almost all of our fellow creatures.",
-                "Sometimes we even seem to relish our role as evolutionary losers.",
-                "And so, the bond between people and nature appears to be ruptured beyond repair, and all there is left for us to do is to peer enviously at the amazing abilities animals possess."
+            ch05_ex05: [
+                "The number of architects who either leave or redefine what they do is surprisingly high.",
+                "In the UK, data from the Royal Institute of British Architects (RIBA) show more than half of the students who have completed the undergraduate bachelor of architecture degree, known as Part I, do not go on to complete the post-graduate Part III, a requirement for registration as an architect, representing a gap of around 1,600 students per year, with some claiming the ratio of those who become registered architects versus those who take up the degree is as low as one in 14.",
+                "In the US, the gap between graduates and those registered is narrower, with 37 percent not ultimately registering as an architect, or about 2,500 per year.",
+                "This is perhaps due to the far greater total cost of a US education, at an average of $190,000 for a four-year professional degree.",
+                "It's unclear where these students go or what they end up doing, as their pathways are not captured in the research.",
+                "Anecdotally, we know that many graduates of architecture continue to work in architectural practice while never registering as architects.",
+                "Many will go elsewhere.",
+                "We are hesitant to place too much emphasis on the statistics, as few professional bodies or schools have set out to specifically capture the professional destination of those who have left."
             ]
         };
 
@@ -541,9 +378,7 @@
 
         exerciseSelect.addEventListener('change', function() {
             const selectedExercise = this.value;
-            if (selectedExercise) {
-                loadExercise(selectedExercise);
-            }
+            if (selectedExercise) loadExercise(selectedExercise);
         });
 
         shuffleBtn.addEventListener('click', shuffleSentences);
@@ -555,7 +390,6 @@
             correctOrder = [...currentExercise];
             userOrder = [];
             selectedSentence = null;
-
             shuffleSentences();
             exerciseArea.style.display = 'block';
             shuffleBtn.disabled = false;
@@ -570,7 +404,6 @@
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
             }
-
             displayScrambledSentences(shuffled);
             createDropZones();
             checkBtn.disabled = true;
@@ -580,35 +413,22 @@
 
         function displayScrambledSentences(sentences) {
             scrambledContainer.innerHTML = '';
-            sentences.forEach((sentence, index) => {
+            sentences.forEach(sentence => {
                 const sentenceDiv = document.createElement('div');
                 sentenceDiv.className = 'sentence-item';
                 sentenceDiv.textContent = sentence;
                 sentenceDiv.dataset.sentence = sentence;
-
-                sentenceDiv.addEventListener('click', function() {
-                    selectSentence(this);
-                });
-
+                sentenceDiv.addEventListener('click', function() { selectSentence(this); });
                 scrambledContainer.appendChild(sentenceDiv);
             });
         }
 
         function selectSentence(element) {
-            document.querySelectorAll('.sentence-item.selected').forEach(item => {
-                item.classList.remove('selected');
-            });
-            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
-                zone.classList.remove('highlight');
-            });
-
+            document.querySelectorAll('.sentence-item.selected').forEach(item => item.classList.remove('selected'));
+            document.querySelectorAll('.drop-zone.highlight').forEach(zone => zone.classList.remove('highlight'));
             element.classList.add('selected');
             selectedSentence = element;
-
-            document.querySelectorAll('.drop-zone').forEach(zone => {
-                zone.classList.add('highlight');
-            });
-
+            document.querySelectorAll('.drop-zone').forEach(zone => zone.classList.add('highlight'));
             showFeedback('선택된 문장을 배치할 위치를 클릭하세요!', 'correct');
         }
 
@@ -619,11 +439,7 @@
                 dropZone.className = 'drop-zone';
                 dropZone.textContent = `문장 ${i + 1}을 여기에 배치하세요`;
                 dropZone.dataset.position = i;
-
-                dropZone.addEventListener('click', function() {
-                    handleDropZoneClick(this);
-                });
-
+                dropZone.addEventListener('click', function() { handleDropZoneClick(this); });
                 orderedContainer.appendChild(dropZone);
             }
         }
@@ -633,31 +449,19 @@
                 showFeedback('먼저 왼쪽에서 문장을 선택하세요!', 'incorrect');
                 return;
             }
-
             const sentence = selectedSentence.dataset.sentence;
             const position = parseInt(dropZone.dataset.position);
-
             const sentenceDiv = document.createElement('div');
             sentenceDiv.className = 'sentence-item';
             sentenceDiv.textContent = sentence;
             sentenceDiv.dataset.sentence = sentence;
             sentenceDiv.dataset.position = position;
-
-            sentenceDiv.addEventListener('click', function() {
-                returnSentence(this);
-            });
-
+            sentenceDiv.addEventListener('click', function() { returnSentence(this); });
             dropZone.parentNode.replaceChild(sentenceDiv, dropZone);
             selectedSentence.remove();
             selectedSentence = null;
-
-            document.querySelectorAll('.sentence-item.selected').forEach(item => {
-                item.classList.remove('selected');
-            });
-            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
-                zone.classList.remove('highlight');
-            });
-
+            document.querySelectorAll('.sentence-item.selected').forEach(item => item.classList.remove('selected'));
+            document.querySelectorAll('.drop-zone.highlight').forEach(zone => zone.classList.remove('highlight'));
             updateUserOrder();
             hideFeedback();
         }
@@ -665,88 +469,57 @@
         function returnSentence(sentenceElement) {
             const position = parseInt(sentenceElement.dataset.position);
             const sentence = sentenceElement.dataset.sentence;
-
             const dropZone = document.createElement('div');
             dropZone.className = 'drop-zone';
             dropZone.textContent = `문장 ${position + 1}을 여기에 배치하세요`;
             dropZone.dataset.position = position;
-
-            dropZone.addEventListener('click', function() {
-                handleDropZoneClick(this);
-            });
-
+            dropZone.addEventListener('click', function() { handleDropZoneClick(this); });
             sentenceElement.parentNode.replaceChild(dropZone, sentenceElement);
-
             const newSentenceDiv = document.createElement('div');
             newSentenceDiv.className = 'sentence-item';
             newSentenceDiv.textContent = sentence;
             newSentenceDiv.dataset.sentence = sentence;
-
-            newSentenceDiv.addEventListener('click', function() {
-                selectSentence(this);
-            });
-
+            newSentenceDiv.addEventListener('click', function() { selectSentence(this); });
             scrambledContainer.appendChild(newSentenceDiv);
-
-            selectedSentence = null;
-            document.querySelectorAll('.sentence-item.selected').forEach(item => {
-                item.classList.remove('selected');
-            });
-            document.querySelectorAll('.drop-zone.highlight').forEach(zone => {
-                zone.classList.remove('highlight');
-            });
-
             updateUserOrder();
         }
 
         function updateUserOrder() {
-            userOrder = [];
-            const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
-            placedSentences.forEach(sentence => {
-                const position = parseInt(sentence.dataset.position);
-                userOrder[position] = sentence.dataset.sentence;
-            });
-
-            const hasEmptySlots = userOrder.includes(undefined) || userOrder.length !== currentExercise.length;
-            checkBtn.disabled = hasEmptySlots;
+            const placedItems = orderedContainer.querySelectorAll('.sentence-item');
+            userOrder = Array.from(placedItems).map(item => item.dataset.sentence);
+            const allPlaced = orderedContainer.querySelectorAll('.drop-zone').length === 0;
+            checkBtn.disabled = !allPlaced;
         }
 
         function checkAnswer() {
-            let correct = 0;
-            const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
-            
-            placedSentences.forEach((sentence, index) => {
-                sentence.classList.remove('correct-sentence', 'incorrect-sentence');
-                const position = parseInt(sentence.dataset.position);
-                const userSentence = sentence.dataset.sentence;
-                const correctSentence = correctOrder[position];
-                
-                if (userSentence === correctSentence) {
-                    sentence.classList.add('correct-sentence');
-                    correct++;
+            const placedItems = orderedContainer.querySelectorAll('.sentence-item');
+            let correctCount = 0;
+            placedItems.forEach((item, index) => {
+                item.classList.remove('correct-sentence', 'incorrect-sentence');
+                if (item.dataset.sentence === correctOrder[index]) {
+                    item.classList.add('correct-sentence');
+                    correctCount++;
                 } else {
-                    sentence.classList.add('incorrect-sentence');
+                    item.classList.add('incorrect-sentence');
                 }
             });
-
-            const score = Math.round((correct / currentExercise.length) * 100);
+            const score = Math.round((correctCount / correctOrder.length) * 100);
             scoreElement.textContent = score;
             scoreDisplay.style.display = 'block';
-
             if (score === 100) {
-                showFeedback('🎉 완벽합니다! 모든 문장을 올바르게 배열했습니다!', 'correct');
-            } else if (score >= 70) {
-                showFeedback(`👍 잘했습니다! ${correct}/${currentExercise.length}개 정답입니다.`, 'correct');
+                showFeedback('🎉 완벽합니다! 모든 문장의 순서가 맞습니다!', 'correct');
+            } else if (score >= 60) {
+                showFeedback(`👍 좋아요! ${correctCount}/${correctOrder.length}개가 맞았습니다. 계속 연습해보세요!`, 'correct');
             } else {
-                showFeedback(`💪 다시 한번 시도해보세요! ${correct}/${currentExercise.length}개 정답입니다.`, 'incorrect');
+                showFeedback(`💪 ${correctCount}/${correctOrder.length}개가 맞았습니다. 다시 도전해보세요!`, 'incorrect');
             }
         }
 
         function resetExercise() {
-            const selectedExercise = exerciseSelect.value;
-            if (selectedExercise) {
-                loadExercise(selectedExercise);
-            }
+            userOrder = [];
+            selectedSentence = null;
+            shuffleSentences();
+            scoreDisplay.style.display = 'none';
             hideFeedback();
         }
 
@@ -757,6 +530,7 @@
 
         function hideFeedback() {
             feedback.className = 'feedback';
+            feedback.textContent = '';
         }
     </script>
 </body>
