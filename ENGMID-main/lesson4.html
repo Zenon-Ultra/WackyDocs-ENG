@@ -1,413 +1,64 @@
 <html lang="ko"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2과: Smart Economic Decisions for All - 문장 순서 배열 연습</title>
+  <title>Lesson 4: Cultural Treasures - King Jeongjo’s Grand Procession</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Malgun Gothic', Arial, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh; padding: 20px;
+      min-height: 100vh; padding: 20px; color: #222;
     }
     .container {
-      max-width: 1200px; margin: 0 auto; background: white;
-      border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      overflow: hidden;
+      max-width: 900px; margin: 40px auto; background: white;
+      border-radius: 12px; box-shadow: 0 18px 36px rgba(0,0,0,0.12);
+      overflow: hidden; padding: 30px;
     }
-    .back-btn {
-      position: absolute; left: 30px; top: 50%; transform: translateY(-50%);
-      background: rgba(255,255,255,0.2); color: white;
-      border: 2px solid rgba(255,255,255,0.3);
-      padding: 10px 20px; border-radius: 25px;
-      text-decoration: none; transition: all 0.3s ease;
-    }
-    .header {
-      background: linear-gradient(45deg, #1a237e, #0288d1);
-      color: white; padding: 30px 20px; text-align: center; position: relative;
-    }
-    .header h1 { font-size: 2.2em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-    .header p { font-size: 1.1em; opacity: 0.9; }
-    .exercise-container { padding: 30px 20px; }
-    .exercise-info {
-      background: #f8f9fa; border-left: 5px solid #1a237e;
-      padding: 20px; margin-bottom: 30px; border-radius: 5px;
-    }
-    .exercise-select { margin-bottom: 30px; text-align: center; }
-    .exercise-select select {
-      padding: 12px 20px; font-size: 16px;
-      border: 2px solid #ddd; border-radius: 8px;
-      background: white; cursor: pointer; min-width: 300px; max-width: 100%;
-    }
-    .controls { text-align: center; margin: 20px 0; }
-    .btn {
-      background: linear-gradient(45deg, #1a237e, #0288d1);
-      color: white; border: none; padding: 12px 25px; margin: 0 10px;
-      border-radius: 25px; cursor: pointer; font-size: 16px;
-      transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(26,35,126,0.3);
-    }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,35,126,0.4); }
-    .btn:disabled { background: #6c757d; cursor: not-allowed; transform: none; box-shadow: none; }
-    .exercise-area {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 30px; margin-top: 30px;
-    }
-    @media (max-width:768px){ .exercise-area{grid-template-columns:1fr;} }
-    .scrambled-sentences,.ordered-sentences{
-      background:#f8f9fa;border-radius:10px;padding:20px;min-height:400px;
-    }
-    .scrambled-sentences h3,.ordered-sentences h3{
-      color:#1a237e;margin-bottom:15px;font-size:1.3em;
-      border-bottom:2px solid #1a237e;padding-bottom:5px;
-    }
-    .sentence-item{
-      background:white;border:2px solid #e9ecef;border-radius:8px;
-      padding:15px;margin:10px 0;cursor:pointer;transition:all .3s ease;
-      user-select:none;line-height:1.5;font-family:'Times New Roman',serif;
-    }
-    .sentence-item:hover{border-color:#1a237e;box-shadow:0 4px 12px rgba(26,35,126,0.2);transform:translateY(-2px);}
-    .sentence-item.selected{border-color:#007bff;background-color:rgba(0,123,255,0.1);box-shadow:0 0 15px rgba(0,123,255,0.3);}
-    .sentence-item.correct-sentence { border-color: #28a745; background-color: rgba(40,167,69,0.1); }
-    .sentence-item.incorrect-sentence { border-color: #dc3545; background-color: rgba(220,53,69,0.1); }
-    .drop-zone{
-      border:2px dashed #ddd;border-radius:8px;padding:20px;margin:5px 0;
-      min-height:70px;display:flex;align-items:center;justify-content:center;
-      color:#666;transition:all .3s ease;font-style:italic;cursor:pointer;
-    }
-    .drop-zone:hover{border-color:#1a237e;background-color:rgba(26,35,126,0.1);color:#1a237e;}
-    .score-display{text-align:center;margin:20px 0;padding:15px;
-      background:linear-gradient(45deg,#ffd700,#ffed4e);
-      border-radius:10px;font-size:1.2em;font-weight:bold;color:#333;}
-    .feedback{text-align:center;margin:20px 0;padding:15px;
-      border-radius:10px;font-weight:bold;opacity:0;transition:opacity .3s ease;}
-    .feedback.correct{background:linear-gradient(45deg,#28a745,#20c997);color:white;opacity:1;}
-    .feedback.incorrect{background:linear-gradient(45deg,#dc3545,#fd7e14);color:white;opacity:1;}
+    .header { text-align: center; margin-bottom: 20px; }
+    .header h1 { color: #1a237e; font-size: 1.8em; margin-bottom: 8px; }
+    .header p { color: #444; }
+    .content { line-height: 1.8; font-size: 1.05em; color: #333; }
+    .content p { margin: 14px 0; }
+    .credit { margin-top: 20px; font-size: 0.9em; color: #666; }
   </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <a href="main.html" class="back-btn">← 과 선택</a>
-    <h1>📈 2과: Smart Economic Decisions for All</h1>
-    <p>The ABCs of Stocks and Stock Markets - 영어 문장들을 올바른 순서로 배열해보세요!</p>
-  </div>
-
-  <div class="exercise-container">
-    <div class="exercise-info">
-      <h3>📚 연습 방법</h3>
-      <p>1. 아래에서 연습할 문단을 선택하세요<br>
-         2. 왼쪽 문장을 클릭해 선택 후 오른쪽 원하는 위치를 클릭하세요<br>
-         3. 잘못 배치한 문장은 클릭해 다시 왼쪽으로 돌려보낼 수 있습니다<br>
-         4. '정답 확인' 버튼을 눌러 결과를 확인하세요</p>
+  <div class="container">
+    <div class="header">
+      <h1>Lesson 4: Cultural Treasures</h1>
+      <p>King Jeongjo’s Grand Procession</p>
     </div>
 
-    <div class="exercise-select">
-      <select id="exerciseSelect">
-        <option value="">연습할 문단을 선택하세요</option>
-        <option value="intro">본문 ❶: Intro (Neil &amp; Beth) - 9문장</option>
-        <option value="intro2">본문 ❷: Finance &amp; Overview (Beth &amp; Neil) - 8문장</option>
-        <option value="concept">본문 ❸: The Concept of a Stock - 8문장</option>
-        <option value="market">본문 ❹: The Stock Market and Companies - 11문장</option>
-        <option value="prices">본문 ❺: The Prices of Stocks - 8문장</option>
-        <option value="factors">본문 ❻: Factors Affecting the Price - 8문장</option>
-        <option value="investing">본문 ❼: How to Invest in the Stock Market - 11문장</option>
-      </select>
-    </div>
+    <div class="content">
+      <p>Hey there! Let me introduce you to a fascinating piece of Korean history. Back on February 9, 1795, something remarkable happened in front of Changdeokgung Palace, where King Jeongjo lived. There was quite a crowd gathered there to witness a very special procession that’s still talked about in Korea today.</p>
 
-    <div class="controls">
-      <button class="btn" id="shuffleBtn" disabled="">다시 섞기</button>
-      <button class="btn" id="checkBtn" disabled="">정답 확인</button>
-      <button class="btn" id="resetBtn" disabled="">초기화</button>
-    </div>
+      <p>Now, imagine this: more than 2,000 soldiers, hundreds of horse riders, and lots of important officials, all marching alongside the king and his mother with 50 musicians playing traditional instruments. When they crossed a bridge made of 36 boats on the Hangang River, you can imagine how that turned heads! That must have been something ordinary people rarely saw. Talk about a big event!</p>
 
-    <div class="score-display" id="scoreDisplay" style="display:none;">
-      점수: <span id="score">0</span>/100
-    </div>
-    <div class="feedback" id="feedback"></div>
+      <p>This was not just about putting on a show. No, it was serious business. Lasting four days and covering 68 kilometers, the procession moved alongside the king and his mother as they made a round trip to Hwaseong Haenggung.</p>
 
-    <div class="exercise-area" id="exerciseArea" style="display:none;">
-      <div class="scrambled-sentences">
-        <h3>🔀 Scrambled Sentences</h3>
-        <div id="scrambledContainer"></div>
-      </div>
-      <div class="ordered-sentences">
-        <h3>✅ Correct Order</h3>
-        <div id="orderedContainer"></div>
+      <p>Why did all of this happen? The first thing King Jeongjo had in mind was to show respect to his family. It happened around his mother’s sixtieth birthday. Back in the Joseon Dynasty, just like today, turning 60 years old had a special meaning. And his father’s tomb was near Hwaseong Haenggung. He was planning to hold a memorial service to honor his late father. By combining the two events, he was telling everyone how much family meant to him.</p>
+
+      <p>But wait. There’s more. King Jeongjo was also making a statement about the Joseon Dynasty’s strength. He dressed up like a military leader, wearing armor and sitting on a horse with his soldiers marching in perfect order. It was a way of saying, “We’re ready to protect our land.” He was really serious about making the Joseon Dynasty a powerful and successful kingdom.</p>
+
+      <p>Now, here’s the twist: the procession also had something to do with Hwaseong Fortress, which was being built. In King Jeongjo’s mind were big plans for Hwaseong. He wanted it to be a self-sufficient city with a strong military, farming, and trade as he hoped to make it the new capital, away from all the political chaos in Hanyang. So King Jeongjo gathered the best talents, such as Jeong Yakyong, and let them bring together the finest architectural techniques of his time from both the East and the West to build Hwaseong Fortress.</p>
+
+      <p>There’s more to King Jeongjo’s story. He treated his people well during the construction of the fortress. They received fair wages and breaks during bad weather and were even paid when they were sick, something that was unheard of at that time. Back then, ordinary people were typically required to work on public projects without getting paid. Once people got wind of King Jeongjo’s plan, workers from all over the country came together in a rush. So, in under three years was the project finished, though it was initially thought to take about 10 years. Impressive, right?</p>
+
+      <p>Let’s go back to the procession. The procession wasn’t just some fancy show for ordinary people. It was actually a way for them to get up close and personal with the king. King Jeongjo set up a chance during the procession for common people to meet him and to share their concerns. This was a big deal, especially for those who couldn’t read or write. They didn’t have any other way to tell the king what was on their minds, so this was a direct line to him.</p>
+
+      <p>And here’s the cherry on top: through the procession, King Jeongjo made government more accessible. During that time, the government used to hold exams to hire officials every three years. So, there weren’t many chances available. He added special exams during the procession, giving more people a shot at joining the government. This move was innovative back then and made the government more diverse.</p>
+
+      <p>And guess what? King Jeongjo didn’t forget a single detail. He made sure everything was documented properly by creating records for the procession and the construction of Hwaseong Fortress. These construction records were especially a lifesaver when the fortress was damaged during wartime. They were even part of why UNESCO recognized Hwaseong Fortress as a World Heritage Site.</p>
+
+      <p>At first, the people at UNESCO were a bit unsure about recognizing Hwaseong Fortress as the real deal. They weren’t totally convinced it was authentic. But after checking out translated documents and comparing them with the restored fortress, they finally came around and agreed that the fortress had actually been restored just the way it was meant to be.</p>
+
+      <p>And among the records of the procession, there are these amazing paintings. One painting, Hwaneo Haengryeoldo, doesn’t just feature the king’s crew, but it also shows ordinary people watching along the road. It’s a different take from the usual art of that time, which only focused on important figures.</p>
+
+      <p>So being kind to the people was a big deal for kings of the Joseon Dynasty. King Jeongjo’s 1795 procession and Hwaseong Fortress stand as proof of that spirit. Hwaseong is more than just a fortress; it symbolizes a king who cared for his people. And this is a significant part of Korean cultural heritage.</p>
+
+      <div class="credit">
+        <p>Original passage provided by the user. Converted into lesson HTML for Lesson 4.</p>
       </div>
     </div>
   </div>
-</div>
-
-<script>
-const exercises = {
-  // 본문 ❶: Neil 1~14 (Neil의 소개 파트)
-  intro: [
-    "Welcome to the 10-Minute Economics 101 podcast for teenagers!",
-    "I'm your host, Neil.",
-    "Thank you for tuning in.",
-    "We have a very special guest with us, the renowned economist Beth Friedman.",
-    "Please give her a warm welcome!",
-    "Hello, everyone.",
-    "It's truly an honor to be here with all of you.",
-    "We've been exploring the basics of economics.",
-    "In this 35th episode, we'll be talking about the world of stocks."
-  ],
-  // 본문 ❷: Beth & Neil (finance ~ overview)
-  intro2: [
-    "Before we begin, Neil, I have a question for you.",
-    "Have you ever wondered what to do with your extra money?",
-    "Absolutely, Beth.",
-    "I bet all our listeners have asked themselves the same question.",
-    "Indeed.",
-    "It's a question that often arises, especially among young people who are beginning to explore the world of finance.",
-    "As you go about your daily lives, you find yourself engaged in financial activities such as purchasing goods and paying bus fares.",
-    "After that, you might have some extra money."
-  ],
-  // 본문 ❸: The Concept of a Stock
-  concept: [
-    "Okay, let's start with the concept of a stock.",
-    "A stock is a partial share of ownership in a company.",
-    "When you buy a stock, you get a portion of the company's ownership.",
-    "To put it simply, owning one stock is like having a slice of the company's pie.",
-    "Does that mean stockholders themselves can actively participate in the management of the company?",
-    "Not exactly, Neil.",
-    "Management is generally carried out by professional managers.",
-    "However, companies hold stockholder meetings to seek the opinions of major stockholders when they make important decisions."
-  ],
-  // 본문 ❹: The Stock Market and Companies
-  market: [
-    "I see.",
-    "Then how do companies use the stock market?",
-    "The stock market is very important for companies because it can provide them with the money they need to grow and expand.",
-    "How does that work?",
-    "Let's imagine that a small group of people start a footwear company producing innovative sneakers.",
-    "The founders are confident that their products will be popular with consumers, but they do not have enough funds to grow the business.",
-    "So they decide to put the newly formed company on the stock market.",
-    "What happens then?",
-    "When a company is listed on the stock market, individuals or organizations that believe in the company's bright future can buy shares and become partial owners of the company.",
-    "This process makes it easy for the footwear company to raise the funds it needs to grow its business.",
-    "As the business grows, the stock value rises, and the stockholders' profits increase."
-  ],
-  // 본문 ❺: The Prices of Stocks
-  prices: [
-    "Then what factors affect the prices of stocks?",
-    "Just like other transactions, the prices of stocks are decided by the law of supply and demand.",
-    "In other words, the more successful a business is, the more people will see the potential value of the company and start buying its stocks.",
-    "As demand for the stocks increases, so does the stock price.",
-    "In contrast, if a company performs disappointingly, its stock price will fall.",
-    "Understood.",
-    "Are there any other factors affecting the price?",
-    "Yes, companies are constantly under the influence of market factors such as raw material prices, advances in production technology, and labor costs."
-  ],
-  // 본문 ❻: Factors Affecting the Price (continued)
-  factors: [
-    "For example, in terms of raw material prices, if the price of rubber rises, a shoe company may have to pay more to import the rubber it needs from abroad to manufacture sneakers.",
-    "This, in turn, affects production costs and leads to higher prices in the consumer market.",
-    "As consumers hesitate to purchase the company's sneakers, the company may suffer from poor performance, leading to a decline in the stock price.",
-    "There are so many things to consider!",
-    "Additionally, investors may be concerned about a company's leadership or reputation.",
-    "Nowadays, more and more people are starting to support companies that prioritize public values such as business transparency, environmental friendliness, and social justice.",
-    "In purchasing such stocks, they not only pursue their financial goals but also contribute to building a more sustainable economic system that benefits the entire society.",
-    "All these variables can cause daily changes in stock prices in the stock market."
-  ],
-  // 본문 ❼: How to Invest in the Stock Market
-  investing: [
-    "It seems to get more difficult as we learn more about stocks.",
-    "So how do we invest in the stock market?",
-    "You can buy stocks through an official place called a stock exchange, or stock market, where you can easily buy or sell stocks in a company.",
-    "You might think investing in stocks is an easy way to make a profit.",
-    "But if you are investing, you must be prepared to lose money.",
-    "Since the market constantly fluctuates, there is a risk of loss and debt.",
-    "Investing in stocks is challenging!",
-    "I bet our listeners are curious about the best investment options though.",
-    "That depends on individual circumstances.",
-    "Generally, it would be smart to invest in something that interests you, such as a company behind some products you are into.",
-    "Always remember to do your research, stay informed about the companies you invest in, and be mindful of your risk tolerance."
-  ]
-};
-
-let currentExercise = [];
-let correctOrder = [];
-let userOrder = [];
-let selectedSentence = null;
-
-const exerciseSelect = document.getElementById('exerciseSelect');
-const shuffleBtn = document.getElementById('shuffleBtn');
-const checkBtn = document.getElementById('checkBtn');
-const resetBtn = document.getElementById('resetBtn');
-const exerciseArea = document.getElementById('exerciseArea');
-const scrambledContainer = document.getElementById('scrambledContainer');
-const orderedContainer = document.getElementById('orderedContainer');
-const scoreDisplay = document.getElementById('scoreDisplay');
-const scoreElement = document.getElementById('score');
-const feedback = document.getElementById('feedback');
-
-exerciseSelect.addEventListener('change', function() {
-    const selectedExercise = this.value;
-    if (selectedExercise) {
-        loadExercise(selectedExercise);
-    }
-});
-
-shuffleBtn.addEventListener('click', shuffleSentences);
-checkBtn.addEventListener('click', checkAnswer);
-resetBtn.addEventListener('click', resetExercise);
-
-function loadExercise(exerciseKey) {
-    currentExercise = [...exercises[exerciseKey]];
-    correctOrder = [...currentExercise];
-    userOrder = [];
-    selectedSentence = null;
-
-    shuffleSentences();
-    exerciseArea.style.display = 'block';
-    shuffleBtn.disabled = false;
-    resetBtn.disabled = false;
-    scoreDisplay.style.display = 'none';
-    hideFeedback();
-}
-
-function shuffleSentences() {
-    const shuffled = [...currentExercise];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-
-    displayScrambledSentences(shuffled);
-    createDropZones();
-    checkBtn.disabled = true;
-    userOrder = [];
-    selectedSentence = null;
-}
-
-function displayScrambledSentences(sentences) {
-    scrambledContainer.innerHTML = '';
-    sentences.forEach((sentence) => {
-        const sentenceDiv = document.createElement('div');
-        sentenceDiv.className = 'sentence-item';
-        sentenceDiv.textContent = sentence;
-        sentenceDiv.dataset.sentence = sentence;
-        sentenceDiv.addEventListener('click', function() { selectSentence(this); });
-        scrambledContainer.appendChild(sentenceDiv);
-    });
-}
-
-function selectSentence(element) {
-    document.querySelectorAll('.sentence-item.selected').forEach(item => item.classList.remove('selected'));
-    element.classList.add('selected');
-    selectedSentence = element;
-    showFeedback('선택된 문장을 배치할 위치(오른쪽)를 클릭하세요!', 'correct');
-}
-
-function createDropZones() {
-    orderedContainer.innerHTML = '';
-    for (let i = 0; i < currentExercise.length; i++) {
-        const dropZone = document.createElement('div');
-        dropZone.className = 'drop-zone';
-        dropZone.textContent = `문장 ${i + 1}을 여기에 배치하세요`;
-        dropZone.dataset.position = i;
-        dropZone.addEventListener('click', function() { handleDropZoneClick(this); });
-        orderedContainer.appendChild(dropZone);
-    }
-}
-
-function handleDropZoneClick(dropZone) {
-    if (!selectedSentence) {
-        showFeedback('먼저 왼쪽에서 문장을 선택하세요!', 'incorrect');
-        return;
-    }
-
-    const sentence = selectedSentence.dataset.sentence;
-    const position = parseInt(dropZone.dataset.position);
-
-    const sentenceDiv = document.createElement('div');
-    sentenceDiv.className = 'sentence-item';
-    sentenceDiv.textContent = sentence;
-    sentenceDiv.dataset.sentence = sentence;
-    sentenceDiv.dataset.position = position;
-    sentenceDiv.addEventListener('click', function() { returnSentence(this); });
-
-    dropZone.parentNode.replaceChild(sentenceDiv, dropZone);
-    selectedSentence.remove();
-    selectedSentence = null;
-
-    updateUserOrder();
-    hideFeedback();
-}
-
-function returnSentence(sentenceElement) {
-    const position = parseInt(sentenceElement.dataset.position);
-    const sentence = sentenceElement.dataset.sentence;
-
-    const dropZone = document.createElement('div');
-    dropZone.className = 'drop-zone';
-    dropZone.textContent = `문장 ${position + 1}을 여기에 배치하세요`;
-    dropZone.dataset.position = position;
-    dropZone.addEventListener('click', function() { handleDropZoneClick(this); });
-
-    sentenceElement.parentNode.replaceChild(dropZone, sentenceElement);
-
-    const newSentenceDiv = document.createElement('div');
-    newSentenceDiv.className = 'sentence-item';
-    newSentenceDiv.textContent = sentence;
-    newSentenceDiv.dataset.sentence = sentence;
-    newSentenceDiv.addEventListener('click', function() { selectSentence(this); });
-    scrambledContainer.appendChild(newSentenceDiv);
-
-    updateUserOrder();
-}
-
-function updateUserOrder() {
-    userOrder = [];
-    const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
-    let count = 0;
-    placedSentences.forEach(s => count++);
-    checkBtn.disabled = (count !== currentExercise.length);
-}
-
-function checkAnswer() {
-    let correct = 0;
-    const placedSentences = orderedContainer.querySelectorAll('.sentence-item');
-    
-    placedSentences.forEach((sentence) => {
-        const position = parseInt(sentence.dataset.position);
-        const userSentence = sentence.dataset.sentence;
-        const correctSentence = correctOrder[position];
-        
-        sentence.classList.remove('correct-sentence', 'incorrect-sentence');
-        if (userSentence === correctSentence) {
-            sentence.classList.add('correct-sentence');
-            correct++;
-        } else {
-            sentence.classList.add('incorrect-sentence');
-        }
-    });
-
-    const score = Math.round((correct / currentExercise.length) * 100);
-    scoreElement.textContent = score;
-    scoreDisplay.style.display = 'block';
-
-    if (score === 100) {
-        showFeedback('🎉 완벽합니다! 모든 문장을 올바르게 배열했습니다!', 'correct');
-    } else {
-        showFeedback(`💪 다시 확인해보세요! ${correct}/${currentExercise.length}개 정답입니다.`, 'incorrect');
-    }
-}
-
-function resetExercise() {
-    const selectedExercise = exerciseSelect.value;
-    if (selectedExercise) loadExercise(selectedExercise);
-}
-
-function showFeedback(message, type) {
-    feedback.textContent = message;
-    feedback.className = `feedback ${type}`;
-}
-
-function hideFeedback() {
-    feedback.className = 'feedback';
-}
-</script>
-
-
 </body></html>
